@@ -1,14 +1,18 @@
 <template>
-  <div flex="~ wrap" items-center justify-center gap-6>
-    <div v-for="item in list" :key="item.name" p-2 text-center>
-      <div text="6 primary">
+  <div flex="~ wrap" items-center justify-center gap-8>
+    <div v-for="item in list" :key="item.name" class="max-w-xs text-center card-hover">
+      <div class="text-primary-600 mb-4 text-lg font-semibold">
         {{ item.name }}
       </div>
-      <div b="6 primary solid" of-hidden rounded-6>
-        <img :src="item.image" m-0="!" size-50="!" object-cover>
+      <div class="border-primary-500 mb-4 overflow-hidden border-4 rounded-xl">
+        <img :src="item.image" m-0="!" size-50="!" object-cover class="transition-transform duration-300 hover:scale-105">
       </div>
       <div>
-        <a :href="item.url" target="_blank" text-4 text-black font-bold>
+        <a
+          :href="item.url"
+          target="_blank"
+          class="inline-flex items-center gap-2 btn-primary"
+        >
           <span icon i-material-symbols-download-rounded />
           Github
         </a>

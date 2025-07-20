@@ -4,12 +4,13 @@
       <img src="/assets/images/favicon.png" alt="favicon" size-12>
     </div>
 
-    <nav fyc gap-4>
+    <nav fyc gap-6>
       <AutoLink
         v-for="item in navbar"
         :key="item.link"
         :href="item.link"
         clickable-97
+        class="fyc gap-2 text-white text-opacity-90"
       >
         <span :class="item.icon" />
         <span>{{ item.text }}</span>

@@ -1,19 +1,18 @@
 <style scoped>
 .page-btn {
-  --uno: px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed min-w-9 text-center;
+  --uno: px-3 py-2 text-gray-600 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed min-w-10 text-center font-medium transition-colors;
 }
 
 .page-current {
-  --uno: bg-primary text-white hover:bg-primary-dark;
+  --uno: text-primary-600;
 }
 
 .page-ellipsis {
-  --uno: px-2 min-w-9 text-center inline-flex justify-center items-center;
+  --uno: px-2 min-w-10 text-center inline-flex justify-center items-center text-gray-400;
 }
 
 .pagination-container {
-  --uno: mt-4 fcc gap-2 select-none;
-  transition: all 0.3s ease;
+  --uno: mt-8 fcc gap-2 select-none;
 }
 </style>
 

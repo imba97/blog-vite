@@ -1,16 +1,17 @@
 <template>
   <div size-full flex flex-col>
-    <ul h-96>
+    <ul pl-0 space-y-3 class="[&>li]:(py-2 before:hidden)">
       <li
         v-for="post in paginatedPosts"
         :key="post.path"
+        class="list-none border-b border-gray-100 py-3 last:border-b-0 [&_a]:(b-b-none!)"
       >
-        <RouterLink :to="post.path">
+        <RouterLink :to="post.path" class="block rounded px-2 py-1 transition-colors -mx-2 hover:bg-gray-50">
           <div fbc gap-4>
-            <div>
+            <div class="hover:text-primary-600 text-gray-900 transition-colors">
               {{ post.title }}
             </div>
-            <div text-3 text-gray font-mono>
+            <div class="shrink-0 text-sm text-gray-400 font-mono">
               {{ dayjs(post.date).format('YYYY-MM-DD') }}
             </div>
           </div>

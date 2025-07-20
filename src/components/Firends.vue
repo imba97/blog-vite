@@ -1,20 +1,27 @@
 <template>
-  <div mt-6 gap-4 p-4 grid="~ cols-2">
+  <div mt-8 gap-6 grid="~ cols-1 md:cols-2">
     <a
       v-for="item in list"
       :key="item.url"
       :href="item.url"
       target="_blank"
       important="decoration-none"
-      rounded-md
-      :class="item.bg || 'bg-gray-1 hover:bg-gray-2'"
+      class="card-hover"
+      :class="item.bg || 'bg-white hover:bg-gray-50'"
     >
-      <div fcc gap-4 rounded-md p-4>
-        <div pointer-events-none size-16>
-          <img :src="item.avatar" size-full important="rounded-full m-0">
+      <div fcc gap-4 p-6>
+        <div size-20 shrink-0>
+          <img
+            :src="item.avatar"
+            size-full
+            important="rounded-full m-0 object-cover"
+            class="transition-transform duration-300 hover:scale-110"
+          >
         </div>
-        <div text="gray-6 4.5" font-bold>
-          {{ item.name }}
+        <div class="text-center">
+          <div class="hover:text-primary-600 text-lg text-gray-900 font-semibold transition-colors">
+            {{ item.name }}
+          </div>
         </div>
       </div>
     </a>

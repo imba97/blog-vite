@@ -6,6 +6,7 @@ import {
   defineConfig,
   presetAttributify,
   presetIcons,
+  presetTypography,
   presetWebFonts,
   presetWind3,
   transformerDirectives,
@@ -34,6 +35,15 @@ export default defineConfig({
       'bg-base': 'bg-white dark:bg-black',
       'color-base': 'text-black dark:text-white',
       'border-base': 'border-[#8884]'
+    },
+
+    // 常用卡片样式
+    {
+      'card': 'rounded-lg border border-gray-200 bg-white p-4 shadow-sm',
+      'card-hover': 'card transition-all hover:border-primary-300 hover:shadow-md',
+      'btn-primary': 'bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors font-medium',
+      'btn-secondary': 'bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium',
+      'input-base': 'border border-gray-300 rounded-lg px-3 py-2 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all'
     },
 
     [/^clickable(-.*)?$/, ([, scale]) => `cursor-pointer transition active:scale${scale || '-95'}`],
@@ -78,6 +88,7 @@ export default defineConfig({
     }),
     presetAttributify(),
     presetWind3(),
+    presetTypography(),
     presetWebFonts({
       fonts: {
         sans: 'Inter',
