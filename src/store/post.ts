@@ -1,6 +1,13 @@
 export const usePostsStore = defineStore('posts', () => {
   const page = shallowRef(1)
   const size = shallowRef(10)
+  const current = shallowRef<{
+    path?: string
+    title?: string
+    date?: string
+    tags?: string[]
+    categories?: string[]
+  } | null>(null)
 
   const router = useRouter()
   const routes: any[] = router.getRoutes()
@@ -22,7 +29,27 @@ export const usePostsStore = defineStore('posts', () => {
   const total = computed(() => posts.value.length)
   const totalPages = computed(() => Math.ceil(total.value / size.value))
 
+  // 设置当前文章的函数
+  function setCurrent(path: string) {
+    const route = routes.find(r => r.path === path)
+    current.value = route || null
+  }
+
+  // 初始化时检查当前路由
+  const currentRoute = router.currentRoute.value
+  if (currentRoute.path.startsWith('/posts/')) {
+    setCurrent(currentRoute.path)
+  }
+
   router.beforeEach((to) => {
+    // 设置当前文章
+    if (to.path.startsWith('/posts/')) {
+      setCurrent(to.path)
+    }
+    else {
+      current.value = null
+    }
+
     if (to.name === '/') {
       page.value = 1
       return true
@@ -66,6 +93,7 @@ export const usePostsStore = defineStore('posts', () => {
     page,
     size,
     totalPages,
+    current,
 
     setPage
   }
