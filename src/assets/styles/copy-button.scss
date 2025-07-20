@@ -1,19 +1,19 @@
-pre:has(code) {
-  --uno: pr;
+div[class*="language-"] {
+  --uno: relative overflow-hidden;
 }
 
-pre button.copy {
-  --uno: pa top-2 right-2 size-8 fcc opacity-0 transition-opacity duration-300;
+div[class*="language-"] button.copy {
+  --uno: absolute top-3 right-3 size-8 fcc opacity-0 transition-opacity duration-300 z-10 border-none bg-transparent cursor-pointer;
 
   span {
-    --uno: text-4;
+    --uno: text-4 block;
 
     &.ready {
-      --uno: i-solar-clipboard-bold-duotone bg-primary;
+      --uno: i-solar-clipboard-bold-duotone text-primary;
     }
 
     &.success {
-      --uno: i-solar-clipboard-check-bold-duotone hidden bg-green-6;
+      --uno: i-solar-clipboard-check-bold-duotone hidden text-green-6;
     }
   }
 
@@ -26,8 +26,12 @@ pre button.copy {
       --uno: hidden;
     }
   }
+
+  &:hover {
+    --uno: opacity-100;
+  }
 }
 
-pre:hover button.copy {
+div[class*="language-"]:hover button.copy {
   --uno: opacity-100;
 }

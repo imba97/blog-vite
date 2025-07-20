@@ -13,7 +13,6 @@ import anchor from 'markdown-it-anchor'
 import GitHubAlerts from 'markdown-it-github-alerts'
 import LinkAttributes from 'markdown-it-link-attributes'
 import TOC from 'markdown-it-table-of-contents'
-import { addCopyButton } from 'shiki-copy-button'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -23,6 +22,7 @@ import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 import Exclude from 'vite-plugin-optimize-exclude'
+import CopyButtonPlugin from './scripts/copy-button-plugin'
 import { slugify } from './scripts/slugify'
 
 const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
@@ -85,6 +85,11 @@ export default defineConfig({
         quotes: '""\'\''
       },
       async markdownItSetup(md) {
+        // 先添加我们的复制按钮插件
+        md.use(CopyButtonPlugin({
+          codeCopyButtonTitle: '复制代码'
+        }))
+
         md.use(await MarkdownItShiki({
           themes: {
             dark: 'vitesse-dark',
@@ -99,8 +104,7 @@ export default defineConfig({
             }),
             transformerNotationDiff(),
             transformerNotationHighlight(),
-            transformerNotationWordHighlight(),
-            addCopyButton()
+            transformerNotationWordHighlight()
           ]
         }))
 
