@@ -34,6 +34,40 @@
         @change="changePage"
       />
     </div>
+
+    <footer class="mt-25 border-t border-gray-200/70 pt-12.5 text-xs text-soft dark:border-neutral-800/80">
+      <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5 leading-5">
+        <a
+          class="rounded-sm text-muted decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          :href="commitLink"
+          target="_blank"
+          rel="noopener"
+          :aria-label="`查看构建提交：${buildShortHash}`"
+        >
+          Build {{ buildShortHash }}
+        </a>
+        <span aria-hidden="true">·</span>
+        <a
+          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          :href="repositoryLink"
+          target="_blank"
+          rel="noopener"
+          aria-label="查看项目仓库"
+        >
+          Repository
+        </a>
+        <span aria-hidden="true">·</span>
+        <a
+          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"
+          target="_blank"
+          rel="noopener"
+          aria-label="查看 CC BY-NC-SA 4.0 许可协议"
+        >
+          CC BY-NC-SA 4.0
+        </a>
+      </p>
+    </footer>
   </div>
 </template>
 
@@ -43,6 +77,16 @@ import { usePostsStore } from '~/store/post'
 import Pagination from './Pagination.vue'
 
 const postsStore = usePostsStore()
+const repositoryLink = 'https://github.com/imba97/blog-vite'
+const buildShortHash = __GIT_COMMIT_SHORT_HASH__
+const buildFullHash = __GIT_COMMIT_HASH__
+
+const commitLink = computed(() => {
+  if (buildFullHash === 'unknown') {
+    return repositoryLink
+  }
+  return `${repositoryLink}/commit/${buildFullHash}`
+})
 
 const paginatedPosts = computed(() => {
   const start = (postsStore.page - 1) * postsStore.size

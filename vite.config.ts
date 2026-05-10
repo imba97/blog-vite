@@ -23,11 +23,17 @@ import Exclude from 'vite-plugin-optimize-exclude'
 import { VueRouterAutoImports } from 'vue-router/unplugin'
 import VueRouter from 'vue-router/vite'
 import CopyButtonPlugin from './scripts/copy-button-plugin'
+import { getGitMeta } from './scripts/get-git-meta'
 import { slugify } from './scripts/slugify'
 
 const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+const gitMeta = getGitMeta()
 
 export default defineConfig({
+  define: {
+    __GIT_COMMIT_HASH__: JSON.stringify(gitMeta.fullHash),
+    __GIT_COMMIT_SHORT_HASH__: JSON.stringify(gitMeta.shortHash)
+  },
   plugins: [
     UnoCSS(),
 
