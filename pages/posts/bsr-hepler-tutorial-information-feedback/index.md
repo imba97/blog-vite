@@ -18,7 +18,7 @@ categories:
 
 # 使用
 
-在工具主页：[https://bsr.imba97.cn](https://bsr.imba97.cn)
+在工具主页：[https://bsr.imba97.com](https://bsr.imba97.com)
 
 可以看到这唯一的一个功能
 

@@ -23,7 +23,7 @@ categories:
 
 这是战网网关编辑器，修改成PvPGN服务器的地址
 
-下载：[gwe.zip](http://static.imba97.cn/uploads/gwe.zip) `208.0K`
+下载：[gwe.zip](http://static.imba97.com/uploads/gwe.zip) `208.0K`
 
 ![](/uploads/2019/09/v1.png)
 
@@ -37,7 +37,7 @@ IP   PvPGN 服务器IP或域名
 
 这是运行所需要的文件，有它你才能连接PvPGN服务器
 
-下载：[w3l.zip](http://static.imba97.cn/uploads/w3l.zip) `20.0K`
+下载：[w3l.zip](http://static.imba97.com/uploads/w3l.zip) `20.0K`
 
 把解压缩得到的 w3l.exe、w3h.dll、wl27.dll 放到魔兽争霸目录下，运行 **w3l.exe** 打开游戏
 

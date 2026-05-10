@@ -53,7 +53,7 @@ export enum MethodType {
 export class Url<T extends ParsedUrlQueryInput> {
   private _bilibili_base_url = 'https://api.bilibili.com'
 
-  private _imba97_base_rul = 'https://bili.imba97.cn'
+  private _imba97_base_rul = 'https://bili.imba97.com'
 
   public static readonly enums: Url<any>[] = []
 
@@ -236,7 +236,7 @@ public class Url<TParam, TResponse> : Url where TParam : Params.ParamBase
     switch (this._type)
     {
       case UrlType.TEST:
-        return "https://bili.imba97.cn";
+        return "https://bili.imba97.com";
       case UrlType.TEST2:
         return "https://xxx";
       default:

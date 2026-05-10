@@ -12,7 +12,7 @@ categories:
 
 # 前情提要
 
-两个月前[《我入职了老东家的母公司》](/archives/804)，也连轴转到 18 号，甚至没放过周末。做了个原生 <span i-ic-baseline-wechat bg="#07c160"></span> 微信小程序转 <span i-tdesign-logo-alipay-filled bg="#0499e1"></span> 支付宝小程序的转换器，有机会单开一篇文章聊聊
+两个月前[《我入职了老东家的母公司》](/posts/804)，也连轴转到 18 号，甚至没放过周末。做了个原生 <span i-ic-baseline-wechat bg="#07c160"></span> 微信小程序转 <span i-tdesign-logo-alipay-filled bg="#0499e1"></span> 支付宝小程序的转换器，有机会单开一篇文章聊聊
 
 目前终于是告一段落了
 

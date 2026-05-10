@@ -146,6 +146,6 @@ bind :6253 -group overseas
 
 # 软件、镜像、工具
 
-[AdGuardHome_linux_armv6.tar.gz](http://static.imba97.cn/uploads/AdGuardHome_linux_armv6.tar.gz)
+[AdGuardHome_linux_armv6.tar.gz](http://static.imba97.com/uploads/AdGuardHome_linux_armv6.tar.gz)
 
 [百度云](https://pan.baidu.com/s/1QH08qyRv7P-6QcWEikKOuA) 【g4n4】

@@ -19,9 +19,9 @@ categories:
 
 # 这一年
 
-去年的目标是去往更多城市，今年年初的工作可以远程，所以一两个月就跑出去一周，去了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 大连、<span i-solar-map-point-wave-bold-duotone text-primary></span> 昆明、<span i-solar-map-point-wave-bold-duotone text-primary></span> 大理，后来回老家陪我奶奶待了一个月，详情阅读 [《数字游民报告》](/archives/803/)
+去年的目标是去往更多城市，今年年初的工作可以远程，所以一两个月就跑出去一周，去了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 大连、<span i-solar-map-point-wave-bold-duotone text-primary></span> 昆明、<span i-solar-map-point-wave-bold-duotone text-primary></span> 大理，后来回老家陪我奶奶待了一个月，详情阅读 [《数字游民报告》](/posts/803)
 
-从老家回来去 <span i-solar-map-point-wave-bold-duotone text-primary></span> 上海玩了一圈，然后去 <span i-solar-map-point-wave-bold-duotone text-primary></span> 杭州找工作，结果找到了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 扬州，于是 [《我入职了老东家的母公司》](/archives/804/)。年底又离开了扬州，来到了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 成都
+从老家回来去 <span i-solar-map-point-wave-bold-duotone text-primary></span> 上海玩了一圈，然后去 <span i-solar-map-point-wave-bold-duotone text-primary></span> 杭州找工作，结果找到了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 扬州，于是 [《我入职了老东家的母公司》](/posts/804)。年底又离开了扬州，来到了 <span i-solar-map-point-wave-bold-duotone text-primary></span> 成都
 
 有时候越想干什么越是干不成，反而不刻意去完成这个目标，结果为了见家人和朋友、为了旅游、为了看演出、为了找工作，在不知不觉中去了很多地方，也享受了一路的风景
 

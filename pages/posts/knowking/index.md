@@ -17,7 +17,7 @@ categories:
 
 **第一种方式**，直接把下面这个拖到收藏夹。然后在**任意页面**点击使用
 
-<style>#code_a{display:block;width:200px;height:200px;line-height:30px;color:#FFF;-webkit-text-stroke:.8px #000;text-align:center;background: transparent url(//imba97.cn/uploads/2020/05/knowking.jpg) no-repeat scroll 0 0 / 100% auto;cursor:move;font-size:0;border:1px #000 solid;border-radius:5px;}#code_a::before{display:none;}#code_a::after{content:'拖到收藏夹';font-size:20px;font-weight:700;}#code_a:hover{text-decoration:none;color:#CCC;}</style>
+<style>#code_a{display:block;width:200px;height:200px;line-height:30px;color:#FFF;-webkit-text-stroke:.8px #000;text-align:center;background: transparent url(//imba97.com/uploads/2020/05/knowking.jpg) no-repeat scroll 0 0 / 100% auto;cursor:move;font-size:0;border:1px #000 solid;border-radius:5px;}#code_a::before{display:none;}#code_a::after{content:'拖到收藏夹';font-size:20px;font-weight:700;}#code_a:hover{text-decoration:none;color:#CCC;}</style>
 <a id="code_a" alt="懂王👐" href="javascript:void(0);">懂王👐</a>
 
 图片来自：[BV1hf4y127HD](https://www.bilibili.com/video/BV1hf4y127HD) 封面
@@ -37,7 +37,7 @@ javascript:if(typeof koe_knowking_clicked==='undefined'){var koe_knowking_clicke
 
 这里需要PHP去获取百度百科的页面，目前是放在我服务器上的，如果到时候用的人多了我可能会停掉。
 
-以下源码，可自行复制放在自己的服务器上，再把上面`javascript`中的`https://bili.imba97.cn/baike.php`改成你的。
+以下源码，可自行复制放在自己的服务器上，再把上面`javascript`中的`https://bili.imba97.com/baike.php`改成你的。
 
 ```php
 <?php

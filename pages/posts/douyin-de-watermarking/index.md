@@ -81,7 +81,7 @@ Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML,
 
 <style>#share_url,#share_code {width: 230px;text-align: center; border: none;border-bottom: 1px #000 solid;border-radius: 0;} #share_url {outline: none;} #share_btn{border:1px #000 solid; border-radius: 5px; background: none; outline: none; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;} #share_btn:active{background-color: #CCC;}</style>
 
-<script>function analysis(){var share_url=document.querySelector('#share_url').value;var share_code=document.querySelector('#share_code').value;if(!/https?:\/\/v\.douyin\.com\/[a-zA-Z0-9]+/i.test(share_url)){ alert('分享地址格式错误');return;} $.get('https://bili.imba97.cn/douyin/api.php?url='+share_url+'&code='+share_code, function(json){if(json.code==0){alert(json.msg);return;} var output=document.querySelector('#output'); output.href=json.url; output.innerText='点击此处跳转至视频' }); }</script>
+<script>function analysis(){var share_url=document.querySelector('#share_url').value;var share_code=document.querySelector('#share_code').value;if(!/https?:\/\/v\.douyin\.com\/[a-zA-Z0-9]+/i.test(share_url)){ alert('分享地址格式错误');return;} $.get('https://bili.imba97.com/douyin/api.php?url='+share_url+'&code='+share_code, function(json){if(json.code==0){alert(json.msg);return;} var output=document.querySelector('#output'); output.href=json.url; output.innerText='点击此处跳转至视频' }); }</script>
 
 # 去印员
 

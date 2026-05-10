@@ -117,7 +117,7 @@ categories:
 
 6. **微信机器人**
 
-   [《程序猿复健计划之微信机器人》](/archives/741/) 又名：《如何跟微信好友对线时轻松取胜》
+   [《程序猿复健计划之微信机器人》](/posts/741) 又名：《如何跟微信好友对线时轻松取胜》
 
    Github：[wechat_bot](https://github.com/imba97/imba97_project/tree/master/wechat_bot)
 
@@ -127,7 +127,7 @@ categories:
 
    B站改了接口，目前不能用了
 
-   [《程序猿复健计划之B站机器人》](/archives/742/)
+   [《程序猿复健计划之B站机器人》](/posts/742)
 
    Github：[bili_bot](https://github.com/imba97/imba97_project/tree/master/bili_bot)
 

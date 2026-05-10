@@ -6,7 +6,7 @@ import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
 
-const DOMAIN = 'https://imba97.cn'
+const DOMAIN = 'https://imba97.com'
 const AUTHOR = {
   name: 'imba97',
   email: 'mail@imba97.cn',
@@ -28,13 +28,13 @@ async function buildBlogRSS() {
   const options = {
     title: 'imba97',
     description: 'imba97 Blog',
-    id: 'https://imba97.cn/',
-    link: 'https://imba97.cn/',
+    id: 'https://imba97.com/',
+    link: 'https://imba97.com/',
     copyright: 'CC BY-NC-SA 4.0 2018 © imba97',
     feedLinks: {
-      json: 'https://imba97.cn/feed.json',
-      atom: 'https://imba97.cn/feed.atom',
-      rss: 'https://imba97.cn/feed.xml'
+      json: 'https://imba97.com/feed.json',
+      atom: 'https://imba97.com/feed.atom',
+      rss: 'https://imba97.com/feed.xml'
     }
   }
   const posts: any[] = (
@@ -71,8 +71,8 @@ async function buildBlogRSS() {
 
 async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
   options.author = AUTHOR
-  options.image = 'https://imba97.cn/favicon.png'
-  options.favicon = 'https://imba97.cn/favicon.png'
+  options.image = 'https://imba97.com/favicon.png'
+  options.favicon = 'https://imba97.com/favicon.png'
 
   const feed = new Feed(options)
 

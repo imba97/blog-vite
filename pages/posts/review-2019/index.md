@@ -43,7 +43,7 @@ categories:
 
   Btools浏览器插件的官网。
 
-2. [imba97.cn](http://imba97.cn)
+2. [imba97.com](http://imba97.com)
 
   本站，个人博客。
 

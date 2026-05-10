@@ -3,8 +3,8 @@
 ```
 名称：怠惰のコエ - imba久期 BLOG
 简介：あなた、怠惰ですねー
-地址：https://imba97.cn
-头像：https://imba97.cn/uploads/2019/08/imba97-1024-300x300.png
+地址：https://imba97.com
+头像：https://imba97.com/uploads/2019/08/imba97-1024-300x300.png
 ```
 
 <div text="8 primary center" font-bold>各位朋友</div>

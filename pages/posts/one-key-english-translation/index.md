@@ -16,7 +16,7 @@ categories:
 
 <!--more-->
 
-以下源码，可自行复制放在自己的服务器上，再把上面`javascript`中的`https://bili.imba97.cn/translate.php`改成你的。
+以下源码，可自行复制放在自己的服务器上，再把上面`javascript`中的`https://bili.imba97.com/translate.php`改成你的。
 
 ```php
 <?php

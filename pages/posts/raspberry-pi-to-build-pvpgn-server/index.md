@@ -79,6 +79,6 @@ make && make install
 
 ![](/uploads/2019/09/pvpgn-2.png)
 
-最后成功连上服务器，连接需要做一些操作，详情请看：[《魔兽争霸3连接PvPGN服务器》](//imba97.cn/archives/437)
+最后成功连上服务器，连接需要做一些操作，详情请看：[《魔兽争霸3连接PvPGN服务器》](/posts/437)
 
 ![](/uploads/2019/09/pvpgn-3.png)

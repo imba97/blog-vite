@@ -25,12 +25,12 @@
 const list = [
   {
     name: 'Windows Feishin',
-    image: 'https://imba97.cn/uploads/2024/06/navidrome-1.png',
+    image: 'https://imba97.com/uploads/2024/06/navidrome-1.png',
     url: 'https://github.com/jeffvli/feishin'
   },
   {
     name: 'Android Tempo',
-    image: 'https://imba97.cn/uploads/2024/06/navidrome-2.png',
+    image: 'https://imba97.com/uploads/2024/06/navidrome-2.png',
     url: 'https://github.com/CappielloAntonio/tempo'
   }
 ]

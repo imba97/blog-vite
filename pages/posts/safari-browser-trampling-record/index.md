@@ -87,4 +87,4 @@ document.documentElement.style.setProperty('--1svh', (`${svh}px`))
 
 # 最后
 
-上面说的小游戏在这里：[https://games.imba97.cn](https://games.imba97.cn)
+上面说的小游戏在这里：[https://games.imba97.com](https://games.imba97.com)

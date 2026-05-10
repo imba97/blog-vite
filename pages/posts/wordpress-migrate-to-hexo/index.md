@@ -107,7 +107,7 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 原理是用了`git hook`，当你`push`的时候，会在服务器执行命令让网站目录强制`checkout`最新的代码
 
-首先我们需要在服务器上创建一个`git`仓库，这个步骤你可以参考[《搭建自己的Git服务器》](//imba97.cn/archives/281)
+首先我们需要在服务器上创建一个`git`仓库，这个步骤你可以参考[《搭建自己的Git服务器》](/posts/281)
 
 创建好仓库后，不必克隆到本地，而是使用一个插件
 

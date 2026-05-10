@@ -18,4 +18,4 @@ categories:
 
 <div class="point-ranking"></div>
 
-<script>var ranking_script=document.createElement('script');ranking_script.type='text/javascript';ranking_script.src='https://cdn.jsdelivr.net/gh/imba97/js@1.1.0/code/js_ranking.min.js';document.head.appendChild(ranking_script);ranking_script.onload=function(){new Ranking('.point-ranking').getDataWithURL('https://bili.imba97.cn/ranking/api.php');document.querySelectorAll('img').forEach(function(element) { element.onclick = false; });}</script>
+<script>var ranking_script=document.createElement('script');ranking_script.type='text/javascript';ranking_script.src='https://cdn.jsdelivr.net/gh/imba97/js@1.1.0/code/js_ranking.min.js';document.head.appendChild(ranking_script);ranking_script.onload=function(){new Ranking('.point-ranking').getDataWithURL('https://bili.imba97.com/ranking/api.php');document.querySelectorAll('img').forEach(function(element) { element.onclick = false; });}</script>

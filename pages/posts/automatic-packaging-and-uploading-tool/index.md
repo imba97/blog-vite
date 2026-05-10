@@ -78,7 +78,7 @@ const ZipUploadConfig = {
   zipFileDir: 'build',
 
   // 压缩文件下载连接，最后会与文件名拼接
-  host: 'https://download.imba97.cn/upload/',
+  host: 'https://download.imba97.com/upload/',
 
   // 钉钉推送卡片信息
   cardInfo: {

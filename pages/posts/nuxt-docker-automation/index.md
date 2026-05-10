@@ -13,7 +13,7 @@ categories:
 
 <span icon i-logos-nuxt-icon></span> Nuxt 是一个集成了前后端的框架，对于一些小型网站，不需要前后端分离的，是个好的选择
 
-比如最近就做了一个 [me.imba97.cn](https://me.imba97.cn)，准备放一些关于我的一些东西
+比如最近就做了一个 [me.imba97.com](https://me.imba97.com)，准备放一些关于我的一些东西
 
 <!--more-->
 

@@ -47,7 +47,7 @@ categories:
 
    项目不大，里有图片音频预加载、国际化，整个一踩坑练手项目，有兴趣可以看一下
 
-   游戏地址：[https://games.imba97.cn](https://games.imba97.cn)
+   游戏地址：[https://games.imba97.com](https://games.imba97.com)
 
    Github: [imba97/games](https://github.com/imba97/games)
 
@@ -61,7 +61,7 @@ categories:
 
    ![](/uploads/2023/04/code-server-1.png)
 
-   博客文章: [《搭建自己的在线 vscode》](https://imba97.cn/archives/762/)
+   博客文章: [《搭建自己的在线 vscode》](/posts/762)
 
    Github: [code-server](https://github.com/imba97/code-server)
 

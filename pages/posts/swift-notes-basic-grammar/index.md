@@ -525,7 +525,7 @@ dispatch_async(dispatch_get_global_queue(0, 0)) { () -> Void in
 ### 异常捕获
 
 ```swift
-let url = NSURL(string: "http://imba97.cn/wp-json/wp/v2/posts/484")
+let url = NSURL(string: "http://imba97.com/wp-json/wp/v2/posts/484")
 NSURLSession.sharedSession().dataTaskWithURL(url!) {
   // 尾随闭包的参数，可省略回调函数的参数
   (data, _, _) -> Void in

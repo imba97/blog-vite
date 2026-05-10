@@ -11,7 +11,7 @@ categories:
 ## 基本的网络请求
 
 ```swift
-let url = NSURL(string: "http://imba97.cn/wp-json/wp/v2/posts/491")
+let url = NSURL(string: "http://imba97.com/wp-json/wp/v2/posts/491")
 NSURLSession.sharedSession().dataTaskWithURL(url!) {
   // 尾随闭包的参数，可省略回调函数的参数
   (data, _, _) -> Void in
@@ -80,7 +80,7 @@ import UIKit
 class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    NetworkTools.sharedTools.request(requestMethod.GET, URLString: "http://imba97.cn/wp-json/wp/v2/posts/491", parameters: nil) { (result, error) -> () in
+    NetworkTools.sharedTools.request(requestMethod.GET, URLString: "http://imba97.com/wp-json/wp/v2/posts/491", parameters: nil) { (result, error) -> () in
       print(result)
     }
   }
