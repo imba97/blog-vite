@@ -72,7 +72,9 @@ import { navbar } from '~/configs/nav'
 import { usePostsStore } from '~/store/post'
 
 const router = useRouter()
+const route = useRoute()
 const postsStore = usePostsStore()
+const isPostPage = computed(() => route.path.startsWith('/posts/'))
 
 const barMotion = {
   initial: {
@@ -132,6 +134,13 @@ const {
 })
 
 function goHome() {
+  if (isPostPage.value) {
+    const canGoBack = typeof window !== 'undefined' && Boolean(window.history.state?.back)
+    if (canGoBack) {
+      router.back()
+      return
+    }
+  }
   router.push('/')
 }
 </script>
