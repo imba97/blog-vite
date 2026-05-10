@@ -19,7 +19,7 @@
           >
         </div>
         <div class="text-center">
-          <div class="hover:text-primary-600 text-lg text-gray-900 font-semibold transition-colors">
+          <div class="text-lg text-gray-900 font-semibold transition-colors hover:text-primary-6">
             {{ item.name }}
           </div>
         </div>

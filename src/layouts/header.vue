@@ -24,7 +24,7 @@
           :key="item.link"
           :href="item.link"
           clickable-97
-          class="hover:text-primary-600 fyc gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-700 transition-colors duration-200 sm:gap-2 hover:bg-gray-100/80 sm:px-2.5 dark:text-white/90 focus-ring-primary dark:hover:bg-white/8 dark:hover:text-white"
+          class="fyc gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-700 transition-colors duration-200 sm:gap-2 hover:bg-gray-100/80 sm:px-2.5 dark:text-white/90 hover:text-primary-6 focus-ring-primary dark:hover:bg-white/8 dark:hover:text-white"
         >
           <span :class="item.icon" />
           <span class="hidden sm:inline">{{ item.text }}</span>

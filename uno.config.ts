@@ -40,7 +40,7 @@ export default defineConfig({
       'surface-subtle': 'bg-gray-100/70 dark:bg-neutral-800/60',
       'border-subtle': 'border-gray-200/85 dark:border-neutral-800',
       'text-muted': 'text-gray-600 dark:text-gray-400',
-      'focus-ring-primary': 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
+      'focus-ring-primary': 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-5/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
       'interactive-soft': 'transition-colors duration-200 hover:bg-gray-100/75 dark:hover:bg-neutral-800/80',
       'bg-base': 'bg-white dark:bg-black',
       'color-base': 'text-black dark:text-white',
@@ -48,10 +48,10 @@ export default defineConfig({
       'list-divider': 'border-gray-200/80 dark:border-neutral-800',
       'list-link-hover': 'interactive-soft',
       'list-title': 'text-gray-800 dark:text-gray-100',
-      'list-title-hover': 'hover:text-primary-600 dark:hover:text-primary-400',
+      'list-title-hover': 'hover:text-primary-6 dark:hover:text-primary-4',
       'list-meta': 'text-muted',
-      'pagination-text': 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400',
-      'pagination-current': 'text-primary-600 dark:text-primary-400',
+      'pagination-text': 'text-gray-600 dark:text-gray-400 hover:text-primary-6 dark:hover:text-primary-4',
+      'pagination-current': 'text-primary-6 dark:text-primary-4',
       'pagination-ellipsis': 'text-gray-400 dark:text-gray-500',
       'prose-shell': 'text-gray-700 dark:text-gray-300',
       'card-soft': 'surface-base border border-subtle rounded-xl shadow-sm'
@@ -60,10 +60,10 @@ export default defineConfig({
     // 常用卡片样式
     {
       'card': 'rounded-lg border border-gray-200 bg-white p-4 shadow-sm',
-      'card-hover': 'card transition-all hover:border-primary-300 hover:shadow-md',
-      'btn-primary': 'bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors font-medium',
+      'card-hover': 'card transition-all hover:border-primary-3 hover:shadow-md',
+      'btn-primary': 'bg-primary-5 text-white px-4 py-2 rounded-lg hover:bg-primary-6 transition-colors font-medium',
       'btn-secondary': 'bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium',
-      'input-base': 'border border-gray-300 rounded-lg px-3 py-2 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all'
+      'input-base': 'border border-gray-300 rounded-lg px-3 py-2 focus:border-primary-5 focus:ring-2 focus:ring-primary-2 outline-none transition-all'
     },
 
     [/^clickable(-.*)?$/, ([, scale]) => `cursor-pointer transition active:scale${scale || '-95'}`],

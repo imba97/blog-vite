@@ -29,7 +29,7 @@
 }
 
 .page-current {
-  --uno: bg-primary-50 text-primary-600 dark:bg-primary-900/25 dark:text-primary-400;
+  --uno: bg-primary-1 text-primary-6 dark:bg-primary-9/25 dark:text-primary-4;
 }
 
 .page-ellipsis {
