@@ -14,7 +14,7 @@
           <article class="min-h-10 space-y-0.5">
             <div class="flex items-start justify-between gap-4 sm:items-center">
               <h2 class="relative m-0 text-lg list-title font-normal leading-snug transition-colors duration-200 sm:text-xl group-hover:text-primary-2 dark:group-hover:text-primary-2">
-                <span class="i-carbon-chevron-right pa top-1/2 text-primary-2/70 opacity-0 transition-all duration-200 -left-8 -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 group-hover:opacity-65" aria-hidden="true" />
+                <span class="i-carbon-chevron-right pa top-1/2 hidden text-primary-2/70 opacity-0 transition-all duration-200 -left-8 sm:block -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 group-hover:opacity-65" aria-hidden="true" />
                 <span>{{ post.title }}</span>
               </h2>
               <time class="shrink-0 text-xs list-meta tracking-wide font-mono sm:text-sm" :datetime="post.date">
