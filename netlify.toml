@@ -12,6 +12,11 @@ for = "/assets/*"
 Cache-Control = "public, max-age=31536000, immutable"
 
 [[redirects]]
+from = "/atom.xml"
+to = "/feed.xml"
+status = 301
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
