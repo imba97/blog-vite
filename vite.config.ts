@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import MarkdownItShiki from '@shikijs/markdown-it'
 import {
@@ -7,7 +8,6 @@ import {
 } from '@shikijs/transformers'
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
-import fs from 'fs-extra'
 import matter from 'gray-matter'
 import anchor from 'markdown-it-anchor'
 import GitHubAlerts from 'markdown-it-github-alerts'
@@ -45,7 +45,7 @@ export default defineConfig({
           return
 
         if (path.endsWith('.md')) {
-          const { data } = matter(fs.readFileSync(path, 'utf-8'))
+          const { data } = matter(readFileSync(path, 'utf-8'))
 
           route.addToMeta({
             frontmatter: data
