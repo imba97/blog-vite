@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import MarkdownItShiki from '@shikijs/markdown-it'
 import {
@@ -24,10 +25,12 @@ import { VueRouterAutoImports } from 'vue-router/unplugin'
 import VueRouter from 'vue-router/vite'
 import CopyButtonPlugin from './scripts/copy-button-plugin'
 import { getGitMeta } from './scripts/get-git-meta'
+import NetlifyImagePlugin from './scripts/netlify-image-plugin'
 import { slugify } from './scripts/slugify'
 
 const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 const gitMeta = getGitMeta()
+const isProduction = process.env.NODE_ENV === 'production'
 
 export default defineConfig({
   define: {
@@ -95,6 +98,8 @@ export default defineConfig({
         md.use(CopyButtonPlugin({
           codeCopyButtonTitle: '复制代码'
         }))
+        if (isProduction)
+          md.use(NetlifyImagePlugin())
 
         md.use(await MarkdownItShiki({
           themes: {
