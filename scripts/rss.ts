@@ -1,5 +1,5 @@
 import type { FeedOptions, Item } from 'feed'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { Feed } from 'feed'
 import matter from 'gray-matter'
@@ -7,6 +7,14 @@ import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
 
 const DOMAIN = 'https://imba97.com'
+const FOLLOW_CHALLENGE_FEED_ID = '41798923170845756'
+const FOLLOW_CHALLENGE_USER_ID = '56237599479518208'
+const FOLLOW_CHALLENGE_XML = [
+  '<follow_challenge>',
+  `  <feedId>${FOLLOW_CHALLENGE_FEED_ID}</feedId>`,
+  `  <userId>${FOLLOW_CHALLENGE_USER_ID}</userId>`,
+  '</follow_challenge>'
+].join('\n')
 const AUTHOR = {
   name: 'imba97',
   email: 'mail@imba97.cn',
@@ -32,8 +40,6 @@ async function buildBlogRSS() {
     link: 'https://imba97.com/',
     copyright: 'CC BY-NC-SA 4.0 2018 © imba97',
     feedLinks: {
-      json: 'https://imba97.com/feed.json',
-      atom: 'https://imba97.com/feed.atom',
       rss: 'https://imba97.com/feed.xml'
     }
   }
@@ -79,9 +85,17 @@ async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
   items.forEach(item => feed.addItem(item))
 
   await mkdir(dirname(`./dist/${name}`), { recursive: true })
-  await writeFile(`./dist/${name}.xml`, feed.rss2(), 'utf-8')
-  await writeFile(`./dist/${name}.atom`, feed.atom1(), 'utf-8')
-  await writeFile(`./dist/${name}.json`, feed.json1(), 'utf-8')
+  const rssXml = injectFollowChallengeToRssRoot(feed.rss2())
+  await writeFile(`./dist/${name}.xml`, rssXml, 'utf-8')
+  await rm(`./dist/${name}.atom`, { force: true })
+  await rm(`./dist/${name}.json`, { force: true })
+}
+
+function injectFollowChallengeToRssRoot(xml: string) {
+  if (!xml.includes('<channel>'))
+    return xml
+
+  return xml.replace('<channel>', `${FOLLOW_CHALLENGE_XML}\n<channel>`)
 }
 
 run()
