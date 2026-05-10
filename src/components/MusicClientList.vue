@@ -1,11 +1,11 @@
 <template>
   <div flex="~ wrap" items-center justify-center gap-8>
-    <div v-for="item in list" :key="item.name" class="max-w-xs card-hover text-center">
+    <div v-for="item in list" :key="item.name" class="max-w-xs card text-center">
       <div class="mb-4 text-lg text-primary-6 font-semibold">
         {{ item.name }}
       </div>
-      <div class="mb-4 overflow-hidden border-4 border-primary-5 rounded-xl">
-        <img :src="item.image" m-0="!" size-50="!" object-cover class="transition-transform duration-300 hover:scale-105">
+      <div class="mb-4 overflow-hidden border border-subtle rounded-xl">
+        <img :src="item.image" m-0="!" size-50="!" object-cover>
       </div>
       <div>
         <a

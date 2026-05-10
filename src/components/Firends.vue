@@ -6,8 +6,7 @@
       :href="item.url"
       target="_blank"
       important="decoration-none"
-      class="card-hover"
-      :class="item.bg || 'bg-white hover:bg-gray-50'"
+      class="group block card-hover text-inherit focus-ring-primary"
     >
       <div fcc gap-4 p-6>
         <div size-20 shrink-0>
@@ -15,11 +14,11 @@
             :src="item.avatar"
             size-full
             important="rounded-full m-0 object-cover"
-            class="transition-transform duration-300 hover:scale-110"
+            class="border border-subtle"
           >
         </div>
         <div class="text-center">
-          <div class="text-lg text-gray-900 font-semibold transition-colors hover:text-primary-6">
+          <div class="text-lg list-title font-semibold transition-colors duration-200 group-hover:text-primary-6 dark:group-hover:text-primary-4">
             {{ item.name }}
           </div>
         </div>
@@ -53,8 +52,7 @@ const list = [
   {
     name: 'PeterJXL',
     url: 'https://www.peterjxl.com',
-    avatar: 'https://image.peterjxl.com/blog/re0.jpg',
-    bg: `bg-[#CBEAFA] hover:bg-[#BEE3F8]`
+    avatar: 'https://image.peterjxl.com/blog/re0.jpg'
   }
 ]
 </script>

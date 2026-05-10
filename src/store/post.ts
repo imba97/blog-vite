@@ -1,6 +1,6 @@
 export const usePostsStore = defineStore('posts', () => {
   const page = shallowRef(1)
-  const size = shallowRef(10)
+  const size = shallowRef(20)
   const current = shallowRef<{
     path?: string
     title?: string

@@ -5,7 +5,7 @@
   line-height: 1.8;
 }
 .prose [class~='lead'] {
-  color: #4b5563;
+  color: var(--fg);
   font-size: 1.25em;
   line-height: 1.6;
   margin-top: 1.2em;
@@ -60,7 +60,7 @@
   content: counter(list-item, var(--list-counter-style, decimal)) '.';
   position: absolute;
   font-weight: 400;
-  color: #6b7280;
+  color: var(--fg-light);
   left: 0;
 }
 .prose ul > li {
@@ -70,7 +70,7 @@
 .prose ul > li::before {
   content: '';
   position: absolute;
-  background-color: #d1d5db;
+  background-color: color-mix(in srgb, var(--fg-light) 44%, transparent);
   border-radius: 50%;
   width: 0.375em;
   height: 0.375em;
@@ -133,25 +133,32 @@
   line-height: 1.5;
 }
 .prose figure figcaption {
-  color: #6b7280;
+  color: var(--fg-light);
   font-size: 0.875em;
   line-height: 1.4285714;
   margin-top: 0.75em;
   text-align: center;
 }
-.prose code {
-  --uno: font-mono bg-primary bg-opacity-20 text-primary text-base;
+.prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > code {
+  --uno: font-mono text-base;
+  background-color: rgb(79 70 229 / 0.12);
+  color: #334155;
   font-weight: 500;
   font-size: 0.875em;
   border-radius: 0.25rem;
   padding: 0.2em 0.3em;
   margin: -0.2em 0;
 }
+
+html.dark .prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > code {
+  background-color: rgb(148 163 184 / 0.22);
+  color: #f8fafc;
+}
 .prose a code {
   color: inherit;
 }
 .prose pre {
-  color: #e5e7eb;
+  color: #f8fafc;
   overflow-x: auto;
   font-size: 0.875em;
   line-height: 1.7142857;
@@ -164,12 +171,12 @@
   padding-left: 1.1428571em;
 }
 .prose pre code {
-  background-color: transparent;
+  background-color: transparent !important;
   border-width: 0;
   border-radius: 0;
   padding: 0;
   font-weight: 400;
-  color: inherit;
+  color: inherit !important;
   font-size: inherit;
   font-family: inherit;
   line-height: inherit;
@@ -193,7 +200,7 @@
   color: var(--fg-deep);
   font-weight: 600;
   border-bottom-width: 1px;
-  border-bottom-color: #8882;
+  border-bottom-color: color-mix(in srgb, var(--fg-light) 28%, transparent);
 }
 .prose thead th {
   vertical-align: bottom;
@@ -203,7 +210,7 @@
 }
 .prose tbody tr {
   border-bottom-width: 1px;
-  border-bottom-color: #8882;
+  border-bottom-color: color-mix(in srgb, var(--fg-light) 24%, transparent);
 }
 .prose tbody tr:last-child {
   border-bottom-width: 0;

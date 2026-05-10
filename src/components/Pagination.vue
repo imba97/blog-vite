@@ -1,10 +1,10 @@
 <style scoped>
 .pagination-container {
-  --uno: mt-8 flex items-center gap-2 select-none sm:justify-center;
+  --uno: mt-5 flex items-center gap-2 select-none sm:justify-center;
 }
 
 .page-nav-btn {
-  --uno: shrink-0 min-h-11 min-w-11 rounded-lg px-3 py-2 text-center text-sm font-medium pagination-text list-link-hover focus-ring-primary disabled:cursor-not-allowed disabled:opacity-45 transition-colors;
+  --uno: shrink-0 min-h-10 min-w-10 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-nav surface-base border border-subtle interactive-soft focus-ring-primary disabled:pagination-disabled transition-colors;
 }
 
 .page-scroll-wrap {
@@ -24,12 +24,12 @@
 }
 
 .page-number-btn {
-  --uno: min-h-11 min-w-11 shrink-0 rounded-lg px-3 py-2 text-center text-sm font-medium pagination-text list-link-hover focus-ring-primary transition-colors;
+  --uno: min-h-10 min-w-10 shrink-0 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-page focus-ring-primary transition-colors;
   scroll-snap-align: center;
 }
 
 .page-current {
-  --uno: bg-primary-1 text-primary-6 dark:bg-primary-9/25 dark:text-primary-4;
+  --uno: pagination-current font-normal pointer-events-none;
 }
 
 .page-ellipsis {

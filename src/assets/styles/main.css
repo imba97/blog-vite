@@ -1,23 +1,30 @@
 :root {
-  --c-bg: #fff;
-  --c-scrollbar: #eee;
-  --c-scrollbar-hover: #bbb;
+  --c-bg: #f5f6fa;
+  --c-bg-elevated: #ffffff;
+  --c-text: #111827;
+  --c-border: #e5e7eb;
+  --c-scrollbar: #d7dbe5;
+  --c-scrollbar-hover: #b6bfcd;
 }
 
 html {
   background-color: var(--c-bg);
+  color: var(--c-text);
   overflow-x: hidden;
   overflow-y: scroll;
 }
 
 html.dark {
-  --c-bg: #050505;
-  --c-scrollbar: #111;
-  --c-scrollbar-hover: #222;
+  --c-bg: #09090b;
+  --c-bg-elevated: #171717;
+  --c-text: #f3f4f6;
+  --c-border: #3f3f46;
+  --c-scrollbar: #2a2a2f;
+  --c-scrollbar-hover: #43434a;
 }
 
 ::selection {
-  background: #8884;
+  background: #6c71d044;
 }
 
 #nprogress {
@@ -25,7 +32,7 @@ html.dark {
 }
 
 #nprogress .bar {
-  --uno: bg-black bg-opacity-80;
+  --uno: bg-primary-6 bg-opacity-85 dark:bg-primary-4;
   position: fixed;
   z-index: 1031;
   top: 0;
@@ -102,7 +109,7 @@ html:not(.dark) [img-dark] {
 .v-popper--theme-dropdown .v-popper__inner,
 .v-popper--theme-tooltip .v-popper__inner {
   --at-apply: bg-base color-base text-base rounded border border-base shadow;
-  box-shadow: 0 6px 30px #0000001a;
+  box-shadow: 0 6px 16px #11182714;
 }
 
 .v-popper--theme-tooltip .v-popper__arrow-inner,

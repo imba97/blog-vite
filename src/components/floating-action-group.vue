@@ -3,13 +3,13 @@
     class="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-[max(20px,calc(env(safe-area-inset-right)+20px),calc((100vw-56rem)/2-70px))] z-[210] sm:bottom-[calc(1rem+env(safe-area-inset-bottom))]"
   >
     <div
-      class="of-hidden card-soft bg-white/90 p-1 backdrop-blur-sm transition-[max-height] duration-250 ease-out dark:bg-black/80"
+      class="of-hidden card-soft p-1 backdrop-blur-sm transition-[max-height] duration-250 ease-out"
       :class="showBackToTop ? 'max-h-[92px] sm:max-h-[100px]' : 'max-h-[44px] sm:max-h-[48px]'"
     >
       <div class="flex flex-col gap-1">
         <button
           type="button"
-          class="size-9 fcc clickable-95 rounded-lg surface-subtle text-gray-700 outline-none transition-colors duration-200 sm:size-10 hover:bg-gray-200 dark:text-gray-100 focus-ring-primary dark:hover:bg-gray-700"
+          class="size-9 fcc rounded-lg surface-subtle text-gray-700 outline-none transition-colors duration-200 sm:size-10 dark:text-gray-100 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
           :aria-label="themeAriaLabel"
           @click="cycleThemeMode"
         >
@@ -18,7 +18,7 @@
 
         <button
           type="button"
-          class="size-9 fcc clickable-95 rounded-lg surface-subtle text-gray-700 outline-none transition-all duration-250 ease-out sm:size-10 hover:bg-gray-200 dark:text-gray-100 focus-ring-primary dark:hover:bg-gray-700"
+          class="size-9 fcc rounded-lg surface-subtle text-gray-700 outline-none transition-all duration-200 ease-out sm:size-10 dark:text-gray-100 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
           :class="showBackToTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'"
           aria-label="回到顶部"
           @click="scrollToTop"

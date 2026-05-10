@@ -32,38 +32,42 @@ export default defineConfig({
   },
   shortcuts: [
     {
-      'site-shell': 'bg-gray-50 text-gray-900 dark:bg-neutral-950 dark:text-gray-100 transition-colors duration-200',
+      'site-shell': 'bg-gray-100/70 text-gray-900 dark:bg-neutral-950 dark:text-gray-100 transition-colors duration-200',
       'site-container': 'mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8',
       'page-container': 'site-container pt-6 pb-10 sm:pt-8 sm:pb-14',
       'page-container-readable': 'site-container max-w-[75ch] pt-8 pb-12 sm:pt-10 sm:pb-16',
       'surface-base': 'bg-white dark:bg-neutral-900',
-      'surface-subtle': 'bg-gray-100/70 dark:bg-neutral-800/60',
-      'border-subtle': 'border-gray-200/85 dark:border-neutral-800',
+      'surface-subtle': 'bg-gray-100/75 dark:bg-neutral-800/65',
+      'border-subtle': 'border-gray-200/85 dark:border-neutral-700/80',
       'text-muted': 'text-gray-600 dark:text-gray-400',
+      'text-soft': 'text-gray-500 dark:text-gray-500',
       'focus-ring-primary': 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-5/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
-      'interactive-soft': 'transition-colors duration-200 hover:bg-gray-100/75 dark:hover:bg-neutral-800/80',
+      'interactive-soft': 'transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800/70',
+      'nav-link': 'fyc gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-700 transition-colors duration-200 sm:gap-2 sm:px-2.5 interactive-soft hover:text-primary-6 dark:text-gray-200 dark:hover:text-primary-4',
       'bg-base': 'bg-white dark:bg-black',
-      'color-base': 'text-black dark:text-white',
-      'border-base': 'border-[#8884]',
+      'color-base': 'text-gray-900 dark:text-gray-100',
+      'border-base': 'border-gray-300/60 dark:border-neutral-700/80',
       'list-divider': 'border-gray-200/80 dark:border-neutral-800',
       'list-link-hover': 'interactive-soft',
       'list-title': 'text-gray-800 dark:text-gray-100',
       'list-title-hover': 'hover:text-primary-6 dark:hover:text-primary-4',
       'list-meta': 'text-muted',
-      'pagination-text': 'text-gray-600 dark:text-gray-400 hover:text-primary-6 dark:hover:text-primary-4',
-      'pagination-current': 'text-primary-6 dark:text-primary-4',
+      'pagination-nav': 'text-gray-600 dark:text-gray-300 hover:text-primary-6 dark:hover:text-primary-4',
+      'pagination-page': 'border border-transparent bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800/70',
+      'pagination-current': 'border border-transparent bg-primary-6 text-white dark:bg-primary-4 dark:text-neutral-950',
+      'pagination-disabled': 'cursor-not-allowed border-transparent bg-transparent text-gray-400 dark:text-gray-600 hover:bg-transparent dark:hover:bg-transparent hover:text-gray-400 dark:hover:text-gray-600',
       'pagination-ellipsis': 'text-gray-400 dark:text-gray-500',
       'prose-shell': 'text-gray-700 dark:text-gray-300',
-      'card-soft': 'surface-base border border-subtle rounded-xl shadow-sm'
+      'card-soft': 'surface-base border border-subtle rounded-xl'
     },
 
     // 常用卡片样式
     {
-      'card': 'rounded-lg border border-gray-200 bg-white p-4 shadow-sm',
-      'card-hover': 'card transition-all hover:border-primary-3 hover:shadow-md',
-      'btn-primary': 'bg-primary-5 text-white px-4 py-2 rounded-lg hover:bg-primary-6 transition-colors font-medium',
-      'btn-secondary': 'bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium',
-      'input-base': 'border border-gray-300 rounded-lg px-3 py-2 focus:border-primary-5 focus:ring-2 focus:ring-primary-2 outline-none transition-all'
+      'card': 'rounded-xl border border-subtle surface-base p-4',
+      'card-hover': 'card transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-neutral-800/55',
+      'btn-primary': 'rounded-lg bg-primary-6 px-4 py-2 text-white font-medium transition-colors duration-200 hover:bg-primary-7 focus-ring-primary',
+      'btn-secondary': 'rounded-lg bg-gray-100 px-4 py-2 text-gray-700 font-medium transition-colors duration-200 hover:bg-gray-200 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700 focus-ring-primary',
+      'input-base': 'rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition-all focus:border-primary-5 focus:ring-2 focus:ring-primary-2 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-100 dark:focus:border-primary-4'
     },
 
     [/^clickable(-.*)?$/, ([, scale]) => `cursor-pointer transition active:scale${scale || '-95'}`],
