@@ -52,8 +52,8 @@
       上一页
     </button>
 
-    <div class="page-scroll-wrap" aria-label="移动端页码滚动区域">
-      <div ref="pageScrollRef" class="page-scroll-track">
+    <div ref="pageScrollWrapRef" class="page-scroll-wrap" aria-label="移动端页码滚动区域">
+      <div class="page-scroll-track">
         <button
           v-for="page in allPages"
           :key="`mobile-${page}`"
@@ -105,20 +105,27 @@ const emit = defineEmits<{
   (e: 'change', page: number): void
 }>()
 
-const pageScrollRef = ref<HTMLElement | null>(null)
+const pageScrollWrapRef = ref<HTMLElement | null>(null)
 
 const allPages = computed(() =>
   Array.from({ length: props.totalPages }, (_, i) => i + 1)
 )
 
 function centerCurrentPageOnMobile() {
-  const scrollTrack = pageScrollRef.value
-  if (!scrollTrack)
+  if (typeof window === 'undefined')
     return
-  const currentButton = scrollTrack.querySelector('[aria-current="page"]') as HTMLElement | null
+  const scrollWrap = pageScrollWrapRef.value
+  if (!scrollWrap)
+    return
+  if (!window.matchMedia('(max-width: 639px)').matches)
+    return
+  if (scrollWrap.offsetParent === null || !scrollWrap.clientWidth)
+    return
+  const currentButton = scrollWrap.querySelector('[aria-current="page"]') as HTMLElement | null
   if (!currentButton)
     return
-  currentButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+  const nextLeft = currentButton.offsetLeft - (scrollWrap.clientWidth - currentButton.clientWidth) / 2
+  scrollWrap.scrollLeft = Math.max(0, nextLeft)
 }
 
 watch(() => props.currentPage, async () => {
@@ -129,7 +136,6 @@ watch(() => props.currentPage, async () => {
 // 计算要显示的页码
 const displayPages = computed(() => {
   if (props.totalPages <= 7) {
-    // 如果总页数不多，全部显示
     return Array.from({ length: props.totalPages }, (_, i) => i + 1)
   }
 
@@ -142,7 +148,7 @@ const displayPages = computed(() => {
 
   if (currentPage <= 4) {
     // 当前页靠近起始页
-    pages.push(2, 3, 4, 5) // 修改这里，确保显示第5页
+    pages.push(2, 3, 4, 5)
     pages.push('...')
     pages.push(totalPages)
   }

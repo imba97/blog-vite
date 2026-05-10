@@ -38,12 +38,19 @@ export const createApp = ViteSSG(
       setupRouterScroller(router, {
         selectors: {
           html(ctx) {
+            const isPaginatedPostsRoute = ctx.to.path.startsWith('/page/')
+            const shouldResetToTop = isPaginatedPostsRoute && ctx.type !== 'history'
+            const targetPosition = shouldResetToTop ? { top: 0, left: 0 } : ctx.savedPosition
+
             // only do the sliding transition when the scroll position is not 0
             // Disable sliding transition on Dev Mode
-            if (ctx.savedPosition?.top || import.meta.hot)
+            if (targetPosition?.top || import.meta.hot)
               html.classList.add('no-sliding')
             else
               html.classList.remove('no-sliding')
+
+            if (shouldResetToTop)
+              return targetPosition
             return true
           }
         },
