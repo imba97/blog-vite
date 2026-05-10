@@ -23,7 +23,7 @@ async function run() {
 }
 
 async function buildBlogRSS() {
-  const files = await glob('pages/posts/*.md')
+  const files = await glob('pages/posts/**/index.md')
 
   const options = {
     title: 'imba97',
@@ -39,7 +39,7 @@ async function buildBlogRSS() {
   }
   const posts: any[] = (
     await Promise.all(
-      files.filter(i => !i.includes('index'))
+      files.filter(i => i !== 'pages/posts/index.md')
         .map(async (i) => {
           const raw = await readFile(i, 'utf-8')
           const { data, content } = matter(raw)
