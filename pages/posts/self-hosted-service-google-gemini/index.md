@@ -51,7 +51,7 @@ Google Gemini 是谷歌公司推出的一款对话式人工智能模型，可以
 
 首先需要科学上网到 [支持的地区](https://ai.google.dev/available_regions?hl=zh-cn)，不然打不开申请页面。选择好地区后打开 [申请页面](https://ai.google.dev/)，点击创建即可
 
-![](https://imba97.cn/uploads/2024/01/gemini-1.png)
+![](/uploads/2024/01/gemini-1.png)
 
 # 部署
 
@@ -76,10 +76,10 @@ services:
 
 跑起来后你就能看到
 
-<img src="https://imba97.cn/uploads/2024/01/gemini-2.png" style="zoom:50%;" />
+<img src="/uploads/2024/01/gemini-2.png" style="zoom:50%;" />
 
 # 试一下
 
 刚好公司要写年终述职报告，基本上再简单改改就能用
 
-<img src="https://imba97.cn/uploads/2024/01/gemini-3.png" style="zoom:50%;" />
+<img src="/uploads/2024/01/gemini-3.png" style="zoom:50%;" />

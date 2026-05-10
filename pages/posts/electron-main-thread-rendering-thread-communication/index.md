@@ -136,7 +136,7 @@ EventManager.Instance().broadcast<string>(
 
 也可以在`Vue`组件之间传递
 
-![](https://imba97.cn/uploads/2022/02/electron-vue-event-manager-1.png)
+![](/uploads/2022/02/electron-vue-event-manager-1.png)
 
 ## 网络请求
 

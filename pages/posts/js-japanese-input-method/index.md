@@ -19,17 +19,17 @@ categories:
 
 <!--more-->
 
-![](//imba97.cn/uploads/2018/08/jpinput_1.jpg)
+![](/uploads/2018/08/jpinput_1.jpg)
 
 我做的程序一般都是自己需要的（这个不算，只是一时兴起，最初做这个的契机是因为沪江小D（一个多语言翻译、查词等功能的网站），沪江小D的日语查询页面是自带一个点选输入日语的输入法：
 
-![](//imba97.cn/uploads/2018/08/jpinput_2.jpg)
+![](/uploads/2018/08/jpinput_2.jpg)
 
 （网站改版了，之前也差不多是这样的
 
 于是根据这个做出来第一版：
 
-![](//imba97.cn/uploads/2018/08/jpinput_3.gif)
+![](/uploads/2018/08/jpinput_3.gif)
 
 支持点选输入、平假名片假名切换的功能，其实还是比较简陋的。好处就是可以在除沪江小D之外的其他网页中使用（也不是所有的
 
@@ -37,7 +37,7 @@ categories:
 
 最后出现了这个可以用键盘输入的：
 
-![](//imba97.cn/uploads/2018/08/jpinput_4.gif)
+![](/uploads/2018/08/jpinput_4.gif)
 
 （这个是2.1版本，有汉字的判断，但数据库还是只有5个へんたい，23333
 
@@ -45,7 +45,7 @@ categories:
 
 就像目前数据库里的へんたい们一样：
 
-![](//imba97.cn/uploads/2018/08/jpinput_5.png)
+![](/uploads/2018/08/jpinput_5.png)
 
 但这种方法会在数据库存入大量相同的词，否决。毕竟能用程序判断的还是用程序判断解决比较好。
 
@@ -65,7 +65,7 @@ categories:
 
 版本检测功能：
 
-![](//imba97.cn/uploads/2018/08/jpinput_6.gif)
+![](/uploads/2018/08/jpinput_6.gif)
 
 确认的话直接跳转到安装程序的网页（写作安装读作拖进收藏夹
 
@@ -73,7 +73,7 @@ categories:
 
 自动加载jQuery功能：
 
-![](//imba97.cn/uploads/2018/08/jpinput_7.gif)
+![](/uploads/2018/08/jpinput_7.gif)
 
 程序定位及优点：
 1. 安装、使用方法简单，程序轻巧。
@@ -85,7 +85,7 @@ categories:
 2. 版本更新和汉字输入涉及到跨域连接服务器，暂不支持https协议的网站（但可以进行假名的输入，输入法服务器网站如果也是https应该可以解决这一问题。（应该
 3. 不支持屏蔽加载外部JavaScript的网站。
 
-![](//imba97.cn/uploads/2018/08/jpinput_8.png)
+![](/uploads/2018/08/jpinput_8.png)
 
 [**开发视频**](https://www.bilibili.com/video/av8521956)了解一下，流程还是很全的
 有兴趣的可以研究一下（虽然不是高端的东西

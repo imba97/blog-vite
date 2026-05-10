@@ -69,7 +69,7 @@ dispatch_sync(q, ^{
 
 ## 串行并行、同步异步
 
-![](//imba97.cn/uploads/2019/08/656540a5c2173889a1dc174369f389bc.png)
+![](/uploads/2019/08/656540a5c2173889a1dc174369f389bc.png)
 
 创建串行队列
 

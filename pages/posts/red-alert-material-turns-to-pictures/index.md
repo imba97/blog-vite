@@ -30,11 +30,11 @@ categories:
 
 选择`File` => `Export` => `SHP -> Images`
 
-![](//imba97.cn/uploads/2020/06/ra2-1.png)
+![](/uploads/2020/06/ra2-1.png)
 
 起个名字，点保存，会弹出这样一个框
 
-![](//imba97.cn/uploads/2020/06/ra2-2.png)
+![](/uploads/2020/06/ra2-2.png)
 
 **Loop Type 动画循环类型**
 
@@ -57,19 +57,19 @@ categories:
 
 有些时候颜色是会出问题的，常见是特效部分，比如下面这个核爆素材
 
-![](https://imba97.cn/uploads/2021/04/fe2d0001e0beb1837d45.gif)
+![](/uploads/2021/04/fe2d0001e0beb1837d45.gif)
 
 解决方法是调整配色方案
 
 `Palette` => `Red Alert 2`，红警的话选这个
 
-![](//imba97.cn/uploads/2020/06/ra2-3.png)
+![](/uploads/2020/06/ra2-3.png)
 
 里面名字如果能对应你这个素材的目录，那就选名字对应的，如果没有可以随便试试
 
 于是就正常了
 
-![](https://imba97.cn/uploads/2021/04/fe48000200f514d7ecf1.gif)
+![](/uploads/2021/04/fe48000200f514d7ecf1.gif)
 
 第一张图导出选项中 **Shadows** 是 `Merge info frames`
 第二张是 `None`

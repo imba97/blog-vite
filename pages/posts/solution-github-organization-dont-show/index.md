@@ -15,7 +15,7 @@ categories:
 
 最近发现在 <span icon i-mdi-github></span> Github Profile 本来显示的组织，突然多了个 <span icon i-clarity-eye-hide-line></span> 不可见的标志
 
-![](https://imba97.cn/uploads/2024/05/github-organizations-1.png)
+![](/uploads/2024/05/github-organizations-1.png)
 
 开了个无痕看了看，也确实被隐藏了
 
@@ -25,4 +25,4 @@ categories:
 
 把 Organization visibility 设置为 Public 即可
 
-![](https://imba97.cn/uploads/2024/05/github-organizations-2.png)
+![](/uploads/2024/05/github-organizations-2.png)

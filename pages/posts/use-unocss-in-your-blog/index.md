@@ -81,15 +81,15 @@ categories:
 ```html
 <div mx-a mt-5 p-1 w-90 bg-white b="3 solid primary">
   <div grid="~ cols-3" gap-1 class="[&>img]:(m-0! w-30 h-30 object-cover)">
-    <img src="https://imba97.cn/uploads/2023/04/code-server-1.png">
-    <img src="https://imba97.cn/uploads/2023/12/report-2023-3.png">
-    <img src="https://imba97.cn/uploads/2023/12/report-2023-4.png">
-    <img src="https://imba97.cn/uploads/2023/07/serialport-1-1.jpg">
-    <img src="https://imba97.cn/uploads/2023/07/serialport-1-2.jpg">
-    <img src="https://imba97.cn/uploads/2023/07/serialport-1-3.jpg">
-    <img src="https://imba97.cn/uploads/2023/03/bitwarden-login-error-1.png">
-    <img src="https://imba97.cn/uploads/2022/10/simple-zip-upload-1.png">
-    <img src="https://imba97.cn/uploads/2018/08/switch_4.gif">
+    <img src="/uploads/2023/04/code-server-1.png">
+    <img src="/uploads/2023/12/report-2023-3.png">
+    <img src="/uploads/2023/12/report-2023-4.png">
+    <img src="/uploads/2023/07/serialport-1-1.jpg">
+    <img src="/uploads/2023/07/serialport-1-2.jpg">
+    <img src="/uploads/2023/07/serialport-1-3.jpg">
+    <img src="/uploads/2023/03/bitwarden-login-error-1.png">
+    <img src="/uploads/2022/10/simple-zip-upload-1.png">
+    <img src="/uploads/2018/08/switch_4.gif">
   </div>
 </div>
 ```
@@ -97,15 +97,15 @@ categories:
 <div my-5>
   <div mx-a p-1 w-90 bg-white b="3 solid primary">
     <div grid="~ cols-3" gap-1 class="[&>img]:(m-0! w-30 h-30 object-cover)">
-      <img src="https://imba97.cn/uploads/2023/04/code-server-1.png">
-      <img src="https://imba97.cn/uploads/2023/12/report-2023-3.png">
-      <img src="https://imba97.cn/uploads/2023/12/report-2023-4.png">
-      <img src="https://imba97.cn/uploads/2023/07/serialport-1-1.jpg">
-      <img src="https://imba97.cn/uploads/2023/07/serialport-1-2.jpg">
-      <img src="https://imba97.cn/uploads/2023/07/serialport-1-3.jpg">
-      <img src="https://imba97.cn/uploads/2023/03/bitwarden-login-error-1.png">
-      <img src="https://imba97.cn/uploads/2022/10/simple-zip-upload-1.png">
-      <img src="https://imba97.cn/uploads/2018/08/switch_4.gif">
+      <img src="/uploads/2023/04/code-server-1.png">
+      <img src="/uploads/2023/12/report-2023-3.png">
+      <img src="/uploads/2023/12/report-2023-4.png">
+      <img src="/uploads/2023/07/serialport-1-1.jpg">
+      <img src="/uploads/2023/07/serialport-1-2.jpg">
+      <img src="/uploads/2023/07/serialport-1-3.jpg">
+      <img src="/uploads/2023/03/bitwarden-login-error-1.png">
+      <img src="/uploads/2022/10/simple-zip-upload-1.png">
+      <img src="/uploads/2018/08/switch_4.gif">
     </div>
   </div>
 </div>
@@ -219,4 +219,4 @@ export default defineConfig({
 
 不愧是托尼老师！
 
-![](https://imba97.cn/uploads/2024/01/hexo-unocss-1.png)
+![](/uploads/2024/01/hexo-unocss-1.png)

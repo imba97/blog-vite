@@ -18,7 +18,7 @@ categories:
 
 发现之前的文章有几处错误，又经过一大堆测试，直接登录git用户模拟了一遍操作等，终于找到比较完善的方法了。
 
-![](//imba97.cn/uploads/2019/08/ef06969c39226befcb45e6b110ee3e08.png)
+![](/uploads/2019/08/ef06969c39226befcb45e6b110ee3e08.png)
 
 # 解决疑难杂症
 

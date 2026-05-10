@@ -18,7 +18,7 @@ categories:
 
 整体感觉还行，演示：
 
-![](//imba97.cn/uploads/2020/11/unity-grid-build-1.gif)
+![](/uploads/2020/11/unity-grid-build-1.gif)
 
 <!--more-->
 

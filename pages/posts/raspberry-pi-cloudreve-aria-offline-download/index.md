@@ -141,13 +141,13 @@ sudo service aria start
 
 只需要注意`RPC Secret`这项要跟aria2配置中的`rpc-secret`保持一致就行
 
-![](http://imba97.cn/uploads/2020/12/raspberry-pi-cloudreve-aria2-1.png)
+![](/uploads/2020/12/raspberry-pi-cloudreve-aria2-1.png)
 
 # 后言
 
 cloudreve默认每过一分钟查询一次进度
 
-![](http://imba97.cn/uploads/2020/12/raspberry-pi-cloudreve-aria2-2.png)
+![](/uploads/2020/12/raspberry-pi-cloudreve-aria2-2.png)
 
 实际离线下载功能还有些许问题，我下载磁力链接遇到过的比如
 

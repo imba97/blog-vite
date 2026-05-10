@@ -48,7 +48,7 @@ The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To res
 
 如果你换了Unity路径，也要解决的，不然你会看到满屏红
 
-![](//imba97.cn/uploads/2020/08/failed-to-load-project-file-assembly-csharp-1.png)
+![](/uploads/2020/08/failed-to-load-project-file-assembly-csharp-1.png)
 
 因为`C#`需要的一些引用丢失了，找不到位置所以就报错了
 

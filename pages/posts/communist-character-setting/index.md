@@ -9,7 +9,7 @@ categories: null
 人设图
 
 <!--more-->
-![](https://imba97.cn/uploads/2018/08/20180414233331-768x1212.png)
+![](/uploads/2018/08/20180414233331-768x1212.png)
 
 作者：[<font style="color: #d62b2b;">**@Illeindliass**</font>](https://space.bilibili.com/561845)
 

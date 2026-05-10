@@ -23,7 +23,7 @@ categories:
 
 通过这个网站的接口可以拿到播放列表，根据听歌的先后顺序，也有当前是否正在播放的字段
 
-![](https://imba97.cn/uploads/2024/06/playing-1.png)
+![](/uploads/2024/06/playing-1.png)
 
 ## 后端
 

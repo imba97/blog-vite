@@ -62,4 +62,4 @@ categories:
 
 # 年度照片
 
-![](https://imba97.com/uploads/2025/05/digital-nomad-report-9.jpg)
+![](/uploads/2025/05/digital-nomad-report-9.jpg)

@@ -35,7 +35,7 @@ WSL 是适用于 Linux 的 Windows 子系统，可以在 Windows 中跑一个 Li
 wsl --set-version Ubuntu-24.04 2
 ```
 
-![](https://imba97.cn/uploads/2024/05/wsl-1.png)
+![](/uploads/2024/05/wsl-1.png)
 
 设置默认安装版本
 
@@ -145,7 +145,7 @@ chmod -R 600 ~/.ssh
 
 根据自己实际安装的版本，不知道的话可以先打个引号看看
 
-![](https://imba97.cn/uploads/2024/05/wsl-2.png)
+![](/uploads/2024/05/wsl-2.png)
 
 # VS Code 插件
 
@@ -155,7 +155,7 @@ chmod -R 600 ~/.ssh
 
 先打开原项目，然后 `Ctrl + Shift + P` 打开命令中心，选择在 WSL 中重新打开文件夹
 
-![](https://imba97.cn/uploads/2024/05/wsl-3.png)
+![](/uploads/2024/05/wsl-3.png)
 
 也可以选在 WSL 中打开文件夹，然后输入 Windows 中目录地址
 
@@ -163,13 +163,13 @@ chmod -R 600 ~/.ssh
 
 使用 WSL 打开项目后文件路径都会走 Linux 系统的，所以需要删掉原来的 `node_modules` 和 `lock` 文件，重新跑一下安装
 
-![](https://imba97.cn/uploads/2024/05/wsl-4.png)
+![](/uploads/2024/05/wsl-4.png)
 
 # Git CRLF
 
 因为 Windows 和 Linux 换行符的不同，在 Linux 中 Git 会匹配到换行符不同，提示文件差异
 
-![](https://imba97.cn/uploads/2024/05/wsl-5.png)
+![](/uploads/2024/05/wsl-5.png)
 
 只需要设置一下 Git 配置即可
 
@@ -177,7 +177,7 @@ chmod -R 600 ~/.ssh
 git config --global core.autocrlf true
 ```
 
-![](https://imba97.cn/uploads/2024/05/wsl-6.png)
+![](/uploads/2024/05/wsl-6.png)
 
 # Path 问题
 

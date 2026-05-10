@@ -13,7 +13,7 @@ categories:
 
 QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded bg-gray></span> NAS，拼好后就是下图
 
-![](https://imba97.com/uploads/2025/10/qnasmini-1.png)
+![](/uploads/2025/10/qnasmini-1.png)
 
 （下半部分，上面是个 UPS）
 
@@ -49,6 +49,6 @@ QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded 
 
 更新了一下网络拓扑图
 
-![](https://imba97.com/uploads/2025/10/qnasmini-2.png)
+![](/uploads/2025/10/qnasmini-2.png)
 
 后续逐步把 All in One 的 NAS 迁移到 QNAS MINI 上，以及安排上 6 盘位

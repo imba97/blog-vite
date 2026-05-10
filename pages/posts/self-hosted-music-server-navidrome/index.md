@@ -30,7 +30,7 @@ Navidrome 是一个支持自建的 <span icon i-ph-music-notes-duotone bg-primar
 
 这样就有音乐的相关信息，封面、歌手、专辑、年份等信息基本都有了
 
-![](https://imba97.cn/uploads/2024/06/navidrome-3.png)
+![](/uploads/2024/06/navidrome-3.png)
 
 # 搭建
 

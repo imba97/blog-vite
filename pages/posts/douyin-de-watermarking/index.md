@@ -29,23 +29,23 @@ categories:
 
 点击抖音右下角的更多按钮
 
-![](//imba97.cn/uploads/2020/04/douyin_1.jpg)
+![](/uploads/2020/04/douyin_1.jpg)
 
 点击“复制链接”
 
-![](//imba97.cn/uploads/2020/04/douyin_2.jpg)
+![](/uploads/2020/04/douyin_2.jpg)
 
 ## 2.浏览器打开
 
 **先点一下播放**，让播放器加载出来，随后在视频上右键，点击“检查”
 
-![](//imba97.cn/uploads/2020/04/douyin_3.png)
+![](/uploads/2020/04/douyin_3.png)
 
 ## 3.复制视频地址并修改
 
 右键`video`中的`src`的地址，选择“Copy link address”
 
-![](//imba97.cn/uploads/2020/04/douyin_4.png)
+![](/uploads/2020/04/douyin_4.png)
 
 ```
 https://aweme.snssdk.com/aweme/v1/playwm/?s_vid=93f1b41336a8b7a442dbf1c29c6bbc56fa15389321801622b5036fe13b074f3fa77d6dadede77214dd28b0028f215f16a6eed3e3dc42e96288df31343cd9228b&line=0
@@ -61,7 +61,7 @@ https://aweme.snssdk.com/aweme/v1/playwm/?s_vid=93f1b41336a8b7a442dbf1c29c6bbc56
 
 打开“Network conditions”
 
-![](//imba97.cn/uploads/2020/04/douyin_5.png)
+![](/uploads/2020/04/douyin_5.png)
 
 复制以下内容
 
@@ -71,13 +71,13 @@ Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML,
 
 先去掉“Select automatically”的勾，再粘贴到下面的输入框中
 
-![](//imba97.cn/uploads/2020/04/douyin_6.png)
+![](/uploads/2020/04/douyin_6.png)
 
 ## 5.打开视频地址
 
 最后再把视频地址粘贴到浏览器，打开即可。此时已经没有水印了。
 
-![](//imba97.cn/uploads/2020/04/douyin_7.png)
+![](/uploads/2020/04/douyin_7.png)
 
 <style>#share_url,#share_code {width: 230px;text-align: center; border: none;border-bottom: 1px #000 solid;border-radius: 0;} #share_url {outline: none;} #share_btn{border:1px #000 solid; border-radius: 5px; background: none; outline: none; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;} #share_btn:active{background-color: #CCC;}</style>
 

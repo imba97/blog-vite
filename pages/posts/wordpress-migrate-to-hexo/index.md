@@ -91,11 +91,11 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 然后服务器建议用`Nginx`，其他看你需求
 
-![](https://imba97.cn/uploads/2020/12/wordpress-to-hexo-1.png)
+![](/uploads/2020/12/wordpress-to-hexo-1.png)
 
 安装好后添加静态网站
 
-![](https://imba97.cn/uploads/2020/12/wordpress-to-hexo-2.png)
+![](/uploads/2020/12/wordpress-to-hexo-2.png)
 
 服务器的网站部分就到这了
 

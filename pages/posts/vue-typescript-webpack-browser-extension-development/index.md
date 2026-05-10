@@ -177,7 +177,7 @@ new HtmlWebpackPlugin({
 
 最后配置好`manifest.json`，就可以直接用浏览器导入插件看效果了
 
-![](//imba97.cn/uploads/2020/05/btools-vue.png)
+![](/uploads/2020/05/btools-vue.png)
 
 `manifest.json`可以用一个叫`write-json-webpack-plugin`，这个插件可以加载`.json`文件，转成一个对象，就可以修改
 

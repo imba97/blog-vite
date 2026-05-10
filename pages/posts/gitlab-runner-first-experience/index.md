@@ -81,7 +81,7 @@ ERROR: Job failed: exit status 1
 
 只要在这一步选择合适的执行器，比如根据 `gitlab-ci.yml` 的需要
 
-![](https://imba97.cn/uploads/2023/07/gitlab-runner-1.png)
+![](/uploads/2023/07/gitlab-runner-1.png)
 
 我要用到 `node` 环境，所以这里可以选 `docker`
 

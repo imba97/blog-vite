@@ -19,13 +19,13 @@ categories:
 
 展示食材基本信息、制作必须食材和条件
 
-![](https://imba97.cn/uploads/2025/02/dst-recipe-1.png)
+![](/uploads/2025/02/dst-recipe-1.png)
 
 ## 多个结果
 
 多个结果可以滑动查看
 
-![](https://imba97.cn/uploads/2025/02/dst-recipe-2.png)
+![](/uploads/2025/02/dst-recipe-2.png)
 
 # 代码分析
 
@@ -177,7 +177,7 @@ export default class TurkeyDinner extends FoodBase {
 
 会显示为这样
 
-![](https://imba97.cn/uploads/2025/02/dst-recipe-3.png)
+![](/uploads/2025/02/dst-recipe-3.png)
 
 `_ingredientsCondition` 是所需食材，有时也需要表示某几种食材满足一种即可
 
@@ -236,7 +236,7 @@ export default class GlowBerryMousse extends FoodBase {
 
 会显示为这样
 
-![](https://imba97.cn/uploads/2025/02/dst-recipe-4.png)
+![](/uploads/2025/02/dst-recipe-4.png)
 
 # 开源
 

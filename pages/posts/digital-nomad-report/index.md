@@ -28,23 +28,23 @@ categories:
 
 ## 同步展示在听的歌
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-1.jpg)
+![](/uploads/2025/05/digital-nomad-report-1.jpg)
 
 ## 同步展示在玩的游戏
 
 封装了一个简单的 Steam SDK，快速获取正在玩的游戏 <span i-mdi-github></span> [steam-playing-game](https://github.com/imba97/steam-playing-game)
 
-![](https://imba97.cn/uploads/2025/03/steam-game-2.png)
+![](/uploads/2025/03/steam-game-2.png)
 
 ## AI 简历
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-2.jpg)
+![](/uploads/2025/05/digital-nomad-report-2.jpg)
 
 # introxd.com
 
 [introxd.com](https://introxd.com) 这是我想到的第一个项目，个人简介定制
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-3.jpg)
+![](/uploads/2025/05/digital-nomad-report-3.jpg)
 
 在做 imba97.me 的时候，想到也许其他人也会需要一个快速展示自己的网站，所以就有了这个项目
 
@@ -72,35 +72,35 @@ Base 在武汉，当时也去了，是个开放办公室，同事大部分都是
 
 ## 大连
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-4.jpg)
+![](/uploads/2025/05/digital-nomad-report-4.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-5.jpg)
+![](/uploads/2025/05/digital-nomad-report-5.jpg)
 
 ## 昆明
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-6.jpg)
+![](/uploads/2025/05/digital-nomad-report-6.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-7.jpg)
+![](/uploads/2025/05/digital-nomad-report-7.jpg)
 
 ## 大理
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-8.jpg)
+![](/uploads/2025/05/digital-nomad-report-8.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-9.jpg)
+![](/uploads/2025/05/digital-nomad-report-9.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-10.jpg)
+![](/uploads/2025/05/digital-nomad-report-10.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-11.jpg)
+![](/uploads/2025/05/digital-nomad-report-11.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-12.jpg)
+![](/uploads/2025/05/digital-nomad-report-12.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-13.jpg)
+![](/uploads/2025/05/digital-nomad-report-13.jpg)
 
 ## 老家
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-14.jpg)
+![](/uploads/2025/05/digital-nomad-report-14.jpg)
 
-![](https://imba97.cn/uploads/2025/05/digital-nomad-report-15.jpg)
+![](/uploads/2025/05/digital-nomad-report-15.jpg)
 
 # 获奖感言
 

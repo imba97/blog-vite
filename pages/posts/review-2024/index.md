@@ -26,7 +26,7 @@ categories:
 
 下半年辞职后 <span icon i-ic-round-directions-bike text-primary></span> 骑车从南京出发回老家，骑了 600 公里
 
-![](https://imba97.cn/uploads/2024/12/report-2024-1.jpg)
+![](/uploads/2024/12/report-2024-1.jpg)
 
 # 工作
 

@@ -48,7 +48,7 @@ categories:
 
 ## Unknown custom element
 
-![](//imba97.cn/uploads/2020/08/js2ts-1.png)
+![](/uploads/2020/08/js2ts-1.png)
 
 `[Vue warn]: Unknown custom element: <el-row>`
 

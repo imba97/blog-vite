@@ -18,11 +18,11 @@ categories:
 
 我们就可以简单配置一下，在打包结束后自动执行这个程序
 
-![](https://imba97.cn/uploads/2022/10/simple-zip-upload-1.png)
+![](/uploads/2022/10/simple-zip-upload-1.png)
 
 并且可以直接下载压缩包
 
-![](https://imba97.cn/uploads/2022/10/simple-zip-upload-2.png)
+![](/uploads/2022/10/simple-zip-upload-2.png)
 
 **好了，现在只要把后端骗进群，压力一下子就来到了后端这边**
 

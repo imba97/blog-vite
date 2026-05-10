@@ -25,7 +25,7 @@ categories:
 
 下载：[gwe.zip](http://static.imba97.cn/uploads/gwe.zip) `208.0K`
 
-![](//imba97.cn/uploads/2019/09/v1.png)
+![](/uploads/2019/09/v1.png)
 
 点击 Add Gateway 添加
 Name 随便
@@ -43,4 +43,4 @@ IP   PvPGN 服务器IP或域名
 
 点击`Battle.net`，然后注册或者输入用户名和密码登陆，即可看到以下界面
 
-![](//imba97.cn/uploads/2019/09/pvpgn-3.png)
+![](/uploads/2019/09/pvpgn-3.png)

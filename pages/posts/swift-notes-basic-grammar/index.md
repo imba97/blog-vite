@@ -290,7 +290,7 @@ switch number {
 
 使用 switch 和 元组数据 和 用`_`忽略某个判断值，来判断某个点在下图什么位置
 
-![](//imba97.cn/uploads/2020/02/swift-1-1.png)
+![](/uploads/2020/02/swift-1-1.png)
 
 ```swift
 let point = (0, 0)
@@ -324,7 +324,7 @@ switch point {
 
 使用 switch 的数据绑定 和 where 判断条件成立，来判断某个点是否在下图紫线或绿线上
 
-![](//imba97.cn/uploads/2020/02/swift-1-2.png)
+![](/uploads/2020/02/swift-1-2.png)
 
 ```swift
 let point = (0, 0)

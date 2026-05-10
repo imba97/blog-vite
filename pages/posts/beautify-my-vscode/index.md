@@ -11,7 +11,7 @@ categories:
 
 # 上图
 
-![](https://imba97.cn/uploads/2024/05/vscode-1.png)
+![](/uploads/2024/05/vscode-1.png)
 
 首先，大多数配置来自托尼老师的方案，详情请看 <span icon i-mdi-github></span> [antfu/use](https://github.com/antfu/use)
 
@@ -45,7 +45,7 @@ categories:
 
 `code-server` 中使用 `Vitesse Theme`，目前插件市场中只有老版本，只能使用 `Vitesse Light` 和 `Vitesse Dark`
 
-![](https://imba97.cn/uploads/2024/05/vscode-2.png)
+![](/uploads/2024/05/vscode-2.png)
 
 但可以通过下载 `vsix` 文件手动拖到里面来安装最新版本
 

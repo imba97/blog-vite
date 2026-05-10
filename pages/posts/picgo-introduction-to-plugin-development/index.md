@@ -14,7 +14,7 @@ categories:
 
 [PicGo](https://github.com/Molunerfinn/PicGo)是**一个用于快速上传图片并获取图片 URL 链接的工具**，可以把本地图片上传到图床并返回各种格式的链接
 
-![](https://imba97.cn/uploads/2021/01/picgo-1.png)
+![](/uploads/2021/01/picgo-1.png)
 
 <!--more-->
 
@@ -126,11 +126,11 @@ npm install C:\Users\imba97\Desktop\test
 
 不报错的话你就可以在插件列表里看到你的插件了
 
-![](https://imba97.cn/uploads/2021/01/picgo-2.png)
+![](/uploads/2021/01/picgo-2.png)
 
 把它设置成默认图床
 
-![](https://imba97.cn/uploads/2021/01/picgo-3.png)
+![](/uploads/2021/01/picgo-3.png)
 
 随便上传个东西，看一下日志有没有正常输出
 

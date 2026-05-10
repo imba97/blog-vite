@@ -11,7 +11,7 @@ categories:
 
 # 做个自我介绍
 
-![](https://imba97.cn/uploads/2025/04/imba97-ai-1.gif)
+![](/uploads/2025/04/imba97-ai-1.gif)
 
 做了个求职偷懒 AI，基于我的简历数据的聊天，目前感觉有不少场景都可以用上
 

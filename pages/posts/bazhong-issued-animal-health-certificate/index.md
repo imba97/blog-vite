@@ -25,7 +25,7 @@ categories:
 
 在地图搜动物卫生监督所，只能搜到一个地方。这个地方挺难找，到了之后找了半天才找到相关的办公室
 
-![](https://imba97.cn/uploads/2021/04/bazhong-1.jpg)
+![](/uploads/2021/04/bazhong-1.jpg)
 
 当时是周六，碰到一位大叔说今天不上班，并被告知动物检疫合格证明**不是在这里开**，这位大叔还热心的给我指路
 
@@ -35,17 +35,17 @@ categories:
 
 于是今天，我趁工作日又去了一趟巴中市动物卫生监督所，说明情况后工作人员给我一个电话，还耐心的用我听不太懂的四川话告诉我位置
 
-![](https://imba97.cn/uploads/2021/04/bazhong-2.jpg)
+![](/uploads/2021/04/bazhong-2.jpg)
 
 到这里后我又打电话询问具体位置
 
 首先找到**草坝街**（绿点位置）
 
-![](https://imba97.cn/uploads/2021/04/bazhong-3.jpg)
+![](/uploads/2021/04/bazhong-3.jpg)
 
 长这样
 
-![](https://imba97.cn/uploads/2021/04/bazhong-4.jpg)
+![](/uploads/2021/04/bazhong-4.jpg)
 
 顺着草坝街往前走，遇到一个人物雕像再往前走，走到一个**石头卷轴**，然后右拐拐进一个过道
 
@@ -53,11 +53,11 @@ categories:
 
 出电梯后就能看到牌子
 
-![](https://imba97.cn/uploads/2021/04/bazhong-5.jpg)
+![](/uploads/2021/04/bazhong-5.jpg)
 
 右转后有个楼道口，进去就能看到门了
 
-![](https://imba97.cn/uploads/2021/04/bazhong-6.jpg)
+![](/uploads/2021/04/bazhong-6.jpg)
 
 ---
 

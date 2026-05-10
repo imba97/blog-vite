@@ -28,7 +28,7 @@ categories:
 
 通过文件对比，可以看出项目A的`.sln`文件要多几行内容
 
-![](//imba97.cn/uploads/2020/08/unity-vscode-1.png)
+![](/uploads/2020/08/unity-vscode-1.png)
 
 **第一段不同**
 
@@ -78,7 +78,7 @@ EndGlobal
 
 两个文件的图
 
-![](//imba97.cn/uploads/2020/08/unity-vscode-2.png)
+![](/uploads/2020/08/unity-vscode-2.png)
 
 ## 第二步
 
@@ -86,11 +86,11 @@ EndGlobal
 
 选择项目`.sln`文件，回车
 
-![](//imba97.cn/uploads/2020/08/unity-vscode-3.png)
+![](/uploads/2020/08/unity-vscode-3.png)
 
 等一会后你会发现VsCode左下角出现`.sln`文件名，这样就可以了
 
-![](//imba97.cn/uploads/2020/08/unity-vscode-4.png)
+![](/uploads/2020/08/unity-vscode-4.png)
 
 ---
 

@@ -50,7 +50,7 @@ Options:
 
 首先复制 `iconfont` 提供的 `CSS` 文件链接
 
-![](https://imba97.cn/uploads/2024/09/iconfontx-1.png)
+![](/uploads/2024/09/iconfontx-1.png)
 
 执行命令
 
@@ -62,8 +62,8 @@ npx iconfontx //at.alicdn.com/t/xxx.css
 
 引入样式后可以直接使用图标
 
-![](https://imba97.cn/uploads/2024/09/iconfontx-2.png)
+![](/uploads/2024/09/iconfontx-2.png)
 
 并且会压缩样式代码
 
-![](https://imba97.cn/uploads/2024/09/iconfontx-3.png)
+![](/uploads/2024/09/iconfontx-3.png)

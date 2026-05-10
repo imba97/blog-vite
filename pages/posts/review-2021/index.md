@@ -35,7 +35,7 @@ categories:
 
 本来是通过了，武装部的短信都来了
 
-<img src="https://imba97.cn/uploads/2021/12/report-2021-1.jpg" style="zoom:50%;" />
+<img src="/uploads/2021/12/report-2021-1.jpg" style="zoom:50%;" />
 
 6月份的某天我一看征兵网，发现年龄不合格了
 
@@ -63,7 +63,7 @@ categories:
 
    [picgo-plugin-sftp-uploader](https://github.com/imba97/picgo-plugin-sftp-uploader) SFTP 上传
 
-   ![](https://imba97.cn/uploads/2021/12/report-2021-2.jpg)
+   ![](/uploads/2021/12/report-2021-2.jpg)
 
    ---
 
@@ -73,7 +73,7 @@ categories:
 
    可单独使用，可作为`webpack`插件使用，也可以单纯作为上传工具用
 
-   ![](https://imba97.cn/uploads/2021/12/report-2021-3.jpg)
+   ![](/uploads/2021/12/report-2021-3.jpg)
 
    Github：[simple-sftp-uploader](https://github.com/imba97/simple-sftp-uploader)
 
@@ -139,7 +139,7 @@ categories:
 
    每天 `00:00:05` 这个时间点在 [索尼中国官网](https://www.sonystyle.com.cn/) 和 [My Sony 社区](https://www.sonystyle.com.cn/mysony/bbs/web/) 自动签到
 
-   ![](https://imba97.cn/uploads/2021/12/report-2021-4.png)
+   ![](/uploads/2021/12/report-2021-4.png)
 
    Github：[sonystyle-auto-sign-in](https://github.com/imba97/imba97_project/tree/master/sonystyle-auto-sign-in)
 
@@ -178,7 +178,7 @@ categories:
 
     每天提交日报多少有点麻烦，之前我是每天去看`git`的提交记录，一条条复制粘贴到日报里。但这完全能用程序解决，这个程序就是可以在**指定时间**，去一个或多个**指定项目目录**下拉取`git log`，从中取出**指定用户**提交的信息，没有则会过滤，并可以**指定前缀**，只有带这个前缀的才会被抓取，最后自动发送到钉钉群
 
-    ![](https://imba97.cn/uploads/2021/12/report-2021-5.png)
+    ![](/uploads/2021/12/report-2021-5.png)
 
     比如我设置的，每天`18:00`拉取4个项目的日志，用户是`imba97`，前缀是`report: `
 

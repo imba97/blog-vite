@@ -151,7 +151,7 @@ Url.USER_CARD.request({
 
 用的时候会有代码提示，可以明确知道调用这个接口需要传哪些参数
 
-![](https://imba97.cn/uploads/2021/01/url-1.png)
+![](/uploads/2021/01/url-1.png)
 
 ## C#
 
@@ -493,15 +493,15 @@ Url.POST_TEST_COMPLEX.Request(new Params.POST_TEST_COMPLEX()
 
 传参代码提示：
 
-![](https://imba97.cn/uploads/2021/01/url-2.png)
+![](/uploads/2021/01/url-2.png)
 
 传参类型约束：
 
-![](https://imba97.cn/uploads/2021/01/url-3.png)
+![](/uploads/2021/01/url-3.png)
 
 返回值代码提示：
 
-![](https://imba97.cn/uploads/2021/01/url-4.png)
+![](/uploads/2021/01/url-4.png)
 
 这里面用的JSON格式化包是[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)，比`JsonUtility`不知道要好用多少
 

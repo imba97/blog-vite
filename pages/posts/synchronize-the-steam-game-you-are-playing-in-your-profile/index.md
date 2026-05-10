@@ -13,7 +13,7 @@ categories:
 
 之前写过一个同步我当前正在听的音乐，大概长这样
 
-![](https://imba97.cn/uploads/2025/03/steam-game-1.png)
+![](/uploads/2025/03/steam-game-1.png)
 
 # 这次
 
@@ -21,9 +21,9 @@ categories:
 
 于是去看了一下 Steam API，发现还真行，效果是这样的
 
-![](https://imba97.cn/uploads/2025/03/steam-game-2.png)
+![](/uploads/2025/03/steam-game-2.png)
 
-![](https://imba97.cn/uploads/2025/03/steam-game-3.png)
+![](/uploads/2025/03/steam-game-3.png)
 
 开源：[imba97/me](https://github.com/imba97/me)
 

@@ -21,11 +21,11 @@ categories:
 
 见到了业内大佬 [Anthony Fu](https://github.com/antfu)（托尼老师）！
 
-![](https://imba97.cn/uploads/2024/08/summer-day-1.jpg)
+![](/uploads/2024/08/summer-day-1.jpg)
 
 还有著名 Rapper（狗头） [Evan You](https://github.com/yyx990803)（尤大）！
 
-![](https://imba97.cn/uploads/2024/08/summer-day-2.jpg)
+![](/uploads/2024/08/summer-day-2.jpg)
 
 # 骑行
 
@@ -35,7 +35,7 @@ categories:
 
 慢悠悠骑的，一共用了 11 天，骑了 9 天，休息了 2 天，感觉把这辈子的自行车都骑完了
 
-![](https://imba97.cn/uploads/2024/08/summer-day-3.jpg)
+![](/uploads/2024/08/summer-day-3.jpg)
 
 # 找工作
 
@@ -45,7 +45,7 @@ categories:
 
 布置了一下办公环境，买了人体工学椅和升降桌，可以罚站了
 
-![](https://imba97.cn/uploads/2024/08/summer-day-4.jpg)
+![](/uploads/2024/08/summer-day-4.jpg)
 
 # 开源
 
@@ -71,7 +71,7 @@ categories:
 
 现在几乎啥症状都没了，就八月失眠一次
 
-![](https://imba97.cn/uploads/2024/08/summer-day-5.jpg)
+![](/uploads/2024/08/summer-day-5.jpg)
 
 # 暑假后
 

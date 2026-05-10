@@ -21,7 +21,7 @@ categories:
 
 除了前端也搞一搞 `nodejs` 之类的，简单写写 `iOS` 相关的，于是变成了这样
 
-<img src="https://imba97.cn/uploads/2023/12/report-2023-1.png" style="zoom:50%;" />
+<img src="/uploads/2023/12/report-2023-1.png" style="zoom:50%;" />
 
 加班略多，也学到不少新鲜东西
 
@@ -43,7 +43,7 @@ categories:
 
    之后又做了一个玩梗的：“陶吉吉模拟器”。后面如果有什么有意思的想法还会继续更新
 
-   <img src="https://imba97.cn/uploads/2023/12/report-2023-2.png" style="zoom:50%;" />
+   <img src="/uploads/2023/12/report-2023-2.png" style="zoom:50%;" />
 
    项目不大，里有图片音频预加载、国际化，整个一踩坑练手项目，有兴趣可以看一下
 
@@ -59,7 +59,7 @@ categories:
 
    并参考大佬的方案做了自动化发布 `docker` 镜像
 
-   ![](https://imba97.cn/uploads/2023/04/code-server-1.png)
+   ![](/uploads/2023/04/code-server-1.png)
 
    博客文章: [《搭建自己的在线 vscode》](https://imba97.cn/archives/762/)
 
@@ -87,7 +87,7 @@ categories:
 
      太麻烦！于是写了个脚本
 
-     ![](https://imba97.cn/uploads/2023/12/report-2023-3.png)
+     ![](/uploads/2023/12/report-2023-3.png)
 
      ---
 
@@ -97,7 +97,7 @@ categories:
 
      于是就有了这个一键上传脚本，还配置了自动化，只需要提交一下 `git`，剩下的交给 `Gitlab Runner` 自动化处理
 
-     ![](https://imba97.cn/uploads/2023/12/report-2023-4.png)
+     ![](/uploads/2023/12/report-2023-4.png)
 
      ---
 
@@ -107,7 +107,7 @@ categories:
 
      公司项目批量添加了分组，写了个批量替换器，可以很方便查询一个文件夹下所有项目仓库，并通过字符串或正则匹配进行替换
 
-     ![](https://imba97.cn/uploads/2023/12/report-2023-5.png)
+     ![](/uploads/2023/12/report-2023-5.png)
 
      ---
 
@@ -117,7 +117,7 @@ categories:
 
      其实也可以直接隐藏桌面图标。唯一的用处可能就是让我知道了获取用户目录的方法和 `node` 命令行等待输入的方法
 
-     ![](https://imba97.cn/uploads/2023/12/report-2023-6.png)
+     ![](/uploads/2023/12/report-2023-6.png)
 
 # 小玩意儿
 
@@ -125,7 +125,7 @@ categories:
 
 有了两台小主机，一台是之前的 `All in One`，一台单独跑了 `Jellyfin` 做硬解
 
-![](https://imba97.cn/uploads/2023/12/report-2023-7.png)
+![](/uploads/2023/12/report-2023-7.png)
 
 # 感悟
 

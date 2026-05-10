@@ -27,7 +27,7 @@ categories:
 
 每次我洗完头，第二天的发型绝对是千奇百怪，某天起来发现头上出现一只完美的猫耳（骄傲）！于是揪着另一边拍了一张。
 
-<img src="//imba97.cn/uploads/2024/07/about-avatar.png" rounded-2 >
+<img src="/uploads/2024/07/about-avatar.png" rounded-2 >
 
 > 头像设计来自 [neu.salon](https://neu.salon)
 
@@ -69,7 +69,7 @@ categories:
 
 <div text="#44b549" font-bold>微信公众号</div>
 
-<img src="//imba97.cn/uploads/2019/12/wechat_qr.jpg" size="32!">
+<img src="/uploads/2019/12/wechat_qr.jpg" size="32!">
 
 ---
 

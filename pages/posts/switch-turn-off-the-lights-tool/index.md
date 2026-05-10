@@ -16,7 +16,7 @@ categories:
 
 <!--more-->
 
-![](//imba97.cn/uploads/2018/08/switch_1.png)
+![](/uploads/2018/08/switch_1.png)
 
 用途：看视频非全屏时用的，将播放器周围变暗，变得更容易观看（理论上，不过讲真我觉得无所谓，因为我微博背景是个动图，我刷微博都没被背景分过心。
 
@@ -28,7 +28,7 @@ categories:
 
 之后的方法是这个：
 
-![](//imba97.cn/uploads/2018/08/switch_2.jpg)
+![](/uploads/2018/08/switch_2.jpg)
 
 把域名和这个网站对应元素的id或class放上
 
@@ -40,17 +40,17 @@ categories:
 
 支持中日双语：
 
-![](//imba97.cn/uploads/2018/08/switch_3.gif)
+![](/uploads/2018/08/switch_3.gif)
 
 然后这个页面需要先“开灯”，算是呼应主题
 
-![](//imba97.cn/uploads/2018/08/switch_4.gif)
+![](/uploads/2018/08/switch_4.gif)
 
 emmm...
 
 至于桌子中间那个，为什么要用这么一个图，首先说一下这里面所有东西都是自己随便画的（鼠绘）。符合本人个性，毕竟我做的页面、程序之类的基本都是以搞怪为主题的（并不是老司机。
 
-![](//imba97.cn/uploads/2018/08/switch_5.jpg)
+![](/uploads/2018/08/switch_5.jpg)
 
 这是所有的图。可以很清楚的看到无码版的是个棕色皮肤人种的“蒜头鼻”。
 
@@ -66,29 +66,29 @@ emmm...
 
 页面里的提示：
 
-![](//imba97.cn/uploads/2018/08/switch_6.png)
+![](/uploads/2018/08/switch_6.png)
 
 以及，日语版
 
-![](//imba97.cn/uploads/2018/08/switch_7.png)
+![](/uploads/2018/08/switch_7.png)
 
 设置及设置的提示：
 
-![](//imba97.cn/uploads/2018/08/switch_8.jpg)
+![](/uploads/2018/08/switch_8.jpg)
 
 还有蒜头鼻：
 
-![](//imba97.cn/uploads/2018/08/switch_9.png)
+![](/uploads/2018/08/switch_9.png)
 
 嗯。非常人性化的提示。（至于写的是啥视频里貌似能看到 2333
 
-![](//imba97.cn/uploads/2018/08/switch_10.gif)
+![](/uploads/2018/08/switch_10.gif)
 
 使用方法：
 
 将这个打了码的棕色人种的蒜头鼻拖进收藏夹
 
-![](//imba97.cn/uploads/2018/08/switch_11.gif)
+![](/uploads/2018/08/switch_11.gif)
 
 设置：
 
@@ -98,13 +98,13 @@ emmm...
 
 还可以通过直接点击你收藏夹的按钮，像这样：
 
-![](//imba97.cn/uploads/2018/08/switch_12.gif)
+![](/uploads/2018/08/switch_12.gif)
 
 会读取你之前的设置，如果版本不同会提示基于哪个版本，还会显示当前最新版本
 
 下面是重新设置：
 
-![](//imba97.cn/uploads/2018/08/switch_13.gif)
+![](/uploads/2018/08/switch_13.gif)
 
 改了个名字和快捷键，设置好后再次把“蒜头鼻”拖进收藏夹就可以了。点击不同的按钮会获取按钮相应的设置
 
@@ -112,13 +112,13 @@ emmm...
 
 可以说是程序reset，也可以叫彩弹
 
-![](//imba97.cn/uploads/2018/08/switch_14.gif)
+![](/uploads/2018/08/switch_14.gif)
 
 （不过公布出来就不叫彩弹了吧，就是点10下上面的灯，会掉下来，然后进入初始界面。
 
 实际演示：
 
-![](//imba97.cn/uploads/2018/08/switch_15.gif)
+![](/uploads/2018/08/switch_15.gif)
 
 目前理论还支持B站、A站、优酷土豆、爱奇艺、微博、乐视、N站、油管（因为没试所以理论上支持。
 

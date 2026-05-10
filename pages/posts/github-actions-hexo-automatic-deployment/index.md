@@ -54,7 +54,7 @@ categories:
 
 其他的事情交给 `Github Actions`
 
-![](https://imba97.cn/uploads/2022/11/github-actions-hexo-1.png)
+![](/uploads/2022/11/github-actions-hexo-1.png)
 
 整个流程是
 
@@ -144,7 +144,7 @@ jobs:
 
 经过了大概 `40` 次左右的测试，最后终于是成功部署
 
-![](https://imba97.cn/uploads/2022/11/github-actions-hexo-2.png)
+![](/uploads/2022/11/github-actions-hexo-2.png)
 
 ## 主要问题
 
@@ -154,7 +154,7 @@ jobs:
 
 私钥创建流程，我是在我本地创建了一对密钥，把私钥复制出来放到仓库配置中
 
-![](https://imba97.cn/uploads/2022/11/github-actions-hexo-3.png)
+![](/uploads/2022/11/github-actions-hexo-3.png)
 
 工作流使用的时候就把它写入到文件
 
@@ -178,7 +178,7 @@ ssh-keyscan -t rsa 1.2.3.4 >> ~/.ssh/known_hosts
 
 至此，我本地将不在管理博客的任何东西，甚至写博客都可以随时打开 `Github` 来写，比如现在
 
-![](https://imba97.cn/uploads/2022/11/github-actions-hexo-4.png)
+![](/uploads/2022/11/github-actions-hexo-4.png)
 
 而且依然也可以在本地写，如果换主题肯定还是要本地跑一下测一下的
 

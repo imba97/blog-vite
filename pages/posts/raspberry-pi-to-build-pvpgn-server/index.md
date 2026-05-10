@@ -73,12 +73,12 @@ make && make install
 
 最后你可以在`Battle.net Gateways Editor`中测试连接是否正常
 
-![](//imba97.cn/uploads/2019/09/pvpgn-1.png)
+![](/uploads/2019/09/pvpgn-1.png)
 
 如果你做了内网映射，你可配置一下端口，即可从外网访问到你树莓派PvPGN服务器
 
-![](//imba97.cn/uploads/2019/09/pvpgn-2.png)
+![](/uploads/2019/09/pvpgn-2.png)
 
 最后成功连上服务器，连接需要做一些操作，详情请看：[《魔兽争霸3连接PvPGN服务器》](//imba97.cn/archives/437)
 
-![](//imba97.cn/uploads/2019/09/pvpgn-3.png)
+![](/uploads/2019/09/pvpgn-3.png)

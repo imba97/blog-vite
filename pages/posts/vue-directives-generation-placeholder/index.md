@@ -15,7 +15,7 @@ categories:
 
 不设置感觉空荡荡的，但如果自己一条条的写又感觉非常麻烦
 
-![](https://imba97.cn/uploads/2023/02/auto-placeholder-1.jpg)
+![](/uploads/2023/02/auto-placeholder-1.jpg)
 
 那我们为何不封装个指令，让它自己加呢
 
@@ -117,4 +117,4 @@ export default {
 
 就可以自动生成 `placeholder`
 
-![](https://imba97.cn/uploads/2023/02/auto-placeholder-2.jpg)
+![](/uploads/2023/02/auto-placeholder-2.jpg)

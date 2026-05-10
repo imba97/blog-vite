@@ -42,9 +42,9 @@ categories:
 
    整个项目分三块，服务端、用户端、管理端，边摸索边做的
 
-   ![](https://imba97.cn/uploads/2022/12/report-2022-2.png)
+   ![](/uploads/2022/12/report-2022-2.png)
 
-   ![](https://imba97.cn/uploads/2022/12/report-2022-3.png)
+   ![](/uploads/2022/12/report-2022-3.png)
 
    Github：[bsr-project](https://github.com/bsr-project)
 
@@ -56,7 +56,7 @@ categories:
 
    可以打包后一键压缩、管理版本、推送钉钉群
 
-   ![](https://imba97.cn/uploads/2022/10/simple-zip-upload-1.png)
+   ![](/uploads/2022/10/simple-zip-upload-1.png)
 
    Github：[simple-zip-upload](https://github.com/imba97/simple-zip-upload)
 
@@ -76,4 +76,4 @@ categories:
 
 在今年最后几天决定更新一下网络环境设备，准备把零散的设备 All in One
 
-![](https://imba97.cn/uploads/2022/12/report-2022-4.jpg)
+![](/uploads/2022/12/report-2022-4.jpg)

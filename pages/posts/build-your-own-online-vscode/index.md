@@ -10,7 +10,7 @@ categories:
 
 # 一张图
 
-![](https://imba97.cn/uploads/2023/04/code-server-1.png)
+![](/uploads/2023/04/code-server-1.png)
 
 # code-server
 
@@ -32,7 +32,7 @@ categories:
 
 - 给 `zsh` 装了个可可爱爱的主题
 
-  ![](https://imba97.cn/uploads/2023/04/code-server-2.png)
+  ![](/uploads/2023/04/code-server-2.png)
 
 - 安装了 `nvm`、`nodejs`、`yarn`、`pnpm`、`vue-cli` 等前端环境
 

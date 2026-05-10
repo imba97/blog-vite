@@ -83,4 +83,4 @@ tsclib.closeport()
 
 最后你就会看到，一个小到 3KB 的打印任务出现在 Windows 打印队列里
 
-![](https://imba97.cn/uploads/2023/11/nodejs-tsclib-1.png)
+![](/uploads/2023/11/nodejs-tsclib-1.png)

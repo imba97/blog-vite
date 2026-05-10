@@ -52,7 +52,7 @@ audio.load()
 
 就是地址栏或者 `tab bar` 也会计算在 `100vh` 里，所以实际获取到的高度就是 **可视区域** + **tab bar**
 
-![](https://imba97.cn/uploads/2023/12/safari-1.png)
+![](/uploads/2023/12/safari-1.png)
 
 > 图片来自 [https://web.dev/blog/viewport-units?hl=zh-cn](https://web.dev/blog/viewport-units?hl=zh-cn)
 

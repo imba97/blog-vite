@@ -26,7 +26,7 @@ categories:
 
 请记住，它叫：[rustdesk](https://rustdesk.com/)
 
-<img src="https://imba97.cn/uploads/2023/08/rustdesk-1.png" style="zoom:50%;" />
+<img src="/uploads/2023/08/rustdesk-1.png" style="zoom:50%;" />
 
 它有多良心，如果说全平台和提供免费中继服务器，是一个远程桌面软件最基本的条件，那么开源和支持自建服务器就实属是**格局大开**了
 
@@ -42,7 +42,7 @@ categories:
 
 这次浅浅尝试了一下，在软路由 `Docker` 跑起来一个服务端，使用 `NPS` 穿透到公网，穿透服务器位置是北京，但速度依然飞快，手机远程控制非常跟手
 
-<img src="https://imba97.cn/uploads/2023/08/rustdesk-2.png" style="zoom:50%;" />
+<img src="/uploads/2023/08/rustdesk-2.png" style="zoom:50%;" />
 
 # 其他要说的
 

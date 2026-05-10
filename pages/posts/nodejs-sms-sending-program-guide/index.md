@@ -27,15 +27,15 @@ categories:
 
 - 封装好的 4G 模块 **(A7680C)**
 
-  <img src="https://imba97.cn/uploads/2023/07/serialport-1-1.jpg" style="zoom:50%;" />
+  <img src="/uploads/2023/07/serialport-1-1.jpg" style="zoom:50%;" />
 
 - USB TO TTL **(CH340G)** 一般会附赠线
 
-  <img src="https://imba97.cn/uploads/2023/07/serialport-1-2.jpg" style="zoom:50%;" />
+  <img src="/uploads/2023/07/serialport-1-2.jpg" style="zoom:50%;" />
 
 # 接线参考
 
-<img src="https://imba97.cn/uploads/2023/07/serialport-1-3.jpg" style="zoom:50%;" />
+<img src="/uploads/2023/07/serialport-1-3.jpg" style="zoom:50%;" />
 
 # 测试
 
@@ -59,11 +59,11 @@ categories:
 
 有的教程说的最后发送 `Ctrl + Z` 其实说的就是 `1A`
 
-![](https://imba97.cn/uploads/2023/07/serialport-1-4.jpg)
+![](/uploads/2023/07/serialport-1-4.jpg)
 
 接收成功的短信
 
-<img src="https://imba97.cn/uploads/2023/07/serialport-1-5.jpg" style="zoom: 33%;" />
+<img src="/uploads/2023/07/serialport-1-5.jpg" style="zoom: 33%;" />
 
 ## 发送中文短信
 

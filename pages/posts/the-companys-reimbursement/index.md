@@ -34,13 +34,13 @@ categories:
 
 制冰机到了之后，我开始了我的报销计划，在群里发了这么个东西
 
-![](https://imba97.com/uploads/2025/08/ice-1.jpg)
+![](/uploads/2025/08/ice-1.jpg)
 
 主打一个没法反驳
 
 然后在制冰机旁边还贴了个这个
 
-![](https://imba97.com/uploads/2025/08/ice-2.jpg)
+![](/uploads/2025/08/ice-2.jpg)
 
 # 结果
 

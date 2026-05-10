@@ -31,7 +31,7 @@ categories:
 
 本质上这并不是 AI 的问题。原因是 AI 是目的专注的，当你给 AI 提出一个问题修复时，它的目光首先会聚焦在目的本身，然后向外扩散检查相关逻辑。在混乱的代码中，它的专注力更多的会在出问题的一条逻辑线上，所以如果逻辑互相有多处关联
 
-![](https://imba97.com/uploads/2025/11/dont-just-give-ai-soft-give-it-hard-too-1.png)
+![](/uploads/2025/11/dont-just-give-ai-soft-give-it-hard-too-1.png)
 
 就会非常容易因修复一个问题产生一个或多个新的问题
 
@@ -39,7 +39,7 @@ categories:
 
 解决这个问题，只优化 AI 文档总是有限的，代码的优化也是必不可少的。包括但不限于，使用设计模式、提供抽象类、配置代码规范等等。最理想的状态是，让 AI、文档、代码，形成一个稳定的三角关系
 
-![](https://imba97.com/uploads/2025/11/dont-just-give-ai-soft-give-it-hard-too-2.png)
+![](/uploads/2025/11/dont-just-give-ai-soft-give-it-hard-too-2.png)
 
 近期在实现某个相对独立的模块的时候，我尝试尽可能脱离原本的代码去实现，添加了 `TypeScript` 做类型约束、实现基础抽象类等，让新增模块中的功能像做填空题一样，或者说像插件开发一样。经历了几次小范围重构和优化，<span text="#7B6FF6">**代码**</span>提供硬的约束边界，<span text="#89E2FC">**文档**</span>提供软的方向指导，再通过 <span text="#FFDE5E">**AI**</span> 让两者之间不断循环迭代
 

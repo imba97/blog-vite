@@ -18,7 +18,7 @@ categories:
 
 # h2l-ranking
 
-![](https://imba97.com/uploads/2026/02/h2l-ranking-1.png)
+![](/uploads/2026/02/h2l-ranking-1.png)
 
 体验页面：[https://imba97.me/ranking](https://imba97.me/ranking)
 

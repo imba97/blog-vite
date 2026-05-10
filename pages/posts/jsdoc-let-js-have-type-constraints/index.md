@@ -22,13 +22,13 @@ categories:
 
 比如最简单的`document.querySelector`
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-1.png)
+![](/uploads/2021/10/jsdoc-1.png)
 
 它会返回一个`Element`类型的数据，页面元素的基础类型`HTMLElement`就继承了该类型
 
 但这时如果你想修改`style`，你会发现它并不会给你提示，因为`style`是`HTMLElement`的属性
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-2.png)
+![](/uploads/2021/10/jsdoc-2.png)
 
 # JS Doc
 
@@ -43,7 +43,7 @@ const test = document.querySelector('.test')
 
 此时再看代码提示，就出现了
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-3.png)
+![](/uploads/2021/10/jsdoc-3.png)
 
 并且你可以开启类型检查
 
@@ -57,7 +57,7 @@ const test = document.querySelector('.test')
 
 此时如果你写的代码不规范，语法检查就会报错
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-4.png)
+![](/uploads/2021/10/jsdoc-4.png)
 
 这样就可以在运行前排除掉大部分因为粗心导致的问题
 
@@ -89,7 +89,7 @@ const str = 'string'
 const test = {}
 ```
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-5.png)
+![](/uploads/2021/10/jsdoc-5.png)
 
 ## @typedef
 
@@ -110,7 +110,7 @@ const test = {}
 const test = {}
 ```
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-6.png)
+![](/uploads/2021/10/jsdoc-6.png)
 
 ## @param
 
@@ -127,7 +127,7 @@ function sum(n1, n2) {
 }
 ```
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-7.png)
+![](/uploads/2021/10/jsdoc-7.png)
 
 ## @template
 
@@ -137,7 +137,7 @@ function sum(n1, n2) {
 
 这样你就可以有更好的语法提示
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-8.png)
+![](/uploads/2021/10/jsdoc-8.png)
 
 比如我们可以封装一个简单的`findIndex`，类似`lodash`的一个函数，查找值的下标
 
@@ -195,11 +195,11 @@ console.log(
 )
 ```
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-9.png)
+![](/uploads/2021/10/jsdoc-9.png)
 
 此时如果类型与传递的数组不相符，则会报错
 
-![](https://imba97.cn/uploads/2021/10/jsdoc-10.png)
+![](/uploads/2021/10/jsdoc-10.png)
 
 其实这个例子举的不太好，因为那个函数本身只能传一个对象数组
 

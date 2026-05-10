@@ -85,7 +85,7 @@ create database cloudreve;
 
 你可以输入`show databases;`查看当前有哪些数据库
 
-![](//imba97.cn/uploads/2020/12/raspberry-pi-cloudreve-1.png)
+![](/uploads/2020/12/raspberry-pi-cloudreve-1.png)
 
 ## 启用mysql
 
@@ -148,4 +148,4 @@ sudo service cloudreve start
 
 访问`树莓派IP:端口`，你就能看到登录页了
 
-![](//imba97.cn/uploads/2020/12/raspberry-pi-cloudreve-2.png)
+![](/uploads/2020/12/raspberry-pi-cloudreve-2.png)

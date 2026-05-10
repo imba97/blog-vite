@@ -14,7 +14,7 @@ categories:
 
 刚开始学`Rust`，基本的一些环境安装完建了个项目后发现跑不了，报错：`linker link.exe not found`
 
-![](https://imba97.cn/uploads/2022/03/rust-1.png)
+![](/uploads/2022/03/rust-1.png)
 
 后面给的提示也很明确，`please ensure that VS 2013, VS 2015, VS 2017 or VS 2019 was installed with the Visual C++ option`
 
@@ -28,6 +28,6 @@ categories:
 
    安装环境时选择**单个组件**，够两个即可：`MSVC v142 - VS 2019 C++ x64/x86 生成工具(最新)`、`Windows 10 SDK (xxx)`，版本号可能有区别
 
-   ![](https://imba97.cn/uploads/2022/03/rust-2.png)
+   ![](/uploads/2022/03/rust-2.png)
 
 等安装完成后可能要重启，不出意外应该就能跑起来了

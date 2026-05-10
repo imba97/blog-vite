@@ -67,7 +67,7 @@ categories:
 
    用树莓派加一块硬盘，做了一个本地网盘，并使用`Aria2`进行离线下载，使用`frp`进行内网穿透（虽然外网访问网盘速度极慢）
 
-   <img src="//imba97.cn/uploads/2020/12/2020-1.jpg" style="height: 300px;" />
+   <img src="/uploads/2020/12/2020-1.jpg" style="height: 300px;" />
 
 我倒是挺喜欢研究一个技术类的东西，并且能正反馈到生活中。
 

@@ -45,6 +45,6 @@ npm ERR!     E:\nodejs\node_cache\_logs\2020-07-30T18_05_50_819Z-debug.log
 
 重新安装在生产环境后，编译终于通过了！！！
 
-![](//imba97.cn/uploads/2020/07/electron-store.png)
+![](/uploads/2020/07/electron-store.png)
 
 <span style="font-size: 30px">真是个大坑，我吐了！</span>

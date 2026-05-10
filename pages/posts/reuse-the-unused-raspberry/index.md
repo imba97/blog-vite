@@ -25,7 +25,7 @@ categories:
 
 于是把树莓派去壳，接上电源，让我极度舒适的是它可以用引脚供电，没有一根线
 
-![](https://imba97.cn/uploads/2024/06/raspberrypi-1.jpg)
+![](/uploads/2024/06/raspberrypi-1.jpg)
 
 因为之前的散热风扇在壳上，去壳后没法固定，所以又入手了个风扇，还带灯
 
@@ -37,7 +37,7 @@ categories:
 
 可以在出问题，SSH 连不上的时候做一些简单的调试
 
-![](https://imba97.cn/uploads/2024/06/raspberrypi-2.jpg)
+![](/uploads/2024/06/raspberrypi-2.jpg)
 
 # 瞎玩
 
@@ -45,7 +45,7 @@ categories:
 
 期间经常看他们项目在维护，感觉差不多了，所以再试试，还不错
 
-![](https://imba97.cn/uploads/2024/06/raspberrypi-3.jpg)
+![](/uploads/2024/06/raspberrypi-3.jpg)
 
 目前安装了一些服务，什么青龙面板、Web 服务之类的简单玩一玩
 

@@ -11,7 +11,7 @@ categories:
 
 一个人终究还是敌不过网络这些黑暗的存在。
 
-![](//imba97.cn/uploads/2020/05/yongfeng-1.png)
+![](/uploads/2020/05/yongfeng-1.png)
 
 <!--more-->
 
@@ -31,7 +31,7 @@ categories:
 
 1点40左右 [硫酸钡Barite](https://space.bilibili.com/5790446) 大佬说他解封了，于是我也去申诉了，然后光速解封！
 
-<img width="300" src="//imba97.cn/uploads/2020/05/yongfeng-14.jpg">
+<img width="300" src="/uploads/2020/05/yongfeng-14.jpg">
 
 最上面那个图和文字我就留着不删了，毕竟是我当时被永久封禁的感受。
 
@@ -41,7 +41,7 @@ categories:
 
 `2020-06-06` 反馈的工单回复了，依然是要等封禁结束，不能提前解封。
 
-![](//imba97.cn/uploads/2020/05/yongfeng-15.png)
+![](/uploads/2020/05/yongfeng-15.png)
 
 # 最新进展
 
@@ -49,15 +49,15 @@ categories:
 
 `2020-05-17 16:11` 工单终于回复，但还是一样，对<font color="red">**“恶意举报”**</font>只字未提。
 
-![](//imba97.cn/uploads/2020/05/yongfeng-4.png)
+![](/uploads/2020/05/yongfeng-4.png)
 
 `2020-05-17 16:41` 工单第二次回复，其实挺令人伤心的。我只想说，我提交工单的<font color="red">**意义**</font>是什么，是为了被说<font color="red">**“你回忆一下”**</font>？
 
-![](//imba97.cn/uploads/2020/05/yongfeng-5.png)
+![](/uploads/2020/05/yongfeng-5.png)
 
 `2020-05-17 16:54` 放弃工单
 
-![](//imba97.cn/uploads/2020/05/yongfeng-6.png)
+![](/uploads/2020/05/yongfeng-6.png)
 
 ## 我最后的评论被举报
 
@@ -69,7 +69,7 @@ categories:
 
 我不知道有啥问题。
 
-<img width="400" src="//imba97.cn/uploads/2020/05/yongfeng-7.png">
+<img width="400" src="/uploads/2020/05/yongfeng-7.png">
 
 看来是有人躲在暗处，持续关注我的视频。
 
@@ -83,7 +83,7 @@ categories:
 
 `2020-05-18 23:00`左右，被 [**永封账号收集姬**](https://space.bilibili.com/367543617) 捉到。
 
-![](//imba97.cn/uploads/2020/05/stamp-1.jpg)
+![](/uploads/2020/05/stamp-1.jpg)
 
 ## 文章快照
 
@@ -93,17 +93,17 @@ categories:
 
 每个身份证只能绑定一个号，并且不能解绑，只能注销账号。
 
-![](//imba97.cn/uploads/2020/05/yongfeng-8.png)
+![](/uploads/2020/05/yongfeng-8.png)
 
 ## 大会员无法退款
 
 因为16年大会员，注销我不成王八了么，我就去问了问大会员能不能转到另一个号或者退款，结果是<font color="red">**都不行**</font>
 
-![](//imba97.cn/uploads/2020/05/yongfeng-9.png)
+![](/uploads/2020/05/yongfeng-9.png)
 
-![](//imba97.cn/uploads/2020/05/yongfeng-10.png)
+![](/uploads/2020/05/yongfeng-10.png)
 
-![](//imba97.cn/uploads/2020/05/yongfeng-11.png)
+![](/uploads/2020/05/yongfeng-11.png)
 
 ## NGA帖子被锁定
 
@@ -122,7 +122,7 @@ categories:
 永封是能登陆的，也可以点赞、收藏视频，但没法评论、发弹幕、投币，也没法给评论点赞、回复，所以只能看到大家的点赞、评论消息但没法回复，这里统一回复：**感谢支持**。
 此号就看番用吧 233，毕竟还有个几年大会员。
 
-<img width="500" src="//imba97.cn/uploads/2020/05/yongfeng-2.jpg">
+<img width="500" src="/uploads/2020/05/yongfeng-2.jpg">
 
 （阴阳怪气：没错放这个图的原因就是，哎呀你看我都充了16年大会员了，你看我多么爱B站，结果被永久封禁了）
 
@@ -132,11 +132,11 @@ categories:
 
 `2020-05-12 21:08` 本来跟朋友玩的是QQ游戏的你画我猜。(点击图片放大)
 
-<img width="500" src="//imba97.cn/uploads/2020/05/yongfeng-12.png">
+<img width="500" src="/uploads/2020/05/yongfeng-12.png">
 
 `2020-05-12 21:09` 中途朋友掉线，我俩就决定换一个玩吧，后来就找到了这个。也有全程录播。
 
-<img width="500" src="//imba97.cn/uploads/2020/05/yongfeng-13.png">
+<img width="500" src="/uploads/2020/05/yongfeng-13.png">
 
 # 被恶意举报的其他受害人
 
@@ -202,7 +202,7 @@ UP主 | 被封 | 解封
 
 我在想，如果被永封的不是我这么佛系的一个人，而是容易动粗，那说不定就让这些人的阴谋得逞了。
 
-![](//imba97.cn/uploads/2020/05/yongfeng-3.jpg)
+![](/uploads/2020/05/yongfeng-3.jpg)
 
 我的祖国伟大是我根深蒂固信念，日常中也能感受到，就比如中国控制疫情的速度和为病人免费治疗，除了中国没任何一个国家能做到！
 

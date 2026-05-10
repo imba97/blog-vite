@@ -22,7 +22,7 @@ categories:
 
 然后在固件版本上点4下，会提示`打开adb`，如果关闭了再点4下打开。
 
-![](//imba97.cn/uploads/2020/08/n1-1.png)
+![](/uploads/2020/08/n1-1.png)
 > 图片来自网络
 
 # 连接电脑
@@ -35,7 +35,7 @@ categories:
 
 输入2选择N1降级，再输入盒子的IP
 
-![](//imba97.cn/uploads/2020/08/n1-2.png)
+![](/uploads/2020/08/n1-2.png)
 
 然后根据提示操作，最后盒子会重启。降级后在界面上不会显示，只要降级软件提示`Boot分区降级完毕`之类的成功的提示就OK了。
 
@@ -61,7 +61,7 @@ categories:
 
 下面有个生成密码，点添加后会在上面的选项中出现“改变网页登录密码”
 
-![](//imba97.cn/uploads/2020/08/n1-3.png)
+![](/uploads/2020/08/n1-3.png)
 
 输入明文密码，加载计算模块，然后点计算
 
@@ -79,7 +79,7 @@ categories:
 
 在 过滤器 DNS封锁清单 中可以配置过滤规则
 
-![](//imba97.cn/uploads/2020/08/n1-4.png)
+![](/uploads/2020/08/n1-4.png)
 
 这里放几个我在用的规则
 
@@ -101,7 +101,7 @@ cjxlist | https://gitee.com/cjx82630/cjxlist/raw/master/cjx-ublock.txt
 
 然后DNS缓存配置改为0，因为SmartDNS中已经设置了缓存
 
-![](//imba97.cn/uploads/2020/08/n1-5.png)
+![](/uploads/2020/08/n1-5.png)
 
 **5. 我目前在尝试的配置**
 

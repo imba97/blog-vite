@@ -15,7 +15,7 @@ categories:
 
 NodeJS 开发的一个根据 `git log` 自动生成日报的程序，并可以通过钉钉机器人发到群里
 
-![](https://imba97.cn/uploads/2021/12/report-2021-5.png)
+![](/uploads/2021/12/report-2021-5.png)
 
 <!--more-->
 

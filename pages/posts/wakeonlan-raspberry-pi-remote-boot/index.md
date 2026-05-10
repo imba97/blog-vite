@@ -44,11 +44,11 @@ wakeonlan -i 192.168.1.255 FF:FF:FF:FF:FF:FF
 
 主板设置好后再设置网卡一些属性，首先打开设备管理器或用其他方法找到网卡属性，高级里面把唤醒魔包的值设为开启
 
-![](//imba97.cn/uploads/2019/09/wakeonlan-1.png)
+![](/uploads/2019/09/wakeonlan-1.png)
 
 然后再点**电源管理**，都给他勾上
 
-![](//imba97.cn/uploads/2019/09/wakeonlan-2.png)
+![](/uploads/2019/09/wakeonlan-2.png)
 
 2020-12-02 更新，之前重装过一次电脑，发现唤醒失效了
 
@@ -58,7 +58,7 @@ wakeonlan -i 192.168.1.255 FF:FF:FF:FF:FF:FF
 
 把快速启动的勾去掉
 
-![](//imba97.cn/uploads/2019/09/wakeonlan-3.png)
+![](/uploads/2019/09/wakeonlan-3.png)
 
 ## 远程开机程序
 

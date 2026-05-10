@@ -31,7 +31,7 @@ categories:
 
 比如我有一个面板，上面有几个控件，分别是名叫`btnTest`和`btn2`的两个按钮和名叫`Test`的复选框
 
-![](//imba97.cn/uploads/2020/11/unity-ui-manager-1.png)
+![](/uploads/2020/11/unity-ui-manager-1.png)
 
 我只需要写一个类，继承`BasePanel`类，其他任何复杂的东西都不需要
 
@@ -66,7 +66,7 @@ public class LoginPanel : BasePanel
 
 效果演示：
 
-![](//imba97.cn/uploads/2020/11/unity-ui-manager-2.gif)
+![](/uploads/2020/11/unity-ui-manager-2.gif)
 
 如果有其他事件监听，可以添加更多
 
@@ -80,7 +80,7 @@ public class LoginPanel : BasePanel
 
 在`Canvas`里创建几个空物体，用于实现分层
 
-![](//imba97.cn/uploads/2020/11/unity-ui-manager-3.png)
+![](/uploads/2020/11/unity-ui-manager-3.png)
 
 Bot、Mid、Top、Sys分别是底层、中层、顶层、系统层
 
