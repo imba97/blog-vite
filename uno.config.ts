@@ -32,18 +32,29 @@ export default defineConfig({
   },
   shortcuts: [
     {
+      'site-shell': 'bg-gray-50 text-gray-900 dark:bg-neutral-950 dark:text-gray-100 transition-colors duration-200',
+      'site-container': 'mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8',
+      'page-container': 'site-container pt-6 pb-10 sm:pt-8 sm:pb-14',
+      'page-container-readable': 'site-container max-w-[75ch] pt-8 pb-12 sm:pt-10 sm:pb-16',
+      'surface-base': 'bg-white dark:bg-neutral-900',
+      'surface-subtle': 'bg-gray-100/70 dark:bg-neutral-800/60',
+      'border-subtle': 'border-gray-200/85 dark:border-neutral-800',
+      'text-muted': 'text-gray-600 dark:text-gray-400',
+      'focus-ring-primary': 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
+      'interactive-soft': 'transition-colors duration-200 hover:bg-gray-100/75 dark:hover:bg-neutral-800/80',
       'bg-base': 'bg-white dark:bg-black',
       'color-base': 'text-black dark:text-white',
       'border-base': 'border-[#8884]',
       'list-divider': 'border-gray-200/80 dark:border-neutral-800',
-      'list-link-hover': 'hover:bg-gray-100/70 dark:hover:bg-neutral-900',
+      'list-link-hover': 'interactive-soft',
       'list-title': 'text-gray-800 dark:text-gray-100',
       'list-title-hover': 'hover:text-primary-600 dark:hover:text-primary-400',
-      'list-meta': 'text-gray-500 dark:text-gray-400',
+      'list-meta': 'text-muted',
       'pagination-text': 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400',
       'pagination-current': 'text-primary-600 dark:text-primary-400',
       'pagination-ellipsis': 'text-gray-400 dark:text-gray-500',
-      'prose-shell': 'text-gray-700 dark:text-gray-300'
+      'prose-shell': 'text-gray-700 dark:text-gray-300',
+      'card-soft': 'surface-base border border-subtle rounded-xl shadow-sm'
     },
 
     // 常用卡片样式

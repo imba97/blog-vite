@@ -73,19 +73,8 @@ export const usePostsStore = defineStore('posts', () => {
   })
 
   function setPage(newPage: number) {
-    page.value = newPage
-
-    if (newPage < 1) {
-      page.value = 1
-      return
-    }
-
-    if (newPage > totalPages.value) {
-      page.value = totalPages.value
-      return
-    }
-
-    page.value = newPage
+    const normalized = Math.min(Math.max(newPage, 1), totalPages.value || 1)
+    page.value = normalized
   }
 
   return {

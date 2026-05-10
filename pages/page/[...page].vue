@@ -10,10 +10,11 @@ const postsStore = usePostsStore()
 
 const currentPage = computed(() => {
   const pageParam = (route.params as any).page as string | undefined
-  return pageParam ? Number.parseInt(pageParam, 10) : 1
+  const parsed = pageParam ? Number.parseInt(pageParam, 10) : 1
+  return Number.isNaN(parsed) || parsed < 1 ? 1 : parsed
 })
 
-onMounted(() => {
+watch(currentPage, () => {
   postsStore.setPage(currentPage.value)
-})
+}, { immediate: true })
 </script>

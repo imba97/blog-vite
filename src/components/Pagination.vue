@@ -1,51 +1,98 @@
 <style scoped>
-.page-btn {
-  --uno: px-3 py-2 rounded pagination-text list-link-hover disabled:opacity-50 disabled:cursor-not-allowed min-w-10 text-center font-medium transition-colors;
+.pagination-container {
+  --uno: mt-8 flex items-center gap-2 select-none sm:justify-center;
+}
+
+.page-nav-btn {
+  --uno: shrink-0 min-h-11 min-w-11 rounded-lg px-3 py-2 text-center text-sm font-medium pagination-text list-link-hover focus-ring-primary disabled:cursor-not-allowed disabled:opacity-45 transition-colors;
+}
+
+.page-scroll-wrap {
+  --uno: min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1 sm:hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  touch-action: pan-x;
+  -ms-overflow-style: none;
+}
+
+.page-scroll-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.page-scroll-track {
+  --uno: inline-flex min-w-full items-center justify-start gap-2 py-0.5 whitespace-nowrap;
+}
+
+.page-number-btn {
+  --uno: min-h-11 min-w-11 shrink-0 rounded-lg px-3 py-2 text-center text-sm font-medium pagination-text list-link-hover focus-ring-primary transition-colors;
+  scroll-snap-align: center;
 }
 
 .page-current {
-  --uno: pagination-current;
+  --uno: bg-primary-50 text-primary-600 dark:bg-primary-900/25 dark:text-primary-400;
 }
 
 .page-ellipsis {
-  --uno: px-2 min-w-10 text-center inline-flex justify-center items-center pagination-ellipsis;
+  --uno: inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center px-2 text-center pagination-ellipsis;
 }
 
-.pagination-container {
-  --uno: mt-8 fcc gap-2 select-none;
+.page-desktop-track {
+  --uno: hidden items-center justify-center gap-2 py-0.5 sm:flex;
 }
 </style>
 
 <template>
-  <div v-if="totalPages > 1" class="pagination-container">
+  <nav v-if="totalPages > 1" class="pagination-container" aria-label="文章分页导航">
     <button
-      class="page-btn"
+      class="page-nav-btn"
       :disabled="currentPage <= 1"
+      aria-label="上一页"
       @click="$emit('change', currentPage - 1)"
     >
       上一页
     </button>
 
-    <template v-for="(page, index) in displayPages" :key="index">
-      <button
-        v-if="page !== '...'"
-        class="page-btn"
-        :class="{ 'page-current': page === currentPage }"
-        @click="emit('change', page as number)"
-      >
-        {{ page }}
-      </button>
-      <span v-else class="page-ellipsis">{{ page }}</span>
-    </template>
+    <div class="page-scroll-wrap" aria-label="移动端页码滚动区域">
+      <div ref="pageScrollRef" class="page-scroll-track">
+        <button
+          v-for="page in allPages"
+          :key="`mobile-${page}`"
+          class="page-number-btn"
+          :class="{ 'page-current': page === currentPage }"
+          :aria-current="page === currentPage ? 'page' : undefined"
+          :aria-label="`跳转到第 ${page} 页`"
+          @click="emit('change', page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+
+    <div class="page-desktop-track" aria-label="桌面端页码区域">
+      <template v-for="(page, index) in displayPages" :key="`desktop-${page}-${index}`">
+        <button
+          v-if="page !== '...'"
+          class="page-number-btn"
+          :class="{ 'page-current': page === currentPage }"
+          :aria-current="page === currentPage ? 'page' : undefined"
+          :aria-label="`跳转到第 ${page} 页`"
+          @click="emit('change', page as number)"
+        >
+          {{ page }}
+        </button>
+        <span v-else class="page-ellipsis" aria-hidden="true">{{ page }}</span>
+      </template>
+    </div>
 
     <button
-      class="page-btn"
+      class="page-nav-btn"
       :disabled="currentPage >= totalPages"
+      aria-label="下一页"
       @click="$emit('change', currentPage + 1)"
     >
       下一页
     </button>
-  </div>
+  </nav>
 </template>
 
 <script setup lang="ts">
@@ -57,6 +104,27 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'change', page: number): void
 }>()
+
+const pageScrollRef = ref<HTMLElement | null>(null)
+
+const allPages = computed(() =>
+  Array.from({ length: props.totalPages }, (_, i) => i + 1)
+)
+
+function centerCurrentPageOnMobile() {
+  const scrollTrack = pageScrollRef.value
+  if (!scrollTrack)
+    return
+  const currentButton = scrollTrack.querySelector('[aria-current="page"]') as HTMLElement | null
+  if (!currentButton)
+    return
+  currentButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+}
+
+watch(() => props.currentPage, async () => {
+  await nextTick()
+  centerCurrentPageOnMobile()
+}, { immediate: true })
 
 // 计算要显示的页码
 const displayPages = computed(() => {

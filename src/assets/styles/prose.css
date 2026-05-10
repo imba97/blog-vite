@@ -1,8 +1,8 @@
 .prose {
   color: var(--fg);
-  max-width: 65ch;
+  max-width: none;
   font-size: 1rem;
-  line-height: 1.75;
+  line-height: 1.8;
 }
 .prose [class~='lead'] {
   color: #4b5563;
@@ -15,6 +15,11 @@
   color: var(--fg-deeper);
   text-decoration: none;
   font-weight: 500;
+  border-bottom: 1px solid rgba(125, 125, 125, 0.28);
+  transition: border-color 0.2s ease-in-out;
+}
+.prose a:hover {
+  border-bottom-color: var(--fg-deep);
 }
 .prose strong {
   color: var(--fg-deep);
@@ -131,7 +136,8 @@
   color: #6b7280;
   font-size: 0.875em;
   line-height: 1.4285714;
-  margin-top: 0.8571429em;
+  margin-top: 0.75em;
+  text-align: center;
 }
 .prose code {
   --uno: font-mono bg-primary bg-opacity-20 text-primary text-base;
@@ -142,7 +148,7 @@
   margin: -0.2em 0;
 }
 .prose a code {
-  color: #111827;
+  color: inherit;
 }
 .prose pre {
   color: #e5e7eb;
@@ -210,12 +216,13 @@
   padding-left: 0.5714286em;
 }
 .prose p {
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
 }
 .prose img {
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin-top: 1.8em;
+  margin-bottom: 1.8em;
+  border-radius: 0.75rem;
 }
 .prose .photos img {
   margin-top: 0;
