@@ -77,6 +77,6 @@
     "pre-commit": "pnpm exec nano-staged"
   },
   "nano-staged": {
-    "*": "eslint --fix"
+    "*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue,md,mdx}": "eslint --fix"
   }
 }
