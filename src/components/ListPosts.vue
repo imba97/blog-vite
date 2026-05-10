@@ -4,14 +4,14 @@
       <li
         v-for="post in paginatedPosts"
         :key="post.path"
-        class="list-none border-b border-gray-100 py-3 last:border-b-0 [&_a]:(b-b-none!)"
+        class="list-none border-b list-divider py-3 last:border-b-0 [&_a]:(b-b-none!)"
       >
-        <RouterLink :to="post.path" class="block rounded px-2 py-1 transition-colors -mx-2 hover:bg-gray-50">
+        <RouterLink :to="post.path" class="block rounded list-link-hover px-2 py-1 transition-colors -mx-2">
           <div fbc gap-4>
-            <div class="hover:text-primary-600 text-gray-900 transition-colors">
+            <div class="list-title-hover list-title transition-colors">
               {{ post.title }}
             </div>
-            <div class="shrink-0 text-sm text-gray-400 font-mono">
+            <div class="shrink-0 text-sm list-meta font-mono">
               {{ dayjs(post.date).format('YYYY-MM-DD') }}
             </div>
           </div>

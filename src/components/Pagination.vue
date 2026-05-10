@@ -1,14 +1,14 @@
 <style scoped>
 .page-btn {
-  --uno: px-3 py-2 text-gray-600 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed min-w-10 text-center font-medium transition-colors;
+  --uno: px-3 py-2 rounded pagination-text list-link-hover disabled:opacity-50 disabled:cursor-not-allowed min-w-10 text-center font-medium transition-colors;
 }
 
 .page-current {
-  --uno: text-primary-600;
+  --uno: pagination-current;
 }
 
 .page-ellipsis {
-  --uno: px-2 min-w-10 text-center inline-flex justify-center items-center text-gray-400;
+  --uno: px-2 min-w-10 text-center inline-flex justify-center items-center pagination-ellipsis;
 }
 
 .pagination-container {

@@ -34,7 +34,16 @@ export default defineConfig({
     {
       'bg-base': 'bg-white dark:bg-black',
       'color-base': 'text-black dark:text-white',
-      'border-base': 'border-[#8884]'
+      'border-base': 'border-[#8884]',
+      'list-divider': 'border-gray-200/80 dark:border-neutral-800',
+      'list-link-hover': 'hover:bg-gray-100/70 dark:hover:bg-neutral-900',
+      'list-title': 'text-gray-800 dark:text-gray-100',
+      'list-title-hover': 'hover:text-primary-600 dark:hover:text-primary-400',
+      'list-meta': 'text-gray-500 dark:text-gray-400',
+      'pagination-text': 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400',
+      'pagination-current': 'text-primary-600 dark:text-primary-400',
+      'pagination-ellipsis': 'text-gray-400 dark:text-gray-500',
+      'prose-shell': 'text-gray-700 dark:text-gray-300'
     },
 
     // 常用卡片样式
