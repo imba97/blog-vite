@@ -3,7 +3,7 @@
     :href="props.href"
     pr fyc gap-1
     class="[&:hover_.external-icon]:(opacity-100)"
-    @click.stop.prevent="navigate"
+    @click="navigate"
   >
     <slot />
     <span
@@ -27,12 +27,20 @@ const props = withDefaults(
 
 const router = useRouter()
 
-function navigate() {
+function navigate(event: MouseEvent) {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+    return
+
+  if (props.href.startsWith('#'))
+    return
+
+  event.preventDefault()
+
   if (props.href.startsWith('http')) {
     window.open(props.href, '_blank')
+    return
   }
-  else {
-    router.push(props.href)
-  }
+
+  router.push(props.href)
 }
 </script>
