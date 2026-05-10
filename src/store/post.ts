@@ -31,15 +31,24 @@ export const usePostsStore = defineStore('posts', () => {
 
   // 设置当前文章的函数
   function setCurrent(path: string) {
-    const route = routes.find(r => r.path === path)
+    const normalizedPath = path.replace(/\/+$/, '') || '/'
+    const route = routes.find(r => r.path === normalizedPath)
     current.value = route || null
   }
 
-  // 初始化时检查当前路由
-  const currentRoute = router.currentRoute.value
-  if (currentRoute.path.startsWith('/posts/')) {
-    setCurrent(currentRoute.path)
-  }
+  // 始终跟随当前路由，避免重定向场景下 current 丢失
+  watch(
+    () => router.currentRoute.value.path,
+    (path) => {
+      if (path.startsWith('/posts/')) {
+        setCurrent(path)
+      }
+      else {
+        current.value = null
+      }
+    },
+    { immediate: true }
+  )
 
   router.beforeEach((to) => {
     // 设置当前文章

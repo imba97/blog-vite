@@ -11,60 +11,43 @@
           <img src="/assets/images/favicon.png" alt="站点图标" class="size-10 shrink-0 object-cover">
         </button>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            v-if="postsStore.current"
-            :key="postsStore.current.title"
-            class="min-w-0 fyc gap-2 overflow-hidden"
-          >
+        <div
+          v-if="containerVisible"
+          class="min-w-0 fyc gap-2 overflow-hidden"
+        >
+          <AnimatePresence :on-exit-complete="handleBarExitComplete">
             <motion.div
-              :initial="{ scaleY: 0, opacity: 0.5, originY: 1 }"
-              :animate="{
-                scaleY: 1,
-                opacity: 1,
-                originY: 1,
-                transition: {
-                  duration: 0.2,
-                  ease: [0.22, 1, 0.36, 1]
-                }
-              }"
-              :exit="{
-                scaleY: 0,
-                opacity: 0.6,
-                originY: 1,
-                transition: {
-                  duration: 0.16,
-                  delay: 0.2,
-                  ease: [0.22, 1, 0.36, 1]
-                }
-              }"
+              v-if="showBar"
+              key="post-title-indicator"
+              :initial="barMotion.initial"
+              :animate="barMotion.animate"
+              :exit="barMotion.exit"
               class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-1/35"
             />
-            <motion.div
-              :initial="{ opacity: 0, x: -12 }"
-              :animate="{
-                opacity: 1,
-                x: 0,
-                transition: {
-                  duration: 0.26,
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 0.14
-                }
-              }"
-              :exit="{
-                opacity: 0,
-                x: -14,
-                transition: {
-                  duration: 0.18,
-                  ease: [0.22, 1, 0.36, 1]
-                }
-              }"
-              class="max-w-70 truncate text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
+          </AnimatePresence>
+
+          <div class="relative h-[30px] min-w-0 overflow-hidden">
+            <div
+              aria-hidden="true"
+              class="invisible max-w-70 truncate text-base font-medium sm:text-lg"
             >
-              {{ postsStore.current.title }}
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
+              {{ layoutTitle }}
+            </div>
+
+            <AnimatePresence mode="wait" :on-exit-complete="handleTitleExitComplete">
+              <motion.div
+                v-if="displayedTitle"
+                :key="displayedTitleKey"
+                :initial="titleMotion.initial"
+                :animate="titleAnimate"
+                :exit="titleMotion.exit"
+                class="absolute inset-y-0 left-0 max-w-70 truncate text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
+              >
+                {{ displayedTitle }}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
       <nav class="fyc gap-2 sm:gap-4" aria-label="主导航">
         <AutoLink
@@ -84,11 +67,69 @@
 
 <script lang="ts" setup>
 import { AnimatePresence, motion } from 'motion-v'
+import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
 import { usePostsStore } from '~/store/post'
 
 const router = useRouter()
 const postsStore = usePostsStore()
+
+const barMotion = {
+  initial: {
+    opacity: 0,
+    y: 12
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.22
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: 12,
+    transition: {
+      duration: 0.2
+    }
+  }
+}
+
+const titleMotion = {
+  initial: {
+    opacity: 0,
+    x: 18
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.28
+    }
+  },
+  exit: {
+    opacity: 0,
+    x: -18,
+    transition: {
+      duration: 0.22
+    }
+  }
+}
+
+const {
+  containerVisible,
+  showBar,
+  displayedTitle,
+  displayedTitleKey,
+  layoutTitle,
+  titleAnimate,
+  handleTitleExitComplete,
+  handleBarExitComplete
+} = useHeaderTitleAnimationState({
+  targetTitle: computed(() => postsStore.current?.title?.trim() || ''),
+  targetTitleKey: computed(() => postsStore.current?.path || postsStore.current?.title?.trim() || ''),
+  titleMotionAnimate: titleMotion.animate
+})
 
 function goHome() {
   router.push('/')
