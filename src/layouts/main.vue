@@ -1,10 +1,14 @@
 <template>
   <main
     class="transition-colors duration-200"
-    :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container']"
     @click="handleMainClick"
   >
-    <RouterView />
+    <section :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container']">
+      <RouterView />
+    </section>
+    <section v-if="shouldShowComments" class="page-container-readable">
+      <Twikoo :key="route.path" :route-path="route.path" />
+    </section>
   </main>
 </template>
 
@@ -16,6 +20,7 @@ const router = useRouter()
 
 const isListPage = computed(() => route.path === '/' || route.path.startsWith('/page/'))
 const isPostPage = computed(() => !isListPage.value)
+const shouldShowComments = computed(() => !isListPage.value)
 
 function handleMainClick(event: MouseEvent) {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
