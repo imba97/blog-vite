@@ -53,6 +53,16 @@ const list = [
     name: 'PeterJXL',
     url: 'https://www.peterjxl.com',
     avatar: 'https://image.peterjxl.com/blog/re0.jpg'
+  },
+  {
+    name: 'imxizhen',
+    url: 'https://www.imxizhen.cn',
+    avatar: 'https://q1.qlogo.cn/g?b=qq&nk=89525295&s=640'
+  },
+  {
+    name: 'ZMTU',
+    url: 'https://zmtu.com',
+    avatar: 'https://zmtu.com/static/images/app/App_Logo.png'
   }
 ]
 </script>
