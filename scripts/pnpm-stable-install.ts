@@ -92,6 +92,7 @@ const args = [
   '--max-old-space-size=6144',
   pnpmCliPath,
   'install',
+  '--config.manage-package-manager-versions=false',
   '--network-concurrency=4',
   '--child-concurrency=1'
 ]
