@@ -4,7 +4,7 @@
 }
 
 .page-nav-btn {
-  --uno: shrink-0 min-h-10 min-w-10 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-nav surface-base border border-subtle interactive-soft focus-ring-primary disabled:pagination-disabled transition-colors;
+  --uno: shrink-0 min-h-10 min-w-10 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-nav surface-base border border-subtle focus-ring-primary disabled:pagination-disabled transition-colors;
 }
 
 .page-scroll-wrap {
@@ -29,7 +29,11 @@
 }
 
 .page-current {
-  --uno: pagination-current font-normal pointer-events-none;
+  --uno: pagination-current cursor-default font-normal pointer-events-none;
+}
+
+.page-interactive {
+  --uno: pagination-page-hover;
 }
 
 .page-ellipsis {
@@ -58,7 +62,7 @@
           v-for="page in allPages"
           :key="`mobile-${page}`"
           class="page-number-btn"
-          :class="{ 'page-current': page === currentPage }"
+          :class="page === currentPage ? 'page-current' : 'page-interactive'"
           :aria-current="page === currentPage ? 'page' : undefined"
           :aria-label="`跳转到第 ${page} 页`"
           @click="emit('change', page)"
@@ -73,7 +77,7 @@
         <button
           v-if="page !== '...'"
           class="page-number-btn"
-          :class="{ 'page-current': page === currentPage }"
+          :class="page === currentPage ? 'page-current' : 'page-interactive'"
           :aria-current="page === currentPage ? 'page' : undefined"
           :aria-label="`跳转到第 ${page} 页`"
           @click="emit('change', page as number)"
@@ -121,16 +125,24 @@ function centerCurrentPageOnMobile() {
     return
   if (scrollWrap.offsetParent === null || !scrollWrap.clientWidth)
     return
-  const currentButton = scrollWrap.querySelector('[aria-current="page"]') as HTMLElement | null
-  if (!currentButton)
+  const pageButtons = Array.from(scrollWrap.querySelectorAll('.page-number-btn')) as HTMLElement[]
+  if (pageButtons.length < 2)
     return
-  const nextLeft = currentButton.offsetLeft - (scrollWrap.clientWidth - currentButton.clientWidth) / 2
-  scrollWrap.scrollLeft = Math.max(0, nextLeft)
+
+  const maxScrollLeft = Math.max(0, scrollWrap.scrollWidth - scrollWrap.clientWidth)
+  const currentPage = props.currentPage
+  const totalPages = props.totalPages
+  const visibleWindowSize = 5
+  const maxStartPage = Math.max(1, totalPages - visibleWindowSize + 1)
+  const desiredStartPage = Math.min(maxStartPage, Math.max(1, currentPage - 2))
+  const pageStep = pageButtons[1].offsetLeft - pageButtons[0].offsetLeft
+  const targetLeft = Math.min(maxScrollLeft, Math.max(0, (desiredStartPage - 1) * pageStep))
+  scrollWrap.scrollTo({ left: targetLeft, behavior: 'auto' })
 }
 
 watch(() => props.currentPage, async () => {
   await nextTick()
-  centerCurrentPageOnMobile()
+  requestAnimationFrame(centerCurrentPageOnMobile)
 }, { immediate: true })
 
 // 计算要显示的页码
