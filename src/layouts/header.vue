@@ -1,8 +1,8 @@
 <template>
   <header class="sticky left-0 top-0 z-40 border-b border-subtle bg-white/82 shadow-sm backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/92">
     <div class="site-container h-16 flex items-center justify-between gap-5">
-      <button type="button" class="fyc gap-4 rounded-lg p-1 transition-opacity hover:opacity-90 focus-ring-primary" aria-label="返回首页" @click="goHome">
-        <img src="/assets/images/favicon.png" alt="站点图标" size-10>
+      <button type="button" class="fyc shrink-0 gap-4 rounded-lg p-1 transition-opacity hover:opacity-90 focus-ring-primary" aria-label="返回首页" @click="goHome">
+        <img src="/assets/images/favicon.png" alt="站点图标" class="size-10 shrink-0 object-cover">
       </button>
 
       <AnimatePresence>
