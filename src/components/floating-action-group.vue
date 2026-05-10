@@ -1,6 +1,7 @@
 <template>
   <div
-    class="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-[max(20px,calc(env(safe-area-inset-right)+20px),calc((100vw-56rem)/2-70px))] z-[210] sm:bottom-[calc(1rem+env(safe-area-inset-bottom))]"
+    class="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[210] sm:bottom-[calc(1rem+env(safe-area-inset-bottom))]"
+    :style="{ right: floatingRightOffset }"
   >
     <div
       class="of-hidden card-soft p-1 backdrop-blur-sm transition-[max-height] duration-250 ease-out"
@@ -34,8 +35,19 @@
 import { useThemeMode } from '~/composables/use-theme-mode'
 
 const SCROLL_THRESHOLD = 320
+const LIST_PAGE_WIDTH = '64rem'
+const POST_PAGE_WIDTH = '56rem'
+const BUTTON_SIDE_OFFSET = '70px'
 const showBackToTop = ref(false)
+const route = useRoute()
 const { themePreference, cycleThemeMode } = useThemeMode()
+
+const isListPage = computed(() => route.path === '/' || route.path.startsWith('/page/'))
+
+const floatingRightOffset = computed(() => {
+  const targetWidth = isListPage.value ? LIST_PAGE_WIDTH : POST_PAGE_WIDTH
+  return `max(20px, calc(env(safe-area-inset-right) + 20px), calc((100vw - ${targetWidth}) / 2 - ${BUTTON_SIDE_OFFSET}))`
+})
 
 const themeIconClass = computed(() => {
   if (themePreference.value === 'dark')
