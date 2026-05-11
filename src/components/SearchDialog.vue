@@ -86,7 +86,7 @@ html.dark .tag-chip--primed {
               <span class="text-sm text-muted">搜索</span>
               <button
                 type="button"
-                class="fyc rounded-lg p-2 text-gray-600 transition-colors dark:text-gray-300 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+                class="chrome-icon-btn p-2 text-gray-600 dark:text-gray-300"
                 aria-label="关闭搜索"
                 @click="close"
               >
@@ -98,7 +98,7 @@ html.dark .tag-chip--primed {
               <label class="sr-only" for="site-search-input">搜索关键词</label>
               <div class="relative min-w-0">
                 <div
-                  class="relative min-w-0 border border-subtle rounded-xl bg-white/90 py-2 pl-3 pr-10 transition-shadow focus-within:border-primary-4 dark:bg-neutral-950/60 focus-within:ring-2 focus-within:ring-primary-4/25"
+                  class="relative min-w-0 border border-subtle rounded-xl bg-white/90 py-2 pl-3 pr-10 transition-shadow focus-within:border-primary-4 dark:bg-neutral-950/60 focus-within:ring-2 focus-within:ring-primary-4/25 dark:focus-within:border-primary-light dark:focus-within:ring-primary-light/28"
                   role="group"
                   aria-label="搜索条件"
                   @click="onSearchFieldShellClick"
@@ -163,7 +163,7 @@ html.dark .tag-chip--primed {
                     role="option"
                     :aria-selected="i === selectedSuggestIndex"
                     class="w-full px-3 py-2.5 text-left text-sm text-gray-800 transition-colors dark:text-white/90"
-                    :class="i === selectedSuggestIndex ? 'bg-primary-2/30 dark:bg-primary-6/18' : 'hover:bg-gray-50/90 dark:hover:bg-neutral-900/55'"
+                    :class="i === selectedSuggestIndex ? 'bg-primary-2/32 dark:bg-primary-light/20' : 'hover:bg-gray-50/90 dark:hover:bg-neutral-900/55'"
                     @mousedown.prevent="applyPrefixChoice(activeSuggest.strategy.kind, item)"
                     @mouseenter="selectedSuggestIndex = i"
                   >
@@ -223,10 +223,10 @@ html.dark .tag-chip--primed {
                       <li v-for="item in hits" :key="item.path">
                         <AutoLink
                           :href="item.path"
-                          class="block rounded-lg px-2 py-2.5 transition-colors hover:bg-white/90 dark:hover:bg-neutral-900/80"
+                          class="group search-hit-link focus-ring-primary"
                           @click="close"
                         >
-                          <div class="text-gray-800 font-medium dark:text-white/90">
+                          <div class="search-hit-title">
                             {{ item.title }}
                           </div>
                           <div v-if="item.date" class="mt-0.5 text-xs text-muted">

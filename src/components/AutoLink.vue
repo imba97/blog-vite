@@ -9,8 +9,8 @@
     <span
       v-show="isExternalUrl(props.href)"
       class="external-icon"
-      i-iconamoon-link-external-duotone pa right--1 top--1 size-4 bg-primary opacity-0
-      transition-opacity duration-300
+
+      i-iconamoon-link-external-duotone pa right--1 top--1 size-4 bg-primary opacity-0 transition-opacity duration-300 dark:bg-primary-light
     />
   </a>
 </template>

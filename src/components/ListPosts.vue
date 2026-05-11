@@ -13,8 +13,8 @@
         >
           <article class="min-h-10 space-y-0.5">
             <div class="flex items-start justify-between gap-4 sm:items-center">
-              <h2 class="relative m-0 text-lg list-title font-normal leading-snug transition-colors duration-200 sm:text-xl group-hover:text-primary-2 dark:group-hover:text-primary-2">
-                <span class="i-carbon-chevron-right pa top-1/2 hidden text-primary-2/70 opacity-0 transition-all duration-200 -left-8 sm:block -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 group-hover:opacity-65" aria-hidden="true" />
+              <h2 class="relative m-0 text-lg list-title font-normal leading-snug transition-colors duration-200 sm:text-xl group-hover:text-primary-3 dark:group-hover:text-primary-light">
+                <span class="i-carbon-chevron-right pa top-1/2 hidden text-primary-3/70 opacity-0 transition-all duration-200 -left-8 sm:block -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 dark:text-primary-light/70 group-hover:opacity-65" aria-hidden="true" />
                 <span>{{ post.title }}</span>
               </h2>
               <time class="shrink-0 text-xs list-meta tracking-wide font-mono sm:text-sm" :datetime="post.date">
@@ -38,7 +38,7 @@
     <footer class="mt-25 border-t border-gray-200/70 pt-12.5 text-xs text-soft dark:border-neutral-800/80">
       <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5 leading-5">
         <a
-          class="rounded-sm text-muted decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          class="rounded-sm text-muted decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-light"
           :href="commitLink"
           target="_blank"
           rel="noopener"
@@ -48,7 +48,7 @@
         </a>
         <span aria-hidden="true">·</span>
         <a
-          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-light"
           :href="repositoryLink"
           target="_blank"
           rel="noopener"
@@ -58,7 +58,7 @@
         </a>
         <span aria-hidden="true">·</span>
         <a
-          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-4"
+          class="rounded-sm text-soft decoration-transparent transition-colors duration-200 hover:text-primary-6 hover:underline hover:decoration-current focus-ring-primary dark:hover:text-primary-light"
           href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"
           target="_blank"
           rel="noopener"

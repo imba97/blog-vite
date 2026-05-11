@@ -32,7 +32,7 @@ html.dark {
 }
 
 #nprogress .bar {
-  --uno: bg-primary-6 bg-opacity-85 dark:bg-primary-4;
+  --uno: bg-primary-6 bg-opacity-85 dark:bg-primary-light;
   position: fixed;
   z-index: 1031;
   top: 0;

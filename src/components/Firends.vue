@@ -18,7 +18,7 @@
           >
         </div>
         <div class="text-center">
-          <div class="text-lg list-title font-semibold transition-colors duration-200 group-hover:text-primary-6 dark:group-hover:text-primary-4">
+          <div class="text-lg list-title list-title-hover font-semibold transition-colors duration-200">
             {{ item.name }}
           </div>
         </div>

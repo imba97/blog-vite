@@ -1,5 +1,5 @@
 <template>
-  <section class="twikoo-shell mt-10 border-t border-subtle pt-8">
+  <section class="twikoo-shell">
     <p
       v-if="initError"
       class="mb-4 border border-red-200 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-700/50 dark:bg-red-950/30 dark:text-red-200"

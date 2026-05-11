@@ -1,12 +1,12 @@
 <template>
   <main
-    class="transition-colors duration-200"
+    class="pb-24 transition-colors duration-200"
     @click="handleMainClick"
   >
     <section :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container']">
       <RouterView />
     </section>
-    <section v-if="shouldShowComments" class="page-container-readable">
+    <section v-if="shouldShowComments" class="page-container-readable rounded-2xl bg-gray-200/30 px-4 py-5 dark:bg-neutral-900/45 sm:px-6">
       <Twikoo :key="route.path" :route-path="route.path" />
     </section>
   </main>

@@ -4,7 +4,7 @@
       <div class="min-w-0 fyc flex-1 gap-2.5">
         <button
           type="button"
-          class="fyc shrink-0 gap-4 rounded-lg interactive-soft p-1 text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          class="chrome-icon-btn fyc shrink-0 gap-4 rounded-lg p-1"
           aria-label="返回首页"
           @click="goHome"
         >
@@ -22,7 +22,7 @@
               :initial="barMotion.initial"
               :animate="barMotion.animate"
               :exit="barMotion.exit"
-              class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-1/35"
+              class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/35"
             />
           </AnimatePresence>
 
@@ -69,7 +69,7 @@
         <button
           ref="searchButtonRef"
           type="button"
-          class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          class="chrome-icon-btn"
           aria-label="打开站内搜索"
           @click="openSearch"
         >
@@ -79,7 +79,7 @@
         <button
           ref="menuButtonRef"
           type="button"
-          class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 sm:hidden dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          class="chrome-icon-btn sm:hidden"
           aria-label="打开导航菜单"
           :aria-expanded="isDrawerOpen"
           aria-controls="mobile-nav-drawer"
@@ -130,7 +130,7 @@
         <span class="text-sm text-muted">导航</span>
         <button
           type="button"
-          class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          class="chrome-icon-btn"
           aria-label="关闭导航菜单"
           @click="closeDrawer"
         >
