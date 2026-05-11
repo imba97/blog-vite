@@ -51,6 +51,12 @@ html:not(.dark) .shiki span {
   margin: 0.5em 0;
 }
 
+/* Twikoo loads Prism globally; keep article Shiki typography only */
+.prose .shiki,
+.prose .shiki span {
+  text-shadow: none;
+}
+
 .prose img {
   width: 100%;
 }
