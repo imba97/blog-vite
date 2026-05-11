@@ -7,6 +7,7 @@ import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { initAnalytics } from './utils/analytics/51.la'
 
 import './assets/styles/main.css'
 import './assets/styles/prose.css'
@@ -34,6 +35,8 @@ export const createApp = ViteSSG(
     app.use(createPinia())
 
     if (!import.meta.env.SSR) {
+      initAnalytics()
+
       const html = document.querySelector('html')!
       setupRouterScroller(router, {
         selectors: {

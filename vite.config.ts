@@ -27,6 +27,7 @@ import CopyButtonPlugin from './scripts/copy-button-plugin'
 import { getGitMeta } from './scripts/get-git-meta'
 import NetlifyImagePlugin from './scripts/netlify-image-plugin'
 import { slugify } from './scripts/slugify'
+import HtmlHeadInject from './scripts/vite/plugins/html-head-inject'
 
 const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 const gitMeta = getGitMeta()
@@ -38,6 +39,8 @@ export default defineConfig({
     __GIT_COMMIT_SHORT_HASH__: JSON.stringify(gitMeta.shortHash)
   },
   plugins: [
+    HtmlHeadInject(),
+
     UnoCSS(),
 
     Vue({
