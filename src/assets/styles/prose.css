@@ -103,31 +103,31 @@
 .prose h1 {
   color: var(--fg-deep);
   font-weight: 800;
-  font-size: 2.25em;
-  margin-top: 0;
-  margin-bottom: 0.8888889em;
-  line-height: 1.1111111;
+  font-size: 2em;
+  margin-top: 1.45em;
+  margin-bottom: 0.8em;
+  line-height: 1.2;
 }
 .prose h2 {
   color: var(--fg-deep);
   font-weight: 700;
   font-size: 1.5em;
-  margin-top: 2em;
-  margin-bottom: 1em;
-  line-height: 1.3333333;
+  margin-top: 1.35em;
+  margin-bottom: 0.9em;
+  line-height: 1.35;
 }
 .prose h3 {
   color: var(--fg-deep);
   font-weight: 600;
-  font-size: 1.25em;
-  margin-top: 1.6em;
+  font-size: 1.34em;
+  margin-top: 1.25em;
   margin-bottom: 0.6em;
   line-height: 1.6;
 }
 .prose h4 {
   color: var(--fg-deep);
   font-weight: 600;
-  margin-top: 1.5em;
+  margin-top: 1.15em;
   margin-bottom: 0.5em;
   line-height: 1.5;
 }
@@ -317,6 +317,9 @@ html.dark .prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > 
   padding-right: 0;
 }
 .prose > :first-child {
+  margin-top: 0;
+}
+.markdown-body > :first-child {
   margin-top: 0;
 }
 .prose > :last-child {

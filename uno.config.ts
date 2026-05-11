@@ -38,7 +38,7 @@ export default defineConfig({
       'site-shell': 'bg-gray-100/70 text-gray-900 dark:bg-neutral-950 dark:text-gray-100 transition-colors duration-200',
       'site-container': 'mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8',
       'page-container': 'site-container pt-6 pb-10 sm:pt-8 sm:pb-14',
-      'page-container-readable': 'site-container max-w-[75ch] pt-8 pb-12 sm:pt-10 sm:pb-16',
+      'page-container-readable': 'site-container max-w-[75ch] pt-12 pb-14 sm:pt-14 sm:pb-18',
       'surface-base': 'bg-white dark:bg-neutral-900',
       'surface-subtle': 'bg-gray-100/75 dark:bg-neutral-800/65',
       'border-subtle': 'border-gray-200/85 dark:border-neutral-700/80',

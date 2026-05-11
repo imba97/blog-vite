@@ -9,13 +9,13 @@ categories:
   - 个人项目
 ---
 
-## 从体积焦虑到按需加载
+# 从体积焦虑到按需加载
 
 写了个中文字体子集化工具 `charbi-font`
 
 ---
 
-## 开发契机
+# 开发契机
 
 受公司大佬做的工具的启发，了解到字体子集化这条路径。说来惭愧，入行前端这么多年了，还是头一次知道
 
@@ -23,7 +23,7 @@ categories:
 
 ---
 
-## 发现需求
+# 发现需求
 
 1. 多字重支持
 
@@ -39,7 +39,7 @@ categories:
 
 ---
 
-## charbi-font 做了什么
+# charbi-font 做了什么
 
 `charbi-font` 覆盖了从扫描、构建到分发的完整链路：
 
@@ -52,7 +52,7 @@ categories:
 - 自动生成 CSS/SCSS 样式文件
 - 支持多字重合并管理
 
-### 实测压缩效果
+## 实测压缩效果
 
 | 名称 | 原体积（MB） | 压缩体积（KB） | 压缩率 |
 | --- | ---: | ---: | ---: |
@@ -61,9 +61,9 @@ categories:
 | DelaGothicOne | 2 MB | 144 KB | 94.08% |
 | Total | 39 MB | 1,343 KB | 96.63% |
 
-### 其他特性
+## 其他特性
 
-- #### Vite 插件支持
+- ### Vite 插件支持
 
   通过 Vite 插件，实现业务侧更多能力
 
@@ -93,7 +93,7 @@ categories:
   ```
   </details>
 
-- #### 获取加载字体所需字段
+- ### 获取加载字体所需字段
 
   因为需要基于版本号创建不同的目录，防止多版本相互影响。在生成的样式中是自动写入的，但有时也会使用 `uni.loadFontFace` 在 JS 中加载字体
 
@@ -126,15 +126,15 @@ categories:
     </summary>
   </details>
 
-## 使用
+# 使用
 
-### 安装
+## 安装
 
 ```
 pnpm add charbi-font -D
 ```
 
-### 配置
+## 配置
 
 目录下创建 `fonts.config.ts`，配置示例
 
@@ -240,7 +240,7 @@ export default defineConfig({
 })
 ```
 
-### 命令
+## 命令
 
 ```bash
 # 构建及上传
@@ -253,10 +253,10 @@ pnpm chabi build
 pnpm chabi upload
 ```
 
-## 关于名称
+# 关于名称
 
 最开始让 AI 起名，我说可以造组合字，于是在一堆名称中我一眼看到了 `char + build = charbi`（你没有偷摸骂我吧？）
 
-## 开源
+# 开源
 
 [Github](https://github.com/imba97/charbi-font)

@@ -22,7 +22,7 @@
               :initial="barMotion.initial"
               :animate="barMotion.animate"
               :exit="barMotion.exit"
-              class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/35"
+              class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/55"
             />
           </AnimatePresence>
 
