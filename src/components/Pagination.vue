@@ -1,17 +1,6 @@
 <style scoped>
-.pagination-container {
-  --uno: mt-5 flex items-center gap-2 select-none sm:justify-center;
-}
-
-.page-nav-btn {
-  --uno: shrink-0 min-h-10 min-w-10 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-nav surface-base border border-subtle focus-ring-primary disabled:pagination-disabled transition-colors;
-}
-
 .page-scroll-wrap {
-  --uno: min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1 sm:hidden;
   scrollbar-width: none;
-  scroll-snap-type: x proximity;
-  touch-action: pan-x;
   -ms-overflow-style: none;
 }
 
@@ -19,36 +8,15 @@
   display: none;
 }
 
-.page-scroll-track {
-  --uno: inline-flex min-w-full items-center justify-start gap-2 py-0.5 whitespace-nowrap;
-}
-
 .page-number-btn {
-  --uno: min-h-10 min-w-10 shrink-0 rounded-lg px-3 py-2 text-center text-sm font-normal pagination-page focus-ring-primary transition-colors;
   scroll-snap-align: center;
-}
-
-.page-current {
-  --uno: pagination-current cursor-default font-normal pointer-events-none;
-}
-
-.page-interactive {
-  --uno: pagination-page-hover;
-}
-
-.page-ellipsis {
-  --uno: inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center px-2 text-center pagination-ellipsis;
-}
-
-.page-desktop-track {
-  --uno: hidden items-center justify-center gap-2 py-0.5 sm:flex;
 }
 </style>
 
 <template>
-  <nav v-if="totalPages > 1" class="pagination-container" aria-label="文章分页导航">
+  <nav v-if="totalPages > 1" class="mt-5 flex select-none items-center gap-2 sm:justify-center" aria-label="文章分页导航">
     <button
-      class="page-nav-btn"
+      class="min-h-10 min-w-10 shrink-0 border border-subtle rounded-lg surface-base px-3 py-2 text-center text-sm pagination-nav font-normal transition-colors disabled:pagination-disabled focus-ring-primary"
       :disabled="currentPage <= 1"
       aria-label="上一页"
       @click="$emit('change', currentPage - 1)"
@@ -56,13 +24,13 @@
       上一页
     </button>
 
-    <div ref="pageScrollWrapRef" class="page-scroll-wrap" aria-label="移动端页码滚动区域">
-      <div class="page-scroll-track">
+    <div ref="pageScrollWrapRef" class="page-scroll-wrap [touch-action:pan-x] min-w-0 flex-1 snap-x snap-proximity overflow-x-auto overscroll-x-contain px-1 sm:hidden" aria-label="移动端页码滚动区域">
+      <div class="min-w-full inline-flex items-center justify-start gap-2 whitespace-nowrap py-0.5">
         <button
           v-for="page in allPages"
           :key="`mobile-${page}`"
-          class="page-number-btn"
-          :class="page === currentPage ? 'page-current' : 'page-interactive'"
+          class="page-number-btn min-h-10 min-w-10 shrink-0 pagination-page rounded-lg px-3 py-2 text-center text-sm font-normal transition-colors focus-ring-primary"
+          :class="page === currentPage ? 'pagination-current cursor-default font-normal pointer-events-none' : 'pagination-page-hover'"
           :aria-current="page === currentPage ? 'page' : undefined"
           :aria-label="`跳转到第 ${page} 页`"
           @click="emit('change', page)"
@@ -72,24 +40,24 @@
       </div>
     </div>
 
-    <div class="page-desktop-track" aria-label="桌面端页码区域">
+    <div class="hidden items-center justify-center gap-2 py-0.5 sm:flex" aria-label="桌面端页码区域">
       <template v-for="(page, index) in displayPages" :key="`desktop-${page}-${index}`">
         <button
           v-if="page !== '...'"
-          class="page-number-btn"
-          :class="page === currentPage ? 'page-current' : 'page-interactive'"
+          class="page-number-btn min-h-10 min-w-10 shrink-0 pagination-page rounded-lg px-3 py-2 text-center text-sm font-normal transition-colors focus-ring-primary"
+          :class="page === currentPage ? 'pagination-current cursor-default font-normal pointer-events-none' : 'pagination-page-hover'"
           :aria-current="page === currentPage ? 'page' : undefined"
           :aria-label="`跳转到第 ${page} 页`"
           @click="emit('change', page as number)"
         >
           {{ page }}
         </button>
-        <span v-else class="page-ellipsis" aria-hidden="true">{{ page }}</span>
+        <span v-else class="min-h-11 min-w-11 inline-flex shrink-0 items-center justify-center px-2 text-center pagination-ellipsis" aria-hidden="true">{{ page }}</span>
       </template>
     </div>
 
     <button
-      class="page-nav-btn"
+      class="min-h-10 min-w-10 shrink-0 border border-subtle rounded-lg surface-base px-3 py-2 text-center text-sm pagination-nav font-normal transition-colors disabled:pagination-disabled focus-ring-primary"
       :disabled="currentPage >= totalPages"
       aria-label="下一页"
       @click="$emit('change', currentPage + 1)"
