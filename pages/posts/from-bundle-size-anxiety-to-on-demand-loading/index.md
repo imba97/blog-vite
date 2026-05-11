@@ -130,7 +130,7 @@ categories:
 
 ## 安装
 
-```
+```bash
 pnpm add charbi-font -D
 ```
 
