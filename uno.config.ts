@@ -110,10 +110,10 @@ export default defineConfig({
   ],
   presets: [
     presetIcons({
+      cdn: 'https://esm.sh/',
+      scale: 1.2,
       extraProperties: {
         'display': 'inline-block',
-        'height': '1.2em',
-        'width': '1.2em',
         'vertical-align': 'text-bottom'
       }
     }),
