@@ -52,30 +52,42 @@
           </div>
         </div>
       </div>
-      <nav class="hidden fyc gap-2 sm:flex sm:gap-4" aria-label="主导航">
-        <AutoLink
-          v-for="item in navbar"
-          :key="item.link"
-          :href="item.link"
-          clickable-100
-          class="nav-link focus-ring-primary"
-        >
-          <span :class="item.icon" />
-          <span class="hidden sm:inline">{{ item.text }}</span>
-        </AutoLink>
-      </nav>
+      <div class="fyc shrink-0 gap-1 sm:gap-2">
+        <nav class="hidden fyc gap-2 sm:flex sm:gap-4" aria-label="主导航">
+          <AutoLink
+            v-for="item in navbar"
+            :key="item.link"
+            :href="item.link"
+            clickable-100
+            class="nav-link focus-ring-primary"
+          >
+            <span :class="item.icon" />
+            <span class="hidden sm:inline">{{ item.text }}</span>
+          </AutoLink>
+        </nav>
 
-      <button
-        ref="menuButtonRef"
-        type="button"
-        class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 sm:hidden dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
-        aria-label="打开导航菜单"
-        :aria-expanded="isDrawerOpen"
-        aria-controls="mobile-nav-drawer"
-        @click="toggleDrawer"
-      >
-        <span :class="isDrawerOpen ? 'i-carbon-close-large text-base' : 'i-carbon-menu text-base'" />
-      </button>
+        <button
+          ref="searchButtonRef"
+          type="button"
+          class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          aria-label="打开站内搜索"
+          @click="openSearch"
+        >
+          <span class="i-carbon-search text-base" />
+        </button>
+
+        <button
+          ref="menuButtonRef"
+          type="button"
+          class="fyc rounded-lg p-2 text-gray-700 transition-colors duration-200 sm:hidden dark:text-gray-200 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+          aria-label="打开导航菜单"
+          :aria-expanded="isDrawerOpen"
+          aria-controls="mobile-nav-drawer"
+          @click="toggleDrawer"
+        >
+          <span :class="isDrawerOpen ? 'i-carbon-close-large text-base' : 'i-carbon-menu text-base'" />
+        </button>
+      </div>
     </div>
   </header>
 
@@ -148,13 +160,16 @@ import { AnimatePresence, motion } from 'motion-v'
 import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
 import { usePostsStore } from '~/store/post'
+import { useSearchOverlayStore } from '~/store/search-overlay'
 
 const router = useRouter()
 const route = useRoute()
 const postsStore = usePostsStore()
+const searchOverlay = useSearchOverlayStore()
 const isPostPage = computed(() => route.path.startsWith('/posts/'))
 const isDrawerOpen = ref(false)
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
+const searchButtonRef = ref<HTMLButtonElement | null>(null)
 const drawerRef = ref<HTMLElement | null>(null)
 
 const FOCUSABLE_SELECTOR = [
@@ -253,6 +268,10 @@ function goHome() {
     }
   }
   router.push('/')
+}
+
+function openSearch() {
+  searchOverlay.open()
 }
 
 function toggleDrawer() {

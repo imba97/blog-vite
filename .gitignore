@@ -10,5 +10,9 @@ temp
 drafts
 *.log
 public/assets/fonts
+public/search-meta.json
+public/search-full.json
 .eslintcache
 .auto-generate
+
+.pnpm-store/
