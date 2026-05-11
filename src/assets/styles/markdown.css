@@ -1,23 +1,19 @@
-.dark .shiki,
-.dark .shiki span {
-  color: var(--s-dark, #f8fafc);
-  --twoslash-popup-bg: #191919;
-  --twoslash-border-color: #8884;
+/* Keep theme switching aligned with html.dark, without relying on color-scheme/light-dark(). */
+.prose pre.shiki {
+  --shiki-fg: var(--s-light);
+  --shiki-bg: var(--s-light-bg);
+  color: var(--shiki-fg);
+  background-color: var(--shiki-bg);
 }
-.dark .shiki {
-  background-color: #111827cc;
-  border: 1px solid #37415166;
+.prose pre.shiki span {
+  color: var(--s-light);
 }
-
-html:not(.dark) .shiki {
-  background-color: #f8fafacc;
-  border: 1px solid #d1d5db99;
+html.dark .prose pre.shiki {
+  --shiki-fg: var(--s-dark);
+  --shiki-bg: var(--s-dark-bg);
 }
-
-html:not(.dark) .shiki,
-html:not(.dark) .shiki span {
-  color: var(--s-light, inherit);
-  --twoslash-popup-bg: #fafafa;
+html.dark .prose pre.shiki span {
+  color: var(--s-dark);
 }
 
 .twoslash ul {

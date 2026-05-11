@@ -6,7 +6,6 @@ import {
   defineConfig,
   presetAttributify,
   presetIcons,
-  presetTypography,
   presetWebFonts,
   presetWind3,
   transformerDirectives,
@@ -119,7 +118,6 @@ export default defineConfig({
     }),
     presetAttributify(),
     presetWind3(),
-    presetTypography(),
     presetWebFonts({
       fonts: {
         sans: 'Inter',

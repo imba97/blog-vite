@@ -157,7 +157,7 @@ html.dark .prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > 
   color: inherit;
 }
 .prose pre {
-  color: #f8fafc;
+  color: var(--fg-deep);
   overflow-x: auto;
   font-size: 0.875em;
   line-height: 1.7142857;
@@ -169,7 +169,7 @@ html.dark .prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > 
   padding-bottom: 0.8571429em;
   padding-left: 1.1428571em;
 }
-.prose pre code {
+.prose pre:not(.shiki) code {
   background-color: transparent !important;
   border-width: 0;
   border-radius: 0;
@@ -180,10 +180,10 @@ html.dark .prose :where(p, li, blockquote, td, th, h1, h2, h3, h4, h5, h6, a) > 
   font-family: inherit;
   line-height: inherit;
 }
-.prose pre code::before {
+.prose pre:not(.shiki) code::before {
   content: none;
 }
-.prose pre code::after {
+.prose pre:not(.shiki) code::after {
   content: none;
 }
 .prose table {
