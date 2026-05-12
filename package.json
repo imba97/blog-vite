@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@11.0.9",
+  "packageManager": "pnpm@11.1.0",
   "scripts": {
     "dev": "vite",
     "build": "cross-env NODE_ENV=production vite-ssg build && esno ./scripts/copy-fonts.ts && esno ./scripts/rss.ts",
@@ -29,13 +29,13 @@
     "pinia": "^3.0.4",
     "shiki": "^4.0.2",
     "shiki-magic-move": "^1.3.0",
-    "twikoo": "^1.6.44",
+    "twikoo": "^1.7.9",
     "vue": "^3.5.34",
     "vue-router": "^5.0.6",
     "vue-router-better-scroller": "^0.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^8.2.0",
+    "@antfu/eslint-config": "^9.0.0",
     "@iconify/json": "^2.2.471",
     "@octokit/rest": "^22.0.1",
     "@shikijs/markdown-it": "^4.0.2",
@@ -43,7 +43,7 @@
     "@shikijs/twoslash": "^4.0.2",
     "@types/diacritics": "^1.3.3",
     "@types/markdown-it-link-attributes": "^3.0.5",
-    "@types/node": "^25.6.2",
+    "@types/node": "^25.7.0",
     "@types/nprogress": "^0.2.3",
     "@unocss/eslint-plugin": "^66.6.8",
     "@unocss/preset-web-fonts": "^66.6.8",
@@ -71,7 +71,7 @@
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^32.0.0",
     "unplugin-vue-markdown": "29.2.0",
-    "vite": "^8.0.11",
+    "vite": "^8.0.12",
     "vite-plugin-inspect": "^11.3.3",
     "vite-plugin-optimize-exclude": "^0.0.1",
     "vite-ssg": "^28.3.0"

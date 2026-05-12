@@ -327,30 +327,32 @@ watch(() => overlay.isOpen, (open) => {
   }
 })
 
-useEventListener(window, 'keydown', (e: KeyboardEvent) => {
-  if (e.key !== 'Escape' || !overlay.isOpen)
-    return
-  e.stopPropagation()
-  close()
-}, { capture: true })
+onMounted(() => {
+  useEventListener(window, 'keydown', (e: KeyboardEvent) => {
+    if (e.key !== 'Escape' || !overlay.isOpen)
+      return
+    e.stopPropagation()
+    close()
+  }, { capture: true })
 
-useEventListener(window, 'keydown', (e: KeyboardEvent) => {
-  if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey)
-    return
+  useEventListener(window, 'keydown', (e: KeyboardEvent) => {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey)
+      return
 
-  const t = e.target as HTMLElement | null
-  if (!t)
-    return
+    const t = e.target as HTMLElement | null
+    if (!t)
+      return
 
-  const tag = t.tagName
-  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
-    return
-  if (t.isContentEditable)
-    return
+    const tag = t.tagName
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
+      return
+    if (t.isContentEditable)
+      return
 
-  e.preventDefault()
-  overlay.open()
-}, { capture: true })
+    e.preventDefault()
+    overlay.open()
+  }, { capture: true })
+})
 
 onUnmounted(() => {
   resetTagDeletePrime()
