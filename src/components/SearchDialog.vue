@@ -22,6 +22,27 @@
     background-color: rgb(254 226 226);
   }
 }
+
+.search-results-scroll {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
 </style>
 
 <style>
@@ -78,7 +99,7 @@ html.dark .tag-chip--primed {
             role="dialog"
             aria-modal="true"
             aria-label="站内搜索"
-            class="h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/88 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
+            class="h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/91 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
             tabindex="-1"
             @click.stop
           >
@@ -174,15 +195,15 @@ html.dark .tag-chip--primed {
             </div>
 
             <div class="fyc shrink-0 gap-2 px-3 pb-2 sm:px-4">
-              <code class="rounded bg-gray-100 px-1.5 py-px text-xs text-muted dark:bg-white/10">#tag</code>
-              <code class="rounded bg-gray-100 px-1.5 py-px text-xs text-muted dark:bg-white/10">/categorie</code>
+              <code class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted dark:bg-white/10">#tag</code>
+              <code class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted dark:bg-white/10">/categorie</code>
             </div>
 
             <div class="min-h-0 flex flex-1 flex-col overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
               <div
                 class="relative min-h-0 flex flex-1 flex-col overflow-hidden border border-subtle rounded-xl bg-gray-50/35 dark:bg-neutral-950/28"
               >
-                <div class="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
+                <div class="search-results-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
                   <div class="px-2 py-3 sm:px-3">
                     <template v-if="!siteSearchWorkerReady && !siteSearchWorkerError">
                       <div class="flex flex-col items-center justify-center gap-2 py-12 text-muted">
@@ -260,14 +281,6 @@ html.dark .tag-chip--primed {
                     </ul>
                   </div>
                 </div>
-                <div
-                  class="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[16px] from-gray-50 to-transparent bg-gradient-to-b dark:from-neutral-950"
-                  aria-hidden="true"
-                />
-                <div
-                  class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[16px] from-gray-50 to-transparent bg-gradient-to-t dark:from-neutral-950"
-                  aria-hidden="true"
-                />
               </div>
             </div>
           </div>
@@ -360,16 +373,21 @@ onMounted(() => {
       return
 
     const t = e.target as HTMLElement | null
-    if (!t)
-      return
-
-    const tag = t.tagName
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
-      return
-    if (t.isContentEditable)
-      return
+    if (t) {
+      const tag = t.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
+        return
+      if (t.isContentEditable)
+        return
+    }
 
     e.preventDefault()
+
+    if (overlay.isOpen) {
+      focusKeywordInput()
+      return
+    }
+
     overlay.open()
   }, { capture: true })
 })
