@@ -180,7 +180,7 @@ html.dark .tag-chip--primed {
 
             <div class="min-h-0 flex flex-1 flex-col overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
               <div
-                class="relative min-h-0 flex flex-1 flex-col overflow-hidden border border-subtle rounded-xl bg-gray-50/50 dark:bg-neutral-950/40"
+                class="relative min-h-0 flex flex-1 flex-col overflow-hidden border border-subtle rounded-xl bg-gray-50/35 dark:bg-neutral-950/28"
               >
                 <div class="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
                   <div class="px-2 py-3 sm:px-3">
@@ -223,17 +223,37 @@ html.dark .tag-chip--primed {
                       <li v-for="item in hits" :key="item.path">
                         <AutoLink
                           :href="item.path"
-                          class="group search-hit-link focus-ring-primary"
+                          class="group search-hit-link min-w-0 focus-ring-primary"
                           @click="close"
                         >
-                          <div class="search-hit-title">
-                            {{ item.title }}
-                          </div>
-                          <div v-if="item.date" class="mt-0.5 text-xs text-muted">
-                            {{ formatDate(item.date) }}
-                          </div>
-                          <div class="line-clamp-2 mt-1 text-sm text-muted">
-                            {{ item.snippet }}
+                          <div class="min-w-0 flex flex-col max-sm:gap-1.5 sm:gap-1">
+                            <div class="min-w-0 break-words search-hit-title leading-snug sm:leading-normal">
+                              {{ item.title }}
+                            </div>
+                            <div v-if="item.date" class="shrink-0 text-xs text-muted/65 dark:text-muted/55">
+                              {{ formatDate(item.date) }}
+                            </div>
+                            <div
+                              v-if="item.tags.length || item.categories.length"
+                              class="flex flex-wrap gap-1"
+                            >
+                              <span
+                                v-for="t in item.tags"
+                                :key="`${item.path}-tag-${t}`"
+                                class="max-w-full truncate rounded-md bg-gray-100/45 px-1.5 py-0.5 text-[11px] text-muted/70 leading-none dark:bg-white/[0.05]"
+                              >#{{ t }}</span>
+                              <span
+                                v-for="c in item.categories"
+                                :key="`${item.path}-cat-${c}`"
+                                class="max-w-full truncate rounded-md bg-gray-100/35 px-1.5 py-0.5 text-[11px] text-muted/60 leading-none dark:bg-white/[0.035]"
+                              >/{{ c }}</span>
+                            </div>
+                            <div
+                              v-if="item.snippet"
+                              class="line-clamp-2 text-sm text-muted/68 dark:text-muted/58"
+                            >
+                              {{ item.snippet }}
+                            </div>
                           </div>
                         </AutoLink>
                       </li>

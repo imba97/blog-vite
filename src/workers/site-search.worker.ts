@@ -43,7 +43,7 @@ function buildMiniSearch(records: SearchFullRecord[]) {
   docs = records
   mini = new MiniSearch({
     fields: ['title', 'body', 'tagLine', 'catLine'],
-    storeFields: ['path', 'title', 'date', 'text', 'tags'],
+    storeFields: ['path', 'title', 'date', 'text', 'tags', 'categories'],
     searchOptions: {
       boost: { title: 4, tagLine: 3, catLine: 2, body: 1 },
       fuzzy: 0.12,
@@ -61,9 +61,16 @@ function buildMiniSearch(records: SearchFullRecord[]) {
       path: d.path,
       date: d.date,
       text: d.text,
-      tags: d.tags
+      tags: d.tags,
+      categories: d.categories
     }))
   )
+}
+
+function asStringList(v: unknown): string[] {
+  if (!Array.isArray(v))
+    return []
+  return v.filter((x): x is string => typeof x === 'string')
 }
 
 function hitsFromDocs(subset: SearchFullRecord[], limit: number): SearchHit[] {
@@ -71,7 +78,9 @@ function hitsFromDocs(subset: SearchFullRecord[], limit: number): SearchHit[] {
     path: d.path,
     title: d.title,
     date: d.date,
-    snippet: [...d.tags, ...d.categories].filter(Boolean).join(' · ') || '—'
+    snippet: '',
+    tags: d.tags,
+    categories: d.categories
   }))
 }
 
@@ -115,10 +124,14 @@ function handleSearch(tag: string | null, category: string | null, keywords: str
       const title = String(r.title ?? '')
       const date = String(r.date ?? '')
       const text = String(r.text ?? '')
+      const tags = asStringList(r.tags)
+      const categories = asStringList(r.categories)
       return {
         path,
         title,
         date,
+        tags,
+        categories,
         snippet: snippet(text, kw)
       }
     })

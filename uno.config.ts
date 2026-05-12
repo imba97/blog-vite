@@ -1,7 +1,6 @@
 import {
   createLocalFontProcessor
 } from '@unocss/preset-web-fonts/local'
-import { unoColors } from 'uno-colors'
 import {
   defineConfig,
   presetAttributify,
@@ -11,6 +10,7 @@ import {
   transformerDirectives,
   transformerVariantGroup
 } from 'unocss'
+import { colors } from './scripts/unocss/colors'
 
 const breakpoints = {
   'xs': '320px',
@@ -24,12 +24,7 @@ const breakpoints = {
 
 export default defineConfig({
   theme: {
-    colors: {
-      ...unoColors({
-        primary: '#50528a'
-      }),
-      'primary-light': '#a9b4ff'
-    },
+    colors,
     breakpoints
   },
   shortcuts: [
@@ -41,7 +36,6 @@ export default defineConfig({
       'surface-base': 'bg-white dark:bg-neutral-900',
       'surface-subtle': 'bg-gray-100/75 dark:bg-neutral-800/65',
       'border-subtle': 'border-gray-200/85 dark:border-neutral-700/80',
-      'text-muted': 'text-gray-600 dark:text-gray-400',
       'text-soft': 'text-gray-500 dark:text-gray-500',
       'focus-ring-primary': 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-5/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-primary-light/65 dark:focus-visible:ring-offset-neutral-950',
       'interactive-soft': 'transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800/72',
@@ -63,8 +57,8 @@ export default defineConfig({
       'pagination-ellipsis': 'text-gray-400 dark:text-gray-500',
       'prose-shell': 'text-gray-700 dark:text-gray-300',
       'card-soft': 'surface-base border border-subtle rounded-xl',
-      'search-hit-link': 'block rounded-lg px-2 py-2.5 transition-colors interactive-soft hover:bg-white/90 dark:hover:bg-neutral-900/70',
-      'search-hit-title': 'text-gray-800 font-medium transition-colors duration-200 group-hover:text-primary-6 dark:text-white/90 dark:group-hover:text-primary-light'
+      'search-hit-link': 'block min-w-0 rounded-lg px-2 py-2.5 transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.04]',
+      'search-hit-title': 'text-gray-600/90 font-normal transition-colors duration-200 group-hover:text-gray-700 dark:text-gray-400/95 dark:group-hover:text-gray-300'
     },
 
     // 常用卡片样式
