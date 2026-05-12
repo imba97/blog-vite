@@ -13,32 +13,29 @@
 </template>
 
 <script lang="ts" setup>
-import { isExternalUrl } from '~/utils/url'
+import { isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
+import { navigateSpaOrExternal, shouldDelegateSpaNavigation } from '~/utils/spa-navigation'
 
 const route = useRoute()
 const router = useRouter()
 
-const isListPage = computed(() => route.path === '/' || route.path.startsWith('/page/'))
-const isPostPage = computed(() => !isListPage.value)
-const shouldShowComments = computed(() => !isListPage.value)
+const isPostPage = computed(() => isReadableLayoutRoute(route.path))
+const shouldShowComments = computed(() => shouldShowTwikooSection(route.path))
 
 function handleMainClick(event: MouseEvent) {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-    return
-  }
-
   const target = event.target as HTMLElement | null
   const anchor = target?.closest('a[href]') as HTMLAnchorElement | null
-  if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) {
+  if (!anchor)
     return
-  }
 
   const href = anchor.getAttribute('href')
-  if (!href || href.startsWith('#') || href.startsWith('//') || isExternalUrl(href)) {
+  if (!href)
     return
-  }
+
+  if (!shouldDelegateSpaNavigation(event, anchor, href))
+    return
 
   event.preventDefault()
-  router.push(href)
+  navigateSpaOrExternal(router, href)
 }
 </script>

@@ -7,13 +7,14 @@ import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { setupCopyCodeDelegation } from './composables/use-copy-code'
 import { initAnalytics } from './utils/analytics/51.la'
+import { isPostListRoute } from './utils/route-page-kind'
 
 import './assets/styles/main.css'
 import './assets/styles/prose.css'
 import './assets/styles/markdown.css'
 import './assets/styles/copy-button.scss'
-import './composables/use-copy-code'
 import '@unocss/reset/tailwind.css'
 import 'floating-vue/dist/style.css'
 import 'markdown-it-github-alerts/styles/github-colors-light.css'
@@ -37,11 +38,15 @@ export const createApp = ViteSSG(
     if (!import.meta.env.SSR) {
       initAnalytics()
 
+      const disposeCopyCode = setupCopyCodeDelegation()
+      if (import.meta.hot)
+        import.meta.hot.dispose(() => disposeCopyCode())
+
       const html = document.querySelector('html')!
       setupRouterScroller(router, {
         selectors: {
           html(ctx) {
-            const isListRoute = ctx.to.path === '/' || ctx.to.path.startsWith('/page/')
+            const isListRoute = isPostListRoute(ctx.to.path)
             const shouldResetToTop = isListRoute && ctx.type !== 'history'
             const targetPosition = shouldResetToTop ? { top: 0, left: 0 } : ctx.savedPosition
 

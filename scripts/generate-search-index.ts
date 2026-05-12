@@ -3,6 +3,13 @@ import { join } from 'node:path'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
+import { postPublicPath } from '../src/constants/route-policy'
+import {
+  formatPostDateString,
+  isPublishablePostData,
+  normalizeNumericPostId,
+  normalizeStringList
+} from '../src/content/post-policy'
 
 const markdown = MarkdownIt({
   html: true,
@@ -41,24 +48,6 @@ function markdownToPlain(content: string): string {
   return plain.slice(0, MAX_TEXT_CHARS)
 }
 
-function normalizeStringList(value: unknown): string[] {
-  if (value == null)
-    return []
-  if (Array.isArray(value))
-    return value.map(v => String(v).trim()).filter(Boolean)
-  return [String(value).trim()].filter(Boolean)
-}
-
-function formatDate(value: unknown): string {
-  if (value == null)
-    return ''
-  if (typeof value === 'string')
-    return value
-  if (value instanceof Date)
-    return value.toISOString()
-  return String(value)
-}
-
 /** 与 post store + SSG includedRoutes 对齐：非 draft、有 date、数字 id */
 export async function generateSearchIndex(outDir: string): Promise<void> {
   const files = await glob('pages/posts/**/index.md')
@@ -71,23 +60,16 @@ export async function generateSearchIndex(outDir: string): Promise<void> {
     const raw = await readFile(file, 'utf-8')
     const { data, content } = matter(raw)
 
-    if (data.draft)
-      continue
-    if (!data.date)
-      continue
-    if (data.id == null || data.id === '')
+    if (!isPublishablePostData(data))
       continue
 
-    const idStr = String(data.id).trim()
-    if (!/^\d+$/.test(idStr))
-      continue
-
-    const path = `/posts/${idStr}`
+    const idStr = normalizeNumericPostId(data as Record<string, unknown>)!
+    const path = postPublicPath(idStr)
     const meta: SearchMetaRecord = {
       id: idStr,
       path,
       title: String(data.title ?? ''),
-      date: formatDate(data.date),
+      date: formatPostDateString(data.date),
       tags: normalizeStringList(data.tags),
       categories: normalizeStringList(data.categories)
     }

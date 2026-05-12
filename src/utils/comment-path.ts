@@ -1,17 +1,19 @@
+import { archiveCommentPathForPostId, POSTS_PATH_PREFIX } from '~/constants/route-policy'
+
 interface CommentPathStrategy {
   match: (routePath: string) => boolean
   resolve: (routePath: string) => string
 }
 
 const postRouteStrategy: CommentPathStrategy = {
-  match: routePath => routePath.startsWith('/posts/'),
+  match: routePath => routePath.startsWith(POSTS_PATH_PREFIX),
   resolve(routePath) {
     const segments = routePath.split('/').filter(Boolean)
     const id = segments.at(-1)
     if (!id)
       return ''
 
-    return `/archives/${id}`
+    return archiveCommentPathForPostId(id)
   }
 }
 

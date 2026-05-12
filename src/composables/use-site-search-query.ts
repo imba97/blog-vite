@@ -21,6 +21,9 @@ import {
 
 const DOUBLE_BACKSPACE_MS = 520
 
+let searchMetaCandidatesLoaded = false
+let searchMetaCandidatesInflight: Promise<void> | null = null
+
 export interface ActiveSuggestSession {
   strategy: PrefixStrategy
   items: string[]
@@ -114,32 +117,44 @@ export function useSiteSearchQuery() {
   async function loadCandidatesFromMeta() {
     if (import.meta.env.SSR)
       return
+    if (searchMetaCandidatesLoaded)
+      return
 
-    try {
-      const base = import.meta.env.BASE_URL || '/'
-      const res = await fetch(`${base}search-meta.json`)
-      if (!res.ok)
-        return
+    if (!searchMetaCandidatesInflight) {
+      searchMetaCandidatesInflight = (async () => {
+        try {
+          const base = import.meta.env.BASE_URL || '/'
+          const res = await fetch(`${base}search-meta.json`)
+          if (!res.ok)
+            return
 
-      const meta = await res.json() as SearchMetaRecord[]
-      if (!Array.isArray(meta))
-        return
+          const meta = await res.json() as SearchMetaRecord[]
+          if (!Array.isArray(meta))
+            return
 
-      const tagSet = new Set<string>()
-      const catSet = new Set<string>()
-      for (const row of meta) {
-        for (const tag of row.tags ?? [])
-          tagSet.add(tag)
-        for (const cat of row.categories ?? [])
-          catSet.add(cat)
-      }
+          const tagSet = new Set<string>()
+          const catSet = new Set<string>()
+          for (const row of meta) {
+            for (const tag of row.tags ?? [])
+              tagSet.add(tag)
+            for (const cat of row.categories ?? [])
+              catSet.add(cat)
+          }
 
-      allTags.value = [...tagSet].sort((a, b) => a.localeCompare(b, 'zh-CN'))
-      allCategories.value = [...catSet].sort((a, b) => a.localeCompare(b, 'zh-CN'))
+          allTags.value = [...tagSet].sort((a, b) => a.localeCompare(b, 'zh-CN'))
+          allCategories.value = [...catSet].sort((a, b) => a.localeCompare(b, 'zh-CN'))
+          searchMetaCandidatesLoaded = true
+        }
+        catch {
+          /* 联想失败则静默 */
+        }
+        finally {
+          searchMetaCandidatesInflight = null
+        }
+      })()
     }
-    catch {
-      /* 联想失败则静默 */
-    }
+
+    await searchMetaCandidatesInflight
   }
 
   function focusKeywordInput() {

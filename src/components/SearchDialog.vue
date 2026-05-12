@@ -297,6 +297,7 @@ import {
   siteSearchWorkerError,
   siteSearchWorkerReady
 } from '~/composables/site-search-worker'
+import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { useSiteSearchQuery } from '~/composables/use-site-search-query'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 
@@ -350,12 +351,12 @@ watch(() => overlay.isOpen, (open) => {
     return
 
   if (open) {
-    document.body.style.overflow = 'hidden'
+    acquireBodyScrollLock()
     focusKeywordInput()
     onOverlayOpened()
   }
   else {
-    document.body.style.overflow = ''
+    releaseBodyScrollLock()
     resetForOverlayClose()
   }
 })
@@ -395,6 +396,6 @@ onMounted(() => {
 onUnmounted(() => {
   resetTagDeletePrime()
   if (typeof document !== 'undefined' && overlay.isOpen)
-    document.body.style.overflow = ''
+    releaseBodyScrollLock()
 })
 </script>

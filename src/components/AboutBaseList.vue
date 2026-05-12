@@ -21,6 +21,7 @@ import { random } from '~/utils/math'
 dayjs.extend(duration)
 
 const timeCache = new Map<string, Ref<string>>()
+const runningIntervals = new Set<ReturnType<typeof setInterval>>()
 
 const list = [
   { text: '拒绝烟酒', class: 'font-bold' },
@@ -91,11 +92,12 @@ function startInterval(
   // 初始化显示
   updateTimeDisplay(totalDuration)
 
-  return setInterval(() => {
+  const id = setInterval(() => {
     // 每次直接加上间隔时间
     totalDuration = totalDuration.add(INTERVAL_TIME)
     updateTimeDisplay(totalDuration)
   }, INTERVAL_TIME)
+  runningIntervals.add(id)
 
   function updateTimeDisplay(duration: Duration) {
     const years = duration.years()
@@ -125,4 +127,10 @@ function startInterval(
     time.value = result
   }
 }
+
+onUnmounted(() => {
+  for (const id of runningIntervals)
+    clearInterval(id)
+  runningIntervals.clear()
+})
 </script>

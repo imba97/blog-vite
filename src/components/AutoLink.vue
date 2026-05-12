@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+import { navigateSpaOrExternal } from '~/utils/spa-navigation'
 import { isExternalUrl } from '~/utils/url'
 
 const props = withDefaults(
@@ -36,11 +37,6 @@ function navigate(event: MouseEvent) {
 
   event.preventDefault()
 
-  if (props.href.startsWith('http')) {
-    window.open(props.href, '_blank')
-    return
-  }
-
-  router.push(props.href)
+  navigateSpaOrExternal(router, props.href)
 }
 </script>

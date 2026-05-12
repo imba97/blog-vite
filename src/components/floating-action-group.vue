@@ -33,6 +33,7 @@
 
 <script lang="ts" setup>
 import { useThemeMode } from '~/composables/use-theme-mode'
+import { isPostListRoute } from '~/utils/route-page-kind'
 
 const SCROLL_THRESHOLD = 320
 const LIST_PAGE_WIDTH = '64rem'
@@ -42,7 +43,7 @@ const showBackToTop = ref(false)
 const route = useRoute()
 const { themePreference, cycleThemeMode } = useThemeMode()
 
-const isListPage = computed(() => route.path === '/' || route.path.startsWith('/page/'))
+const isListPage = computed(() => isPostListRoute(route.path))
 
 const floatingRightOffset = computed(() => {
   const targetWidth = isListPage.value ? LIST_PAGE_WIDTH : POST_PAGE_WIDTH

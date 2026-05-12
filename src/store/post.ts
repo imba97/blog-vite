@@ -1,3 +1,8 @@
+import type { RouteRecordNormalized } from 'vue-router'
+import type { PostFrontmatter } from '~/types/post-frontmatter'
+import { POSTS_PATH_PREFIX } from '~/constants/route-policy'
+import { isPublishablePostData, sortPostListEntriesByDateDesc, toPostListEntry } from '~/content/post-policy'
+
 export const usePostsStore = defineStore('posts', () => {
   const page = shallowRef(1)
   const size = shallowRef(20)
@@ -10,20 +15,19 @@ export const usePostsStore = defineStore('posts', () => {
   } | null>(null)
 
   const router = useRouter()
-  const routes: any[] = router.getRoutes()
-    .filter(i => i.path.startsWith('/posts') && i.meta.frontmatter.date && !i.meta.frontmatter.draft)
-    .filter(i => !i.path.endsWith('.html'))
-    .map(i => ({
-      path: i.path,
-      title: i.meta.frontmatter.title,
-      date: i.meta.frontmatter.date,
-      tags: i.meta.frontmatter.tags,
-      categories: i.meta.frontmatter.categories
-    }))
+  const routes = router.getRoutes()
+    .filter((i: RouteRecordNormalized) =>
+      i.path.startsWith(POSTS_PATH_PREFIX)
+      && i.meta.frontmatter
+      && isPublishablePostData(i.meta.frontmatter)
+      && !i.path.endsWith('.html')
+    )
+    .map((i: RouteRecordNormalized) =>
+      toPostListEntry(i.meta.frontmatter as PostFrontmatter, i.path)
+    )
 
   const posts = computed(() =>
-    [...routes || []]
-      .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+    sortPostListEntriesByDateDesc([...routes || []])
   )
 
   const total = computed(() => posts.value.length)
@@ -40,7 +44,7 @@ export const usePostsStore = defineStore('posts', () => {
   watch(
     () => router.currentRoute.value.path,
     (path) => {
-      if (path.startsWith('/posts/')) {
+      if (path.startsWith(POSTS_PATH_PREFIX)) {
         setCurrent(path)
       }
       else {
@@ -52,7 +56,7 @@ export const usePostsStore = defineStore('posts', () => {
 
   router.beforeEach((to) => {
     // 设置当前文章
-    if (to.path.startsWith('/posts/')) {
+    if (to.path.startsWith(POSTS_PATH_PREFIX)) {
       setCurrent(to.path)
     }
     else {

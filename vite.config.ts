@@ -29,6 +29,9 @@ import NetlifyImagePlugin from './scripts/netlify-image-plugin'
 import { slugify } from './scripts/slugify'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject'
 import SearchIndex from './scripts/vite/plugins/search-index'
+import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes'
+import { postPublicPath } from './src/constants/route-policy'
+import { isPublishablePostData, normalizeNumericPostId } from './src/content/post-policy'
 
 const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 const gitMeta = getGitMeta()
@@ -65,8 +68,9 @@ export default defineConfig({
             frontmatter: data
           })
 
-          if (path.includes('posts') && !!data && !!data.id) {
-            const newPath = `/posts/${data.id}`
+          if (path.includes('posts') && isPublishablePostData(data)) {
+            const id = normalizeNumericPostId(data)!
+            const newPath = postPublicPath(id)
             route.path = newPath
             route.name = newPath
           }
@@ -161,10 +165,7 @@ export default defineConfig({
     ssgOptions: {
       formatting: 'minify',
       includedRoutes(paths: string[]) {
-        // 只保留 /posts/{id} 形式的路由
-        return paths.filter((filePath) => {
-          return /^\/posts\/\d+$/.test(filePath)
-        })
+        return paths.filter(filePath => isSsgIncludedRoute(filePath))
       }
     }
   }),

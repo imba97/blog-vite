@@ -5,6 +5,8 @@ import { Feed } from 'feed'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
+import { postPublicPath } from '../src/constants/route-policy'
+import { isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
 
 const DOMAIN = 'https://imba97.com'
 const FOLLOW_CHALLENGE_FEED_ID = '41798923170845756'
@@ -43,34 +45,38 @@ async function buildBlogRSS() {
       rss: 'https://imba97.com/feed.xml'
     }
   }
-  const posts: any[] = (
-    await Promise.all(
-      files.filter(i => i !== 'pages/posts/index.md')
-        .map(async (i) => {
-          const raw = await readFile(i, 'utf-8')
-          const { data, content } = matter(raw)
+  const posts = (await Promise.all(
+    files.filter(i => i !== 'pages/posts/index.md')
+      .map(async (i) => {
+        const raw = await readFile(i, 'utf-8')
+        const { data, content } = matter(raw)
 
-          const html = markdown.render(content)
-            .replace('src="/', `src="${DOMAIN}/`)
+        if (!isPublishablePostData(data))
+          return null
 
-          if (data.image?.startsWith('/'))
-            data.image = DOMAIN + data.image
+        const idStr = normalizeNumericPostId(data as Record<string, unknown>)!
+        const link = DOMAIN + postPublicPath(idStr)
 
-          const link = DOMAIN + i.replace(/pages\/posts\/.+/, `/posts/${data.id}`)
+        const html = markdown.render(content)
+          .replace('src="/', `src="${DOMAIN}/`)
 
-          return {
-            ...data,
-            id: link,
-            link,
-            date: new Date(data.date),
-            content: html,
-            author: [AUTHOR]
-          }
-        })
-    ))
-    .filter(Boolean)
+        const image = typeof data.image === 'string' && data.image.startsWith('/')
+          ? DOMAIN + data.image
+          : data.image
 
-  posts.sort((a, b) => +new Date(b.date) - +new Date(a.date))
+        return {
+          ...data,
+          id: link,
+          link,
+          image,
+          date: new Date(data.date as string | Date),
+          content: html,
+          author: [AUTHOR]
+        } as Item
+      })
+  )).filter((x): x is Item => x != null)
+
+  posts.sort((a, b) => +new Date(b.date as Date) - +new Date(a.date as Date))
 
   await writeFeed('feed', options, posts)
 }

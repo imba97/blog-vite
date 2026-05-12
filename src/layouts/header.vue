@@ -157,16 +157,18 @@
 
 <script lang="ts" setup>
 import { AnimatePresence, motion } from 'motion-v'
+import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
 import { usePostsStore } from '~/store/post'
 import { useSearchOverlayStore } from '~/store/search-overlay'
+import { isArticlePostRoute } from '~/utils/route-page-kind'
 
 const router = useRouter()
 const route = useRoute()
 const postsStore = usePostsStore()
 const searchOverlay = useSearchOverlayStore()
-const isPostPage = computed(() => route.path.startsWith('/posts/'))
+const isPostPage = computed(() => isArticlePostRoute(route.path))
 const isDrawerOpen = ref(false)
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
 const searchButtonRef = ref<HTMLButtonElement | null>(null)
@@ -245,7 +247,11 @@ watch(() => route.fullPath, () => {
 watch(isDrawerOpen, (opened) => {
   if (typeof document === 'undefined')
     return
-  document.body.style.overflow = opened ? 'hidden' : ''
+
+  if (opened)
+    acquireBodyScrollLock()
+  else
+    releaseBodyScrollLock()
 
   if (opened) {
     nextTick(() => {
@@ -347,7 +353,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleWindowKeydown)
-  if (typeof document !== 'undefined')
-    document.body.style.overflow = ''
+  if (typeof document === 'undefined')
+    return
+  if (isDrawerOpen.value)
+    releaseBodyScrollLock()
 })
 </script>

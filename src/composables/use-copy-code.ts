@@ -3,11 +3,11 @@ export interface CopyCodeOptions {
   timeout?: number
 }
 
-export function useCopyCode(options: CopyCodeOptions = {}) {
+export function setupCopyCodeDelegation(options: CopyCodeOptions = {}): () => void {
   const { timeout = 2000 } = options
 
   if (typeof window === 'undefined')
-    return
+    return () => {}
 
   const timeoutIdMap: WeakMap<HTMLElement, ReturnType<typeof setTimeout>> = new WeakMap()
 
@@ -57,21 +57,17 @@ export function useCopyCode(options: CopyCodeOptions = {}) {
     if (!preElement)
       return
 
-    // 获取代码文本内容
     const text = preElement.textContent || ''
 
     copyToClipboard(text)
       .then(() => {
-        // 设置复制成功状态
         button.classList.add('copied')
 
-        // 清除之前的定时器
         const existingTimeout = timeoutIdMap.get(button)
         if (existingTimeout) {
           clearTimeout(existingTimeout)
         }
 
-        // 设置新的定时器来重置状态
         const timeoutId = setTimeout(() => {
           button.classList.remove('copied')
           timeoutIdMap.delete(button)
@@ -84,27 +80,20 @@ export function useCopyCode(options: CopyCodeOptions = {}) {
       })
   }
 
-  // 事件委托处理点击
-  document.addEventListener('click', (event) => {
+  function onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement
 
-    // 检查是否点击的是复制按钮或其子元素
-    const copyButton = target.closest('button.copy') as HTMLElement
+    const copyButton = target.closest('button.copy') as HTMLElement | null
     if (!copyButton)
       return
 
     event.preventDefault()
     handleCopy(copyButton)
-  })
-}
-
-// 初始化复制功能
-if (typeof window !== 'undefined') {
-  // 在 DOM 加载完成后初始化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => useCopyCode())
   }
-  else {
-    useCopyCode()
+
+  document.addEventListener('click', onDocumentClick)
+
+  return () => {
+    document.removeEventListener('click', onDocumentClick)
   }
 }
