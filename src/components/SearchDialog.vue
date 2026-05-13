@@ -359,7 +359,7 @@ watch(() => overlay.isOpen, (open) => {
     releaseBodyScrollLock()
     resetForOverlayClose()
   }
-})
+}, { immediate: true })
 
 onMounted(() => {
   useEventListener(window, 'keydown', (e: KeyboardEvent) => {
@@ -367,29 +367,6 @@ onMounted(() => {
       return
     e.stopPropagation()
     close()
-  }, { capture: true })
-
-  useEventListener(window, 'keydown', (e: KeyboardEvent) => {
-    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey)
-      return
-
-    const t = e.target as HTMLElement | null
-    if (t) {
-      const tag = t.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
-        return
-      if (t.isContentEditable)
-        return
-    }
-
-    e.preventDefault()
-
-    if (overlay.isOpen) {
-      focusKeywordInput()
-      return
-    }
-
-    overlay.open()
   }, { capture: true })
 })
 

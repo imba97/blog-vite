@@ -28,6 +28,7 @@ import { getGitMeta } from './scripts/get-git-meta'
 import NetlifyImagePlugin from './scripts/netlify-image-plugin'
 import { slugify } from './scripts/slugify'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject'
+import PostsMeta from './scripts/vite/plugins/posts-meta'
 import SearchIndex from './scripts/vite/plugins/search-index'
 import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes'
 import { postPublicPath } from './src/constants/route-policy'
@@ -44,6 +45,7 @@ export default defineConfig({
   },
   plugins: [
     HtmlHeadInject(),
+    PostsMeta(),
     SearchIndex(),
 
     UnoCSS(),
@@ -186,6 +188,31 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        manualChunks(id) {
+          if (
+            id.includes('/src/composables/site-search-worker.ts')
+            || id.includes('/src/components/SearchDialog.vue')
+            || id.includes('/src/composables/use-site-search-query.ts')
+            || id.includes('/src/workers/site-search.worker.ts')
+            || id.includes('minisearch')
+          ) {
+            return 'search'
+          }
+          if (
+            id.includes('/src/components/Twikoo.vue')
+            || id.includes('/src/composables/useTwikooComments.ts')
+            || id.includes('twikoo')
+          ) {
+            return 'comments'
+          }
+          if (id.includes('motion-v'))
+            return 'motion'
+          if (id.includes('floating-vue'))
+            return 'ui'
+          if (id.includes('/node_modules/'))
+            return 'vendor'
+          return undefined
+        },
         // 自定义入口文件名格式
         entryFileNames: 'assets/entry-[hash].js',
         // 自定义代码块文件名格式

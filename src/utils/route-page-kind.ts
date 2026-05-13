@@ -15,7 +15,7 @@ export function isReadableLayoutRoute(path: string): boolean {
   return !isPostListRoute(path)
 }
 
-/** 是否展示 Twikoo 区块：非列表页（含关于等），与历史行为一致 */
+/** 是否展示 Twikoo 区块：非列表页（含 about、links 等） */
 export function shouldShowTwikooSection(path: string): boolean {
   return !isPostListRoute(path)
 }

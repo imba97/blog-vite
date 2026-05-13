@@ -1,4 +1,4 @@
-<div text="8 primary center" font-bold>本博客</div>
+<div text="8 color-base center" font-bold>本博客</div>
 
 ```
 名称：imba久期 BLOG
@@ -7,6 +7,6 @@
 头像：https://imba97.com/avatar.png
 ```
 
-<div text="8 primary center" font-bold>各位朋友</div>
+<div text="8 color-base center" font-bold>各位朋友</div>
 
 <Firends />

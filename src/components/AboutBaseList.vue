@@ -92,6 +92,10 @@ function startInterval(
   // 初始化显示
   updateTimeDisplay(totalDuration)
 
+  // SSG/SSR 阶段只需要首帧文本，避免在 Node 进程里挂定时器导致构建不退出
+  if (import.meta.env.SSR || typeof window === 'undefined')
+    return
+
   const id = setInterval(() => {
     // 每次直接加上间隔时间
     totalDuration = totalDuration.add(INTERVAL_TIME)

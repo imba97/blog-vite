@@ -1,7 +1,11 @@
 import type MarkdownIt from 'markdown-it'
+import process from 'node:process'
 
 const NETLIFY_IMAGE_PREFIX = '/.netlify/images?url='
 const EXCLUDED_PROTOCOL_RE = /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i
+const IMAGE_EXT_RE = /\.(?:png|jpe?g|webp|avif)(?:$|\?)/i
+const ANIMATED_OR_VECTOR_EXT_RE = /\.(?:gif|svg)(?:$|\?)/i
+const DEFAULT_QUALITY = 75
 
 function shouldTransformSrc(src: string): boolean {
   const value = src.trim()
@@ -16,7 +20,25 @@ function shouldTransformSrc(src: string): boolean {
 }
 
 function toNetlifyImageUrl(src: string): string {
-  return `${NETLIFY_IMAGE_PREFIX}${encodeURIComponent(src)}`
+  const params = new URLSearchParams({
+    url: src
+  })
+
+  const qualityRaw = Number.parseInt(process.env.VITE_NETLIFY_IMAGE_QUALITY ?? '', 10)
+  const quality = Number.isFinite(qualityRaw) && qualityRaw > 0 ? qualityRaw : DEFAULT_QUALITY
+  params.set('q', String(quality))
+
+  const widthRaw = Number.parseInt(process.env.VITE_NETLIFY_IMAGE_WIDTH ?? '', 10)
+  if (Number.isFinite(widthRaw) && widthRaw > 0)
+    params.set('w', String(widthRaw))
+
+  if (IMAGE_EXT_RE.test(src) && !ANIMATED_OR_VECTOR_EXT_RE.test(src)) {
+    const format = (process.env.VITE_NETLIFY_IMAGE_FORMAT || 'webp').trim()
+    if (format)
+      params.set('fm', format)
+  }
+
+  return `/.netlify/images?${params.toString()}`
 }
 
 function transformSrc(src: string): string {
@@ -49,22 +71,41 @@ function transformImageToken(token: any): void {
     removeAttr(token, 'src')
     token.attrSet(':src', toVueStringLiteral(transformed))
   }
+
+  if (!token.attrGet('loading')) {
+    token.attrSet('loading', 'lazy')
+  }
+  if (!token.attrGet('decoding')) {
+    token.attrSet('decoding', 'async')
+  }
 }
 
 function transformHtmlImgSrc(content: string): string {
   return content.replace(/<img\b[^>]*>/gi, (imgTag) => {
-    if (/\b(?::src|v-bind:src)\s*=/.test(imgTag))
-      return imgTag
+    let transformedTag = imgTag
+    if (/\b(?::src|v-bind:src)\s*=/.test(imgTag)) {
+      transformedTag = imgTag
+    }
+    else {
+      transformedTag = imgTag.replace(/\bsrc\s*=\s*("([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i, (fullMatch, _raw, dqValue, sqValue, unquotedValue) => {
+        const currentSrc = (dqValue ?? sqValue ?? unquotedValue ?? '').trim()
+        const transformed = transformSrc(currentSrc)
 
-    return imgTag.replace(/\bsrc\s*=\s*("([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i, (fullMatch, _raw, dqValue, sqValue, unquotedValue) => {
-      const currentSrc = (dqValue ?? sqValue ?? unquotedValue ?? '').trim()
-      const transformed = transformSrc(currentSrc)
+        if (transformed === currentSrc)
+          return fullMatch
 
-      if (transformed === currentSrc)
-        return fullMatch
+        return `:src="${toVueStringLiteral(transformed)}"`
+      })
+    }
 
-      return `:src="${toVueStringLiteral(transformed)}"`
-    })
+    if (!/\bloading\s*=/.test(transformedTag)) {
+      transformedTag = transformedTag.replace(/<img\b/i, '<img loading="lazy"')
+    }
+    if (!/\bdecoding\s*=/.test(transformedTag)) {
+      transformedTag = transformedTag.replace(/<img\b/i, '<img decoding="async"')
+    }
+
+    return transformedTag
   })
 }
 

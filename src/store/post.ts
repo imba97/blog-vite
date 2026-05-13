@@ -1,7 +1,6 @@
-import type { RouteRecordNormalized } from 'vue-router'
-import type { PostFrontmatter } from '~/types/post-frontmatter'
 import { POSTS_PATH_PREFIX } from '~/constants/route-policy'
-import { isPublishablePostData, sortPostListEntriesByDateDesc, toPostListEntry } from '~/content/post-policy'
+import { sortPostListEntriesByDateDesc } from '~/content/post-policy'
+import postsMeta from '../../.auto-generate/posts-meta'
 
 export const usePostsStore = defineStore('posts', () => {
   const page = shallowRef(1)
@@ -15,19 +14,10 @@ export const usePostsStore = defineStore('posts', () => {
   } | null>(null)
 
   const router = useRouter()
-  const routes = router.getRoutes()
-    .filter((i: RouteRecordNormalized) =>
-      i.path.startsWith(POSTS_PATH_PREFIX)
-      && i.meta.frontmatter
-      && isPublishablePostData(i.meta.frontmatter)
-      && !i.path.endsWith('.html')
-    )
-    .map((i: RouteRecordNormalized) =>
-      toPostListEntry(i.meta.frontmatter as PostFrontmatter, i.path)
-    )
+  const postRoutes = sortPostListEntriesByDateDesc([...postsMeta])
 
   const posts = computed(() =>
-    sortPostListEntriesByDateDesc([...routes || []])
+    postRoutes
   )
 
   const total = computed(() => posts.value.length)
@@ -36,7 +26,7 @@ export const usePostsStore = defineStore('posts', () => {
   // 设置当前文章的函数
   function setCurrent(path: string) {
     const normalizedPath = path.replace(/\/+$/, '') || '/'
-    const route = routes.find(r => r.path === normalizedPath)
+    const route = postRoutes.find(r => r.path === normalizedPath)
     current.value = route || null
   }
 

@@ -15,16 +15,20 @@
           v-if="containerVisible"
           class="min-w-0 fyc gap-2 overflow-hidden"
         >
-          <AnimatePresence :on-exit-complete="handleBarExitComplete">
-            <motion.div
+          <Transition
+            enter-active-class="transition-all duration-220 ease-out"
+            enter-from-class="translate-y-3 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition-all duration-200 ease-in"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-3 opacity-0"
+            @after-leave="handleBarExitComplete"
+          >
+            <div
               v-if="showBar"
-              key="post-title-indicator"
-              :initial="barMotion.initial"
-              :animate="barMotion.animate"
-              :exit="barMotion.exit"
               class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/55"
             />
-          </AnimatePresence>
+          </Transition>
 
           <div class="relative h-[30px] max-w-70 min-w-0 overflow-hidden">
             <div
@@ -34,21 +38,31 @@
               {{ layoutTitle }}
             </div>
 
-            <AnimatePresence mode="wait" :on-exit-complete="handleTitleExitComplete">
-              <motion.div
+            <Transition
+              mode="out-in"
+              enter-active-class="transition-all ease-out"
+              enter-from-class="translate-x-4 opacity-0"
+              enter-to-class="translate-x-0 opacity-100"
+              leave-active-class="transition-all ease-in"
+              leave-from-class="translate-x-0 opacity-100"
+              leave-to-class="-translate-x-4 opacity-0"
+              @after-leave="handleTitleExitComplete"
+            >
+              <div
                 v-if="displayedTitle"
                 :key="displayedTitleKey"
-                :initial="titleMotion.initial"
-                :animate="titleAnimate"
-                :exit="titleMotion.exit"
                 class="absolute inset-0"
+                :style="{
+                  transitionDuration: `${titleAnimate.transition.duration}s`,
+                  transitionDelay: `${titleAnimate.transition.delay}s`
+                }"
               >
                 <HeaderMarqueeTitle
                   :title="displayedTitle"
                   text-class="text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
                 />
-              </motion.div>
-            </AnimatePresence>
+              </div>
+            </Transition>
           </div>
         </div>
       </div>
@@ -156,7 +170,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AnimatePresence, motion } from 'motion-v'
 import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
@@ -183,44 +196,12 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])'
 ].join(',')
 
-const barMotion = {
-  initial: {
-    opacity: 0,
-    y: 12
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.22
-    }
-  },
-  exit: {
-    opacity: 0,
-    y: 12,
-    transition: {
-      duration: 0.2
-    }
-  }
-}
-
 const titleMotion = {
-  initial: {
-    opacity: 0,
-    x: 18
-  },
   animate: {
     opacity: 1,
     x: 0,
     transition: {
       duration: 0.28
-    }
-  },
-  exit: {
-    opacity: 0,
-    x: -18,
-    transition: {
-      duration: 0.22
     }
   }
 }

@@ -114,20 +114,3 @@ export async function searchViaWorker(options: {
     w.postMessage(msg)
   })
 }
-
-export function useSiteSearchBootstrap() {
-  onMounted(() => {
-    if (import.meta.env.SSR)
-      return
-
-    const ric = window.requestIdleCallback
-      ?? ((cb: IdleRequestCallback) => window.setTimeout(() => cb({
-        didTimeout: false,
-        timeRemaining: () => 50
-      }), 200))
-
-    ric(() => {
-      void ensureSiteSearchWorker().catch(() => {})
-    })
-  })
-}

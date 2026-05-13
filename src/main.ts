@@ -1,6 +1,5 @@
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat.js'
-import FloatingVue from 'floating-vue'
 import NProgress from 'nprogress'
 import { createPinia } from 'pinia'
 import { ViteSSG } from 'vite-ssg'
@@ -16,7 +15,6 @@ import './assets/styles/prose.css'
 import './assets/styles/markdown.css'
 import './assets/styles/copy-button.scss'
 import '@unocss/reset/tailwind.css'
-import 'floating-vue/dist/style.css'
 import 'markdown-it-github-alerts/styles/github-colors-light.css'
 import 'markdown-it-github-alerts/styles/github-colors-dark-class.css'
 import 'markdown-it-github-alerts/styles/github-base.css'
@@ -31,8 +29,6 @@ export const createApp = ViteSSG(
   },
   ({ router, app }) => {
     dayjs.extend(LocalizedFormat)
-
-    app.use(FloatingVue)
     app.use(createPinia())
 
     if (!import.meta.env.SSR) {
@@ -58,7 +54,7 @@ export const createApp = ViteSSG(
               html.classList.remove('no-sliding')
 
             if (shouldResetToTop)
-              return { ...targetPosition, behavior: 'smooth' }
+              return { ...targetPosition, behavior: 'auto' }
             return true
           }
         },

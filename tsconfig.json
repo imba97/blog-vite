@@ -24,6 +24,7 @@
     "src/**/*.d.ts",
     "src/**/*.vue",
     "pages/**/*.vue",
+    ".auto-generate/*.ts",
     ".auto-generate/*.d.ts"
   ],
   "exclude": ["dist", "node_modules"]

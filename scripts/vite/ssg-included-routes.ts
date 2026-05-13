@@ -4,11 +4,18 @@
 import process from 'node:process'
 
 const DEFAULT_SSG_POST_PATH_RE = /^\/posts\/\d+$/
+const DEFAULT_SSG_STATIC_ROUTE_RES: RegExp[] = [
+  /^\/$/,
+  /^\/page\/.+$/,
+  /^\/about$/,
+  /^\/links$/,
+  /^\/archives(?:\/.*)?$/
+]
 
 function parseSsgIncludeEnv(): RegExp[] {
   const raw = process.env.VITE_SSG_INCLUDE
   if (raw == null || String(raw).trim() === '')
-    return [DEFAULT_SSG_POST_PATH_RE]
+    return [DEFAULT_SSG_POST_PATH_RE, ...DEFAULT_SSG_STATIC_ROUTE_RES]
   const parsed = String(raw)
     .split(',')
     .map(s => s.trim())
@@ -23,7 +30,7 @@ function parseSsgIncludeEnv(): RegExp[] {
     })
     .filter((x): x is RegExp => x != null)
 
-  return parsed.length > 0 ? parsed : [DEFAULT_SSG_POST_PATH_RE]
+  return parsed.length > 0 ? parsed : [DEFAULT_SSG_POST_PATH_RE, ...DEFAULT_SSG_STATIC_ROUTE_RES]
 }
 
 const ssgMatchers = parseSsgIncludeEnv()
