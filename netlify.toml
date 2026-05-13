@@ -17,6 +17,11 @@ to = "/feed.xml"
 status = 301
 
 [[redirects]]
+from = "/posts/:id/index.html"
+to = "/posts/:id"
+status = 301
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
