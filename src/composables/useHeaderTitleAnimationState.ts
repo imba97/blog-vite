@@ -1,115 +1,164 @@
 import type { Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
-type Phase = 'idle' | 'entering' | 'steady' | 'leavingTitle' | 'leavingBar'
+/** Bar motion durations (seconds) — keep aligned with UX expectations. */
+export const HEADER_TITLE_BAR_MS = {
+  enter: 220,
+  leave: 200
+} as const
 
-interface TitleMotionAnimate {
-  opacity: number
-  x: number
-  transition: {
-    duration: number
+/** Title motion durations (seconds). */
+export const HEADER_TITLE_TEXT_MS = {
+  enter: 280,
+  leave: 220
+} as const
+
+export const headerBarMotion = {
+  initial: { opacity: 0, y: 12 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: HEADER_TITLE_BAR_MS.enter / 1000, ease: [0, 0, 0.2, 1] as const }
+  },
+  exit: {
+    opacity: 0,
+    y: 12,
+    transition: { duration: HEADER_TITLE_BAR_MS.leave / 1000, ease: [0.4, 0, 1, 1] as const }
   }
-}
+} as const
+
+export const headerTitleMotion = {
+  initial: { opacity: 0, x: 18 },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: HEADER_TITLE_TEXT_MS.enter / 1000, ease: [0, 0, 0.2, 1] as const }
+  },
+  exit: {
+    opacity: 0,
+    x: -18,
+    transition: { duration: HEADER_TITLE_TEXT_MS.leave / 1000, ease: [0.4, 0, 1, 1] as const }
+  }
+} as const
 
 interface UseHeaderTitleAnimationStateOptions {
   targetTitle: Readonly<Ref<string>>
   targetTitleKey: Readonly<Ref<string>>
-  titleMotionAnimate: TitleMotionAnimate
 }
 
+/**
+ * Drives bar + title visibility for motion-v in the header.
+ * - No→post: bar first, then title after bar `onAnimationComplete` while `gateTitleUntilBarDone`.
+ * - Post→post: title only swaps (AnimatePresence mode wait + key); gate stays open.
+ * - Post→home: title exits; `onExitComplete` hides bar.
+ */
 export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationStateOptions) {
-  const phase = ref<Phase>('idle')
-  const displayedTitle = ref<string | null>(null)
-  const displayedTitleKey = ref('')
+  const barVisible = ref(false)
+  /** When true, bar has mounted but title slot stays empty until bar intro completes. */
+  const gateTitleUntilBarDone = ref(false)
+  const presenceTitleKey = ref('')
+  const presenceTitle = ref('')
   const layoutTitleCache = ref('')
-  const titleEnterDelay = ref(0)
 
-  const showBar = computed(() =>
-    phase.value === 'entering'
-    || phase.value === 'steady'
-    || phase.value === 'leavingTitle'
-  )
+  let barIntroFallbackTimer: ReturnType<typeof setTimeout> | null = null
+
+  function clearBarIntroFallback() {
+    if (barIntroFallbackTimer != null) {
+      clearTimeout(barIntroFallbackTimer)
+      barIntroFallbackTimer = null
+    }
+  }
+
+  function onBarIntroComplete() {
+    if (gateTitleUntilBarDone.value)
+      gateTitleUntilBarDone.value = false
+    clearBarIntroFallback()
+  }
+
+  function scheduleBarIntroFallback() {
+    clearBarIntroFallback()
+    barIntroFallbackTimer = setTimeout(() => {
+      barIntroFallbackTimer = null
+      onBarIntroComplete()
+    }, HEADER_TITLE_BAR_MS.enter + 50)
+  }
 
   const containerVisible = computed(() =>
-    phase.value !== 'idle' || Boolean(displayedTitle.value)
+    barVisible.value
+    || Boolean(presenceTitleKey.value)
+    || gateTitleUntilBarDone.value
   )
 
   const layoutTitle = computed(() =>
-    displayedTitle.value || options.targetTitle.value || layoutTitleCache.value
+    presenceTitle.value || options.targetTitle.value.trim() || layoutTitleCache.value
   )
 
-  const titleAnimate = computed(() => ({
-    ...options.titleMotionAnimate,
-    transition: {
-      ...options.titleMotionAnimate.transition,
-      delay: titleEnterDelay.value
-    }
-  }))
+  const showTitleMotion = computed(() =>
+    Boolean(presenceTitleKey.value) && !gateTitleUntilBarDone.value
+  )
 
   watch(
-    () => [options.targetTitle.value, options.targetTitleKey.value] as const,
-    ([nextTitle, nextKey], previous) => {
-      const prevTitle = previous?.[0] || ''
-      const hadTitle = Boolean(prevTitle)
-      const hasTitle = Boolean(nextTitle)
+    () => [options.targetTitle.value.trim(), options.targetTitleKey.value] as const,
+    ([t, k], prev) => {
+      const prevT = prev?.[0] || ''
+      const prevK = prev?.[1] || ''
+      const prevHad = Boolean(prevT) && Boolean(prevK)
+      const has = Boolean(t) && Boolean(k)
 
-      if (!hadTitle && hasTitle) {
-        phase.value = 'entering'
-        titleEnterDelay.value = 0.12
-        displayedTitle.value = nextTitle
-        displayedTitleKey.value = nextKey
-        layoutTitleCache.value = nextTitle
+      if (has) {
+        presenceTitleKey.value = k
+        presenceTitle.value = t
+        layoutTitleCache.value = t
+        barVisible.value = true
+        gateTitleUntilBarDone.value = !prevHad
         return
       }
 
-      if (hadTitle && hasTitle) {
-        phase.value = 'steady'
-        titleEnterDelay.value = 0
-        displayedTitle.value = nextTitle
-        displayedTitleKey.value = nextKey
-        layoutTitleCache.value = nextTitle
+      if (!has && prevHad) {
+        presenceTitleKey.value = ''
+        gateTitleUntilBarDone.value = false
         return
       }
 
-      if (hadTitle && !hasTitle) {
-        phase.value = 'leavingTitle'
-        titleEnterDelay.value = 0
-        layoutTitleCache.value = prevTitle
-        displayedTitle.value = null
-        displayedTitleKey.value = ''
-        return
-      }
-
-      phase.value = 'idle'
-      titleEnterDelay.value = 0
-      displayedTitle.value = null
-      displayedTitleKey.value = ''
+      barVisible.value = false
+      presenceTitleKey.value = ''
+      presenceTitle.value = ''
+      gateTitleUntilBarDone.value = false
       layoutTitleCache.value = ''
     },
     { immediate: true }
   )
 
-  function handleTitleExitComplete() {
-    if (phase.value === 'leavingTitle' && !options.targetTitle.value) {
-      phase.value = 'leavingBar'
+  watch(
+    () => [barVisible.value, gateTitleUntilBarDone.value] as const,
+    ([bv, gate]) => {
+      if (bv && gate)
+        scheduleBarIntroFallback()
+      else
+        clearBarIntroFallback()
     }
-  }
+  )
 
-  function handleBarExitComplete() {
-    if (phase.value === 'leavingBar' && !options.targetTitle.value) {
-      phase.value = 'idle'
-      layoutTitleCache.value = ''
-    }
+  onUnmounted(() => clearBarIntroFallback())
+
+  function onTitlePresenceExitComplete() {
+    if (options.targetTitleKey.value && options.targetTitle.value.trim())
+      return
+    barVisible.value = false
+    presenceTitle.value = ''
+    layoutTitleCache.value = ''
   }
 
   return {
     containerVisible,
-    showBar,
-    displayedTitle,
-    displayedTitleKey,
     layoutTitle,
-    titleAnimate,
-    handleTitleExitComplete,
-    handleBarExitComplete
+    barVisible,
+    showTitleMotion,
+    presenceTitleKey,
+    presenceTitle,
+    headerBarMotion,
+    headerTitleMotion,
+    onBarIntroComplete,
+    onTitlePresenceExitComplete
   }
 }

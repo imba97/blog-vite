@@ -15,20 +15,17 @@
           v-if="containerVisible"
           class="min-w-0 fyc gap-2 overflow-hidden"
         >
-          <Transition
-            enter-active-class="transition-all duration-220 ease-out"
-            enter-from-class="translate-y-3 opacity-0"
-            enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition-all duration-200 ease-in"
-            leave-from-class="translate-y-0 opacity-100"
-            leave-to-class="translate-y-3 opacity-0"
-            @after-leave="handleBarExitComplete"
-          >
-            <div
-              v-if="showBar"
+          <AnimatePresence>
+            <motion.div
+              v-if="barVisible"
+              key="post-title-bar"
               class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/55"
+              :initial="headerBarMotion.initial"
+              :animate="headerBarMotion.animate"
+              :exit="headerBarMotion.exit"
+              :on-animation-complete="onBarIntroComplete"
             />
-          </Transition>
+          </AnimatePresence>
 
           <div class="relative h-[30px] max-w-70 min-w-0 overflow-hidden">
             <div
@@ -38,31 +35,21 @@
               {{ layoutTitle }}
             </div>
 
-            <Transition
-              mode="out-in"
-              enter-active-class="transition-all ease-out"
-              enter-from-class="translate-x-4 opacity-0"
-              enter-to-class="translate-x-0 opacity-100"
-              leave-active-class="transition-all ease-in"
-              leave-from-class="translate-x-0 opacity-100"
-              leave-to-class="-translate-x-4 opacity-0"
-              @after-leave="handleTitleExitComplete"
-            >
-              <div
-                v-if="displayedTitle"
-                :key="displayedTitleKey"
+            <AnimatePresence mode="wait" :on-exit-complete="onTitlePresenceExitComplete">
+              <motion.div
+                v-if="showTitleMotion"
+                :key="presenceTitleKey"
                 class="absolute inset-0"
-                :style="{
-                  transitionDuration: `${titleAnimate.transition.duration}s`,
-                  transitionDelay: `${titleAnimate.transition.delay}s`
-                }"
+                :initial="headerTitleMotion.initial"
+                :animate="headerTitleMotion.animate"
+                :exit="headerTitleMotion.exit"
               >
                 <HeaderMarqueeTitle
-                  :title="displayedTitle"
+                  :title="presenceTitle"
                   text-class="text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
                 />
-              </div>
-            </Transition>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -170,6 +157,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AnimatePresence, motion } from 'motion-v'
 import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
@@ -196,29 +184,20 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])'
 ].join(',')
 
-const titleMotion = {
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.28
-    }
-  }
-}
-
 const {
   containerVisible,
-  showBar,
-  displayedTitle,
-  displayedTitleKey,
   layoutTitle,
-  titleAnimate,
-  handleTitleExitComplete,
-  handleBarExitComplete
+  barVisible,
+  showTitleMotion,
+  presenceTitleKey,
+  presenceTitle,
+  headerBarMotion,
+  headerTitleMotion,
+  onBarIntroComplete,
+  onTitlePresenceExitComplete
 } = useHeaderTitleAnimationState({
   targetTitle: computed(() => postsStore.current?.title?.trim() || ''),
-  targetTitleKey: computed(() => postsStore.current?.path || postsStore.current?.title?.trim() || ''),
-  titleMotionAnimate: titleMotion.animate
+  targetTitleKey: computed(() => postsStore.current?.path || postsStore.current?.title?.trim() || '')
 })
 
 watch(() => route.fullPath, () => {

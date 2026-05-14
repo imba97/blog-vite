@@ -44,18 +44,11 @@ export const usePostsStore = defineStore('posts', () => {
     { immediate: true }
   )
 
+  // 不在 beforeEach 里 setCurrent：导航尚未提交时改 current 会让页头标题动画在「上一页」就触发，
+  // 真正进入文章页时标题已是终态，看起来像没有进入动画。current 仅由下方 watch(path) 同步。
   router.beforeEach((to) => {
-    // 设置当前文章
-    if (to.path.startsWith(POSTS_PATH_PREFIX)) {
-      setCurrent(to.path)
-    }
-    else {
-      current.value = null
-    }
-
     if (to.name === '/') {
       page.value = 1
-      return true
     }
   })
 
