@@ -18,8 +18,8 @@ const tags: HtmlTagDescriptor[] = [
 export default function HtmlHeadInject(): Plugin {
   return {
     name: 'html-head-inject',
-    transformIndexHtml() {
-      return { tags }
+    transformIndexHtml(html) {
+      return { html, tags }
     }
   }
 }

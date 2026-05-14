@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import MarkdownItShiki from '@shikijs/markdown-it'
@@ -34,7 +35,12 @@ import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes'
 import { postPublicPath } from './src/constants/route-policy'
 import { isPublishablePostData, normalizeNumericPostId } from './src/content/post-policy'
 
-const r = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+const r = (p: string) => fileURLToPath(new URL(p, import.meta.url))
+const postsMarkdownRoot = path.normalize(r('posts'))
+function isPostMarkdownFile(filePath: string): boolean {
+  const abs = path.normalize(filePath)
+  return abs === postsMarkdownRoot || abs.startsWith(`${postsMarkdownRoot}${path.sep}`)
+}
 const gitMeta = getGitMeta()
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -56,21 +62,24 @@ export default defineConfig({
 
     VueRouter({
       extensions: ['.vue', '.md'],
-      routesFolder: 'pages',
+      routesFolder: [
+        'pages',
+        { src: r('posts'), path: 'posts/' }
+      ],
       dts: r('.auto-generate/typed-router.d.ts'),
       extendRoute(route) {
-        const path = route.components.get('default')
-        if (!path)
+        const defaultFile = route.components.get('default')
+        if (!defaultFile)
           return
 
-        if (path.endsWith('.md')) {
-          const { data } = matter(readFileSync(path, 'utf-8'))
+        if (defaultFile.endsWith('.md')) {
+          const { data } = matter(readFileSync(defaultFile, 'utf-8'))
 
           route.addToMeta({
             frontmatter: data
           })
 
-          if (path.includes('posts') && isPublishablePostData(data)) {
+          if (isPostMarkdownFile(defaultFile) && isPublishablePostData(data)) {
             const id = normalizeNumericPostId(data)!
             const newPath = postPublicPath(id)
             route.path = newPath

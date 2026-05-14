@@ -3,7 +3,8 @@
  */
 import process from 'node:process'
 
-const DEFAULT_SSG_POST_PATH_RE = /^\/posts\/\d+$/
+const DEFAULT_SSG_POST_PATH_RE = /^\/post\/\d+$/
+/** 不预渲染 `/posts/*`：避免写出 `dist/posts/<slug>.html`；旧链路由 Netlify 301 与 SPA 内 `pages/posts/[...id].vue` 处理 */
 const DEFAULT_SSG_STATIC_ROUTE_RES: RegExp[] = [
   /^\/$/,
   /^\/page\/.+$/,

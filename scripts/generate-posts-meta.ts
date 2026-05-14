@@ -10,6 +10,7 @@ import {
   normalizeStringList,
   sortPostListEntriesByDateDesc
 } from '../src/content/post-policy'
+import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
 
 interface GeneratedPostMeta {
   path: string
@@ -20,11 +21,11 @@ interface GeneratedPostMeta {
 }
 
 export async function generatePostsMeta(outFile = '.auto-generate/posts-meta.ts'): Promise<void> {
-  const files = await glob('pages/posts/**/index.md')
+  const files = await glob(POSTS_CONTENT_GLOB)
   const records: GeneratedPostMeta[] = []
 
   for (const file of files) {
-    if (file === 'pages/posts/index.md')
+    if (file === POSTS_ROOT_INDEX_FILE)
       continue
 
     const raw = await readFile(file, 'utf-8')

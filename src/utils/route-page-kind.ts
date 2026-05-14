@@ -5,7 +5,7 @@ export function isPostListRoute(path: string): boolean {
   return path === '/' || path.startsWith('/page/')
 }
 
-/** 文章详情（数字 id 的 /posts/... 由路由与策略保证） */
+/** 文章详情（数字 id 的 /post/... 由路由与策略保证） */
 export function isArticlePostRoute(path: string): boolean {
   return path.startsWith(POSTS_PATH_PREFIX)
 }

@@ -7,6 +7,7 @@ import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
 import { postPublicPath } from '../src/constants/route-policy'
 import { isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
+import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
 
 const DOMAIN = 'https://imba97.com'
 const FOLLOW_CHALLENGE_FEED_ID = '41798923170845756'
@@ -33,7 +34,7 @@ async function run() {
 }
 
 async function buildBlogRSS() {
-  const files = await glob('pages/posts/**/index.md')
+  const files = await glob(POSTS_CONTENT_GLOB)
 
   const options = {
     title: 'imba97',
@@ -46,7 +47,7 @@ async function buildBlogRSS() {
     }
   }
   const posts = (await Promise.all(
-    files.filter(i => i !== 'pages/posts/index.md')
+    files.filter(i => i !== POSTS_ROOT_INDEX_FILE)
       .map(async (i) => {
         const raw = await readFile(i, 'utf-8')
         const { data, content } = matter(raw)

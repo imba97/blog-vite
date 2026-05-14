@@ -18,7 +18,12 @@ status = 301
 
 [[redirects]]
 from = "/posts/:id/index.html"
-to = "/posts/:id"
+to = "/post/:id"
+status = 301
+
+[[redirects]]
+from = "/posts/:id"
+to = "/post/:id"
 status = 301
 
 [[redirects]]

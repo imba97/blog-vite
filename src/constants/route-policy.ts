@@ -1,5 +1,5 @@
 /** 文章公开 URL 路径前缀（含尾部无斜杠的段前缀） */
-export const POSTS_PATH_PREFIX = '/posts/'
+export const POSTS_PATH_PREFIX = '/post/'
 
 const ARCHIVES_PREFIX = '/archives/'
 

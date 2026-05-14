@@ -10,6 +10,7 @@ import {
   normalizeNumericPostId,
   normalizeStringList
 } from '../src/content/post-policy'
+import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
 
 const markdown = MarkdownIt({
   html: true,
@@ -50,11 +51,11 @@ function markdownToPlain(content: string): string {
 
 /** 与 post store + SSG includedRoutes 对齐：非 draft、有 date、数字 id */
 export async function generateSearchIndex(outDir: string): Promise<void> {
-  const files = await glob('pages/posts/**/index.md')
+  const files = await glob(POSTS_CONTENT_GLOB)
   const records: SearchFullRecord[] = []
 
   for (const file of files) {
-    if (file === 'pages/posts/index.md')
+    if (file === POSTS_ROOT_INDEX_FILE)
       continue
 
     const raw = await readFile(file, 'utf-8')

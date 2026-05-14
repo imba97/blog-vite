@@ -1,4 +1,4 @@
-<!-- redirect to /post/:id -->
+<!-- legacy /posts/:id → canonical /post/:id -->
 
 <template>
   <div />

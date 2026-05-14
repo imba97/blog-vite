@@ -3,11 +3,10 @@
     "target": "ESNext",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     },
     "resolveJsonModule": true,
     "types": [
@@ -24,6 +23,8 @@
     "src/**/*.d.ts",
     "src/**/*.vue",
     "pages/**/*.vue",
+    "vite.config.ts",
+    "scripts/**/*.ts",
     ".auto-generate/*.ts",
     ".auto-generate/*.d.ts"
   ],

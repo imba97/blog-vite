@@ -15,8 +15,9 @@ export default function copyButtonPlugin(options: CopyButtonPluginOptions = {}) 
     }
 
     const fence = md.renderer.rules.fence!
+    type FenceRule = NonNullable<MarkdownIt['renderer']['rules']['fence']>
 
-    md.renderer.rules.fence = (...args: any[]) => {
+    md.renderer.rules.fence = (...args: Parameters<FenceRule>): ReturnType<FenceRule> => {
       const [tokens, idx] = args
       const token = tokens[idx]
 

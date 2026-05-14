@@ -4,7 +4,7 @@ export const navbar: NavItem[] = [
   {
     icon: 'i-material-symbols-drag-pan',
     text: '生成拖拽安装',
-    link: '/posts/661'
+    link: '/post/661'
   },
   {
     icon: 'i-pepicons-print-chain',
