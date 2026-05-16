@@ -53,6 +53,45 @@ interface UseHeaderTitleAnimationStateOptions {
  * - Post→home: title exits; `onExitComplete` hides bar.
  */
 export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationStateOptions) {
+  const prefersReducedMotion = usePreferredReducedMotion()
+  const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
+  const barEnterMs = computed(() => shouldReduceMotion.value ? 90 : HEADER_TITLE_BAR_MS.enter)
+  const barLeaveMs = computed(() => shouldReduceMotion.value ? 80 : HEADER_TITLE_BAR_MS.leave)
+  const titleEnterMs = computed(() => shouldReduceMotion.value ? 100 : HEADER_TITLE_TEXT_MS.enter)
+  const titleLeaveMs = computed(() => shouldReduceMotion.value ? 90 : HEADER_TITLE_TEXT_MS.leave)
+
+  const resolvedHeaderBarMotion = computed(() => ({
+    initial: shouldReduceMotion.value
+      ? { opacity: 0 }
+      : { opacity: 0, y: 12 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: barEnterMs.value / 1000, ease: [0, 0, 0.2, 1] as const }
+    },
+    exit: {
+      opacity: 0,
+      y: shouldReduceMotion.value ? 0 : 12,
+      transition: { duration: barLeaveMs.value / 1000, ease: [0.4, 0, 1, 1] as const }
+    }
+  }))
+
+  const resolvedHeaderTitleMotion = computed(() => ({
+    initial: shouldReduceMotion.value
+      ? { opacity: 0 }
+      : { opacity: 0, x: 18 },
+    animate: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: titleEnterMs.value / 1000, ease: [0, 0, 0.2, 1] as const }
+    },
+    exit: {
+      opacity: 0,
+      x: shouldReduceMotion.value ? 0 : -18,
+      transition: { duration: titleLeaveMs.value / 1000, ease: [0.4, 0, 1, 1] as const }
+    }
+  }))
+
   const barVisible = ref(false)
   const barLeaving = ref(false)
   /** When true, bar has mounted but title slot stays empty until bar intro completes. */
@@ -89,7 +128,7 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     barIntroFallbackTimer = setTimeout(() => {
       barIntroFallbackTimer = null
       onBarIntroComplete()
-    }, HEADER_TITLE_BAR_MS.enter + 50)
+    }, barEnterMs.value + 40)
   }
 
   const containerVisible = computed(() =>
@@ -169,7 +208,7 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
       barLeaving.value = false
       presenceTitle.value = ''
       layoutTitleCache.value = ''
-    }, HEADER_TITLE_BAR_MS.leave + 50)
+    }, barLeaveMs.value + 40)
   }
 
   return {
@@ -179,8 +218,8 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     showTitleMotion,
     presenceTitleKey,
     presenceTitle,
-    headerBarMotion,
-    headerTitleMotion,
+    headerBarMotion: resolvedHeaderBarMotion,
+    headerTitleMotion: resolvedHeaderTitleMotion,
     onBarIntroComplete,
     onTitlePresenceExitComplete
   }

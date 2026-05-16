@@ -13,6 +13,13 @@
   will-change: transform;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
+}
+
 @keyframes marquee-scroll {
   0% {
     transform: translateX(0);
@@ -28,7 +35,7 @@
   <div
     ref="containerRef"
     class="relative h-full min-w-0 overflow-hidden"
-    :class="{ 'title-mask': isOverflowing }"
+    :class="{ 'title-mask': shouldAnimateMarquee }"
   >
     <span
       ref="measureRef"
@@ -41,7 +48,7 @@
 
     <div v-if="displayTitle" class="h-full min-w-0">
       <div
-        v-if="isOverflowing"
+        v-if="shouldAnimateMarquee"
         :key="trackKey"
         class="marquee-track h-full min-w-0 flex items-center whitespace-nowrap"
         :style="trackStyle"
@@ -76,6 +83,10 @@ const containerRef = ref<HTMLDivElement | null>(null)
 const measureRef = ref<HTMLSpanElement | null>(null)
 const textWidth = ref(0)
 const isOverflowing = ref(false)
+const prefersReducedMotion = usePreferredReducedMotion()
+const shouldAnimateMarquee = computed(() =>
+  isOverflowing.value && prefersReducedMotion.value !== 'reduce'
+)
 
 const displayTitle = computed(() => props.title.trim())
 

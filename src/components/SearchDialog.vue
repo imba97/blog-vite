@@ -43,6 +43,16 @@
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-chip {
+    transition: none;
+  }
+
+  .tag-chip--primed {
+    animation: none;
+  }
+}
 </style>
 
 <style>
@@ -72,240 +82,234 @@ html.dark .tag-chip--primed {
 
 <template>
   <Teleport to="body">
-    <Transition
-      enter-active-class="transition-opacity duration-200 ease-out"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition-opacity duration-150 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <div
+    <AnimatePresence>
+      <motion.div
         v-if="overlay.isOpen"
+        key="search-overlay"
         class="fixed inset-0 z-[100] flex items-start justify-center bg-black/45 px-4 pb-6 pt-[min(12vh,6rem)] backdrop-blur-[2px] sm:items-center sm:pt-6"
+        :initial="overlayMotion.initial"
+        :animate="overlayMotion.animate"
+        :exit="overlayMotion.exit"
+        :transition="overlayMotion.transition"
         role="presentation"
         @click.self="close"
       >
-        <Transition
-          enter-active-class="transition duration-200 ease-out"
-          enter-from-class="translate-y-2 scale-[0.98] opacity-0"
-          enter-to-class="translate-y-0 scale-100 opacity-100"
-          leave-active-class="transition duration-150 ease-in"
-          leave-from-class="translate-y-0 scale-100 opacity-100"
-          leave-to-class="translate-y-2 scale-[0.98] opacity-0"
+        <motion.div
+          key="search-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-label="站内搜索"
+          class="h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/91 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
+          tabindex="-1"
+          :initial="panelMotion.initial"
+          :animate="panelMotion.animate"
+          :exit="panelMotion.exit"
+          :transition="panelMotion.transition"
+          @click.stop
         >
-          <div
-            v-if="overlay.isOpen"
-            role="dialog"
-            aria-modal="true"
-            aria-label="站内搜索"
-            class="h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/91 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
-            tabindex="-1"
-            @click.stop
-          >
-            <div class="fbc shrink-0 border-b border-subtle px-3 py-2 sm:px-4">
-              <span class="text-sm text-muted">搜索</span>
-              <button
-                type="button"
-                class="chrome-icon-btn p-2 text-gray-600 dark:text-gray-300"
-                aria-label="关闭搜索"
-                @click="close"
+          <div class="fbc shrink-0 border-b border-subtle px-3 py-2 sm:px-4">
+            <span class="text-sm text-muted">搜索</span>
+            <button
+              type="button"
+              class="chrome-icon-btn p-2 text-gray-600 dark:text-gray-300"
+              aria-label="关闭搜索"
+              @click="close"
+            >
+              <span class="i-carbon-close text-lg" />
+            </button>
+          </div>
+
+          <div class="relative z-40 shrink-0 px-3 pb-2 pt-3 sm:px-4">
+            <label class="sr-only" for="site-search-input">搜索关键词</label>
+            <div class="relative min-w-0">
+              <div
+                class="relative min-w-0 border border-subtle rounded-xl bg-white/90 py-2 pl-3 pr-10 transition-shadow focus-within:border-primary-4 dark:bg-neutral-950/60 focus-within:ring-2 focus-within:ring-primary-4/25 dark:focus-within:border-primary-light dark:focus-within:ring-primary-light/28"
+                role="group"
+                aria-label="搜索条件"
+                @click="onSearchFieldShellClick"
               >
-                <span class="i-carbon-close text-lg" />
-              </button>
-            </div>
-
-            <div class="relative z-40 shrink-0 px-3 pb-2 pt-3 sm:px-4">
-              <label class="sr-only" for="site-search-input">搜索关键词</label>
-              <div class="relative min-w-0">
-                <div
-                  class="relative min-w-0 border border-subtle rounded-xl bg-white/90 py-2 pl-3 pr-10 transition-shadow focus-within:border-primary-4 dark:bg-neutral-950/60 focus-within:ring-2 focus-within:ring-primary-4/25 dark:focus-within:border-primary-light dark:focus-within:ring-primary-light/28"
-                  role="group"
-                  aria-label="搜索条件"
-                  @click="onSearchFieldShellClick"
-                >
-                  <div class="min-w-0 fyc gap-2">
-                    <template v-if="scopeTag">
-                      <code
-                        class="tag-chip max-w-[50%] min-w-0 shrink-0 truncate rounded px-1 py-px text-sm"
-                        :class="{ 'tag-chip--primed': tagDeletePrimed }"
-                        :title="`#${scopeTag}`"
-                      >#{{ scopeTag }}</code>
-                    </template>
-                    <template v-else-if="scopeCategory">
-                      <code
-                        class="tag-chip max-w-[50%] min-w-0 shrink-0 truncate rounded px-1 py-px text-sm"
-                        :class="{ 'tag-chip--primed': tagDeletePrimed }"
-                        :title="`/${scopeCategory}`"
-                      >/{{ scopeCategory }}</code>
-                    </template>
-                    <input
-                      id="site-search-input"
-                      ref="inputRef"
-                      v-model="keywordQuery"
-                      type="text"
-                      enterkeyhint="search"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      role="combobox"
-                      aria-autocomplete="list"
-                      :aria-expanded="showSuggestDropdown"
-                      :aria-controls="activeSuggestListboxId"
-                      :aria-activedescendant="activeSuggestOptionId"
-                      :placeholder="scopeTag ? '输入关键字筛选该标签下的文章…' : scopeCategory ? '输入关键字筛选该分类下的文章…' : '请输入关键字'"
-                      class="min-h-6 min-w-0 flex-1 border-0 bg-transparent py-0.5 text-base text-gray-900 outline-none ring-0 dark:text-white/90 placeholder:text-gray-600/35 focus:ring-0 dark:placeholder:text-gray-400/30"
-                      @keydown="handleKeywordKeydown"
-                    >
-                  </div>
-                  <button
-                    v-show="scopeTag || scopeCategory || keywordQuery.length > 0"
-                    type="button"
-                    class="absolute right-2 top-1/2 size-[14px] flex shrink-0 items-center justify-center rounded-full bg-black/[0.06] p-0 text-gray-600 leading-none transition-colors -translate-y-1/2 dark:bg-white/[0.08] hover:bg-black/[0.1] dark:text-gray-300 focus-ring-primary dark:hover:bg-white/[0.12]"
-                    aria-label="清空搜索条件"
-                    @click="clearAll"
+                <div class="min-w-0 fyc gap-2">
+                  <template v-if="scopeTag">
+                    <code
+                      class="tag-chip max-w-[50%] min-w-0 shrink-0 truncate rounded px-1 py-px text-sm"
+                      :class="{ 'tag-chip--primed': tagDeletePrimed }"
+                      :title="`#${scopeTag}`"
+                    >#{{ scopeTag }}</code>
+                  </template>
+                  <template v-else-if="scopeCategory">
+                    <code
+                      class="tag-chip max-w-[50%] min-w-0 shrink-0 truncate rounded px-1 py-px text-sm"
+                      :class="{ 'tag-chip--primed': tagDeletePrimed }"
+                      :title="`/${scopeCategory}`"
+                    >/{{ scopeCategory }}</code>
+                  </template>
+                  <input
+                    id="site-search-input"
+                    ref="inputRef"
+                    v-model="keywordQuery"
+                    type="text"
+                    enterkeyhint="search"
+                    autocomplete="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    :aria-expanded="showSuggestDropdown"
+                    :aria-controls="activeSuggestListboxId"
+                    :aria-activedescendant="activeSuggestOptionId"
+                    :placeholder="scopeTag ? '输入关键字筛选该标签下的文章…' : scopeCategory ? '输入关键字筛选该分类下的文章…' : '请输入关键字'"
+                    class="min-h-6 min-w-0 flex-1 border-0 bg-transparent py-0.5 text-base text-gray-900 outline-none ring-0 dark:text-white/90 placeholder:text-gray-600/35 focus:ring-0 dark:placeholder:text-gray-400/30"
+                    @keydown="handleKeywordKeydown"
                   >
-                    <span class="i-carbon-close text-[10px] leading-none op-75" aria-hidden="true" />
-                  </button>
                 </div>
-
-                <div
-                  v-if="activeSuggest"
-                  :id="activeSuggest.strategy.listboxId"
-                  role="listbox"
-                  :aria-label="activeSuggest.strategy.listboxAriaLabel"
-                  class="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-50 max-h-48 overflow-y-auto border border-subtle rounded-xl bg-white/98 shadow-lg ring-1 ring-black/5 backdrop-blur-sm divide-y divide-black/5 dark:bg-neutral-950/98 dark:ring-white/10 dark:divide-white/8"
+                <button
+                  v-show="scopeTag || scopeCategory || keywordQuery.length > 0"
+                  type="button"
+                  class="absolute right-2 top-1/2 size-[14px] flex shrink-0 items-center justify-center rounded-full bg-black/[0.06] p-0 text-gray-600 leading-none transition-colors -translate-y-1/2 dark:bg-white/[0.08] hover:bg-black/[0.1] dark:text-gray-300 focus-ring-primary dark:hover:bg-white/[0.12]"
+                  aria-label="清空搜索条件"
+                  @click="clearAll"
                 >
-                  <button
-                    v-for="(item, i) in activeSuggest.items"
-                    :id="`${activeSuggest.strategy.optionIdPrefix}-${i}`"
-                    :key="`${activeSuggest.strategy.kind}-${item}`"
-                    type="button"
-                    role="option"
-                    :aria-selected="i === selectedSuggestIndex"
-                    class="w-full px-3 py-2.5 text-left text-sm text-gray-800 transition-colors dark:text-white/90"
-                    :class="i === selectedSuggestIndex ? 'bg-primary-2/32 dark:bg-primary-light/20' : 'hover:bg-gray-50/90 dark:hover:bg-neutral-900/55'"
-                    @mousedown.prevent="applyPrefixChoice(activeSuggest.strategy.kind, item)"
-                    @mouseenter="selectedSuggestIndex = i"
-                  >
-                    <span class="text-muted">{{ activeSuggest.strategy.displayPrefix }}</span>{{ item }}
-                  </button>
-                </div>
+                  <span class="i-carbon-close text-[10px] leading-none op-75" aria-hidden="true" />
+                </button>
+              </div>
+
+              <div
+                v-if="activeSuggest"
+                :id="activeSuggest.strategy.listboxId"
+                role="listbox"
+                :aria-label="activeSuggest.strategy.listboxAriaLabel"
+                class="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-50 max-h-48 overflow-y-auto border border-subtle rounded-xl bg-white/98 shadow-lg ring-1 ring-black/5 backdrop-blur-sm divide-y divide-black/5 dark:bg-neutral-950/98 dark:ring-white/10 dark:divide-white/8"
+              >
+                <button
+                  v-for="(item, i) in activeSuggest.items"
+                  :id="`${activeSuggest.strategy.optionIdPrefix}-${i}`"
+                  :key="`${activeSuggest.strategy.kind}-${item}`"
+                  type="button"
+                  role="option"
+                  :aria-selected="i === selectedSuggestIndex"
+                  class="w-full px-3 py-2.5 text-left text-sm text-gray-800 transition-colors dark:text-white/90"
+                  :class="i === selectedSuggestIndex ? 'bg-primary-2/32 dark:bg-primary-light/20' : 'hover:bg-gray-50/90 dark:hover:bg-neutral-900/55'"
+                  @mousedown.prevent="applyPrefixChoice(activeSuggest.strategy.kind, item)"
+                  @mouseenter="selectedSuggestIndex = i"
+                >
+                  <span class="text-muted">{{ activeSuggest.strategy.displayPrefix }}</span>{{ item }}
+                </button>
               </div>
             </div>
+          </div>
 
-            <div class="fyc shrink-0 gap-2 px-3 pb-2 sm:px-4">
-              <button
-                type="button"
-                class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
-                aria-label="插入标签搜索前缀 #"
-                @click="primePrefixInput('#')"
-              >
-                #tag
-              </button>
-              <button
-                type="button"
-                class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
-                aria-label="插入分类搜索前缀 /"
-                @click="primePrefixInput('/')"
-              >
-                /categorie
-              </button>
-            </div>
+          <div class="fyc shrink-0 gap-2 px-3 pb-2 sm:px-4">
+            <button
+              type="button"
+              class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
+              aria-label="插入标签搜索前缀 #"
+              @click="primePrefixInput('#')"
+            >
+              #tag
+            </button>
+            <button
+              type="button"
+              class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
+              aria-label="插入分类搜索前缀 /"
+              @click="primePrefixInput('/')"
+            >
+              /categorie
+            </button>
+          </div>
 
-            <div class="min-h-0 flex flex-1 flex-col overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
-              <div
-                class="relative min-h-0 flex flex-1 flex-col overflow-hidden border border-subtle rounded-xl bg-gray-50/35 dark:bg-neutral-950/28"
-              >
-                <div class="search-results-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
-                  <div class="px-2 py-3 sm:px-3">
-                    <template v-if="!siteSearchWorkerReady && !siteSearchWorkerError">
-                      <div class="flex flex-col items-center justify-center gap-2 py-12 text-muted">
-                        <span class="i-carbon-circle-dash animate-spin text-3xl" />
-                        <span class="text-sm">正在加载搜索索引…</span>
-                      </div>
-                    </template>
+          <div class="min-h-0 flex flex-1 flex-col overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
+            <div
+              class="relative min-h-0 flex flex-1 flex-col overflow-hidden border border-subtle rounded-xl bg-gray-50/35 dark:bg-neutral-950/28"
+            >
+              <div class="search-results-scroll min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
+                <div class="px-2 py-3 sm:px-3">
+                  <template v-if="!siteSearchWorkerReady && !siteSearchWorkerError">
+                    <div class="flex flex-col items-center justify-center gap-2 py-12 text-muted">
+                      <span class="i-carbon-circle-dash animate-spin text-3xl" />
+                      <span class="text-sm">正在加载搜索索引…</span>
+                    </div>
+                  </template>
 
-                    <template v-else-if="siteSearchWorkerError">
-                      <div class="flex flex-col items-center gap-2 py-10 text-center text-sm text-red-600 dark:text-red-400">
-                        <span class="i-carbon-warning-alt text-3xl" />
-                        <span>{{ siteSearchWorkerError }}</span>
-                      </div>
-                    </template>
+                  <template v-else-if="siteSearchWorkerError">
+                    <div class="flex flex-col items-center gap-2 py-10 text-center text-sm text-red-600 dark:text-red-400">
+                      <span class="i-carbon-warning-alt text-3xl" />
+                      <span>{{ siteSearchWorkerError }}</span>
+                    </div>
+                  </template>
 
-                    <template v-else-if="showIdlePlaceholder">
-                      <div class="flex flex-col items-center gap-3 py-14 text-sm text-gray-600/30 dark:text-gray-400/26">
-                        <span class="i-material-symbols-inbox-rounded text-4xl" aria-hidden="true" />
-                        <span>请输入关键字</span>
-                      </div>
-                    </template>
+                  <template v-else-if="showIdlePlaceholder">
+                    <div class="flex flex-col items-center gap-3 py-14 text-sm text-gray-600/30 dark:text-gray-400/26">
+                      <span class="i-material-symbols-inbox-rounded text-4xl" aria-hidden="true" />
+                      <span>请输入关键字</span>
+                    </div>
+                  </template>
 
-                    <template v-else-if="pendingSearchVisual">
-                      <div class="flex flex-col items-center gap-2 py-14 text-muted">
-                        <span class="i-carbon-circle-dash animate-spin text-3xl opacity-70" />
-                        <span class="text-sm">等待输入结束或正在检索…</span>
-                      </div>
-                    </template>
+                  <template v-else-if="pendingSearchVisual">
+                    <div class="flex flex-col items-center gap-2 py-14 text-muted">
+                      <span class="i-carbon-circle-dash animate-spin text-3xl opacity-70" />
+                      <span class="text-sm">等待输入结束或正在检索…</span>
+                    </div>
+                  </template>
 
-                    <template v-else-if="!hits.length">
-                      <div class="flex flex-col items-center gap-3 py-14 text-sm text-gray-600/30 dark:text-gray-400/26">
-                        <span class="i-material-symbols-inbox-rounded text-4xl" aria-hidden="true" />
-                        <span>未搜索到文章</span>
-                      </div>
-                    </template>
+                  <template v-else-if="!hits.length">
+                    <div class="flex flex-col items-center gap-3 py-14 text-sm text-gray-600/30 dark:text-gray-400/26">
+                      <span class="i-material-symbols-inbox-rounded text-4xl" aria-hidden="true" />
+                      <span>未搜索到文章</span>
+                    </div>
+                  </template>
 
-                    <ul v-else class="flex flex-col gap-1">
-                      <li v-for="item in hits" :key="item.path">
-                        <AutoLink
-                          :href="item.path"
-                          class="group search-hit-link min-w-0 focus-ring-primary"
-                          @click="close"
-                        >
-                          <div class="min-w-0 flex flex-col max-sm:gap-1.5 sm:gap-1">
-                            <div class="min-w-0 break-words search-hit-title leading-snug sm:leading-normal">
-                              {{ item.title }}
-                            </div>
-                            <div v-if="item.date" class="shrink-0 text-xs text-muted/65 dark:text-muted/55">
-                              {{ formatDate(item.date) }}
-                            </div>
-                            <div
-                              v-if="item.tags.length || item.categories.length"
-                              class="flex flex-wrap gap-1"
-                            >
-                              <span
-                                v-for="t in item.tags"
-                                :key="`${item.path}-tag-${t}`"
-                                class="max-w-full truncate rounded-md bg-gray-100/45 px-1.5 py-0.5 text-[11px] text-muted/70 leading-none dark:bg-white/[0.05]"
-                              >#{{ t }}</span>
-                              <span
-                                v-for="c in item.categories"
-                                :key="`${item.path}-cat-${c}`"
-                                class="max-w-full truncate rounded-md bg-gray-100/35 px-1.5 py-0.5 text-[11px] text-muted/60 leading-none dark:bg-white/[0.035]"
-                              >/{{ c }}</span>
-                            </div>
-                            <div
-                              v-if="item.snippet"
-                              class="line-clamp-2 text-sm text-muted/68 dark:text-muted/58"
-                            >
-                              {{ item.snippet }}
-                            </div>
+                  <ul v-else class="flex flex-col gap-1">
+                    <li v-for="item in hits" :key="item.path">
+                      <AutoLink
+                        :href="item.path"
+                        class="group search-hit-link min-w-0 focus-ring-primary"
+                        @click="close"
+                      >
+                        <div class="min-w-0 flex flex-col max-sm:gap-1.5 sm:gap-1">
+                          <div class="min-w-0 break-words search-hit-title leading-snug sm:leading-normal">
+                            {{ item.title }}
                           </div>
-                        </AutoLink>
-                      </li>
-                    </ul>
-                  </div>
+                          <div v-if="item.date" class="shrink-0 text-xs text-muted/65 dark:text-muted/55">
+                            {{ formatDate(item.date) }}
+                          </div>
+                          <div
+                            v-if="item.tags.length || item.categories.length"
+                            class="flex flex-wrap gap-1"
+                          >
+                            <span
+                              v-for="t in item.tags"
+                              :key="`${item.path}-tag-${t}`"
+                              class="max-w-full truncate rounded-md bg-gray-100/45 px-1.5 py-0.5 text-[11px] text-muted/70 leading-none dark:bg-white/[0.05]"
+                            >#{{ t }}</span>
+                            <span
+                              v-for="c in item.categories"
+                              :key="`${item.path}-cat-${c}`"
+                              class="max-w-full truncate rounded-md bg-gray-100/35 px-1.5 py-0.5 text-[11px] text-muted/60 leading-none dark:bg-white/[0.035]"
+                            >/{{ c }}</span>
+                          </div>
+                          <div
+                            v-if="item.snippet"
+                            class="line-clamp-2 text-sm text-muted/68 dark:text-muted/58"
+                          >
+                            {{ item.snippet }}
+                          </div>
+                        </div>
+                      </AutoLink>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-        </Transition>
-      </div>
-    </Transition>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   </Teleport>
 </template>
 
 <script lang="ts" setup>
 import dayjs from 'dayjs'
+import { AnimatePresence, motion } from 'motion-v'
 import AutoLink from '~/components/AutoLink.vue'
 import {
   siteSearchWorkerError,
@@ -316,6 +320,35 @@ import { useSiteSearchQuery } from '~/composables/use-site-search-query'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 
 const overlay = useSearchOverlayStore()
+const prefersReducedMotion = usePreferredReducedMotion()
+const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
+const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
+
+const overlayMotion = computed(() => ({
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: {
+    duration: shouldReduceMotion.value ? 0.08 : 0.2,
+    ease: MOTION_EASE
+  }
+}))
+
+const panelMotion = computed(() => ({
+  initial: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, y: 10, scale: 0.985 },
+  animate: shouldReduceMotion.value
+    ? { opacity: 1 }
+    : { opacity: 1, y: 0, scale: 1 },
+  exit: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, y: 8, scale: 0.99 },
+  transition: {
+    duration: shouldReduceMotion.value ? 0.1 : 0.22,
+    ease: MOTION_EASE
+  }
+}))
 
 const {
   scopeTag,

@@ -67,7 +67,7 @@ export default defineConfig({
       'card-hover': 'card transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-neutral-800/65 dark:hover:border-primary-light/30',
       'btn-primary': 'rounded-lg bg-primary-6 px-4 py-2 text-white font-medium transition-colors duration-200 hover:bg-primary-7 focus-ring-primary',
       'btn-secondary': 'rounded-lg bg-gray-100 px-4 py-2 text-gray-700 font-medium transition-colors duration-200 hover:bg-gray-200 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700 focus-ring-primary',
-      'input-base': 'rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition-all focus:border-primary-5 focus:ring-2 focus:ring-primary-2 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-100 dark:focus:border-primary-light'
+      'input-base': 'rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition-[border-color,box-shadow] duration-200 focus:border-primary-5 focus:ring-2 focus:ring-primary-2 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-100 dark:focus:border-primary-light'
     },
 
     [/^clickable(-.*)?$/, ([, scale]) => `cursor-pointer transition active:scale${scale || '-95'}`],

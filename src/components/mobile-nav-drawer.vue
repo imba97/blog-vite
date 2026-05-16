@@ -1,38 +1,34 @@
 <template>
-  <Transition
-    enter-active-class="transition-opacity duration-250 ease-out"
-    enter-from-class="opacity-0"
-    enter-to-class="opacity-100"
-    leave-active-class="transition-opacity duration-200 ease-in"
-    leave-from-class="opacity-100"
-    leave-to-class="opacity-0"
-  >
-    <button
+  <AnimatePresence>
+    <motion.button
       v-if="open"
+      key="mobile-drawer-overlay"
       type="button"
       class="fixed inset-0 z-[90] bg-black/35 backdrop-blur-[1px] sm:hidden"
+      :initial="overlayMotion.initial"
+      :animate="overlayMotion.animate"
+      :exit="overlayMotion.exit"
+      :transition="overlayMotion.transition"
       aria-label="关闭导航抽屉"
       @click="close"
     />
-  </Transition>
+  </AnimatePresence>
 
-  <Transition
-    enter-active-class="transition-transform duration-300 ease-out"
-    enter-from-class="translate-x-full"
-    enter-to-class="translate-x-0"
-    leave-active-class="transition-transform duration-220 ease-in"
-    leave-from-class="translate-x-0"
-    leave-to-class="translate-x-full"
-  >
-    <aside
+  <AnimatePresence>
+    <motion.aside
       v-if="open"
       id="mobile-nav-drawer"
+      key="mobile-drawer-panel"
       ref="drawerRef"
       role="dialog"
       aria-modal="true"
       aria-label="移动端导航抽屉"
       tabindex="-1"
       class="fixed right-0 top-0 z-[91] h-full w-[min(82vw,18rem)] border-l border-subtle surface-base shadow-2xl sm:hidden"
+      :initial="panelMotion.initial"
+      :animate="panelMotion.animate"
+      :exit="panelMotion.exit"
+      :transition="panelMotion.transition"
     >
       <div class="h-16 fbc border-b border-subtle px-4">
         <span class="text-sm text-muted">导航</span>
@@ -59,11 +55,12 @@
           <span>{{ item.text }}</span>
         </AutoLink>
       </nav>
-    </aside>
-  </Transition>
+    </motion.aside>
+  </AnimatePresence>
 </template>
 
 <script lang="ts" setup>
+import { AnimatePresence, motion } from 'motion-v'
 import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { navbar } from '~/configs/nav'
 import { useMobileNavDrawerReturnFocusBus } from '~/event-bus/mobile-nav'
@@ -73,6 +70,35 @@ const returnFocusBus = useMobileNavDrawerReturnFocusBus()
 
 const route = useRoute()
 const drawerRef = ref<HTMLElement | null>(null)
+const prefersReducedMotion = usePreferredReducedMotion()
+const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
+const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
+
+const overlayMotion = computed(() => ({
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: {
+    duration: shouldReduceMotion.value ? 0.08 : 0.18,
+    ease: MOTION_EASE
+  }
+}))
+
+const panelMotion = computed(() => ({
+  initial: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, x: 18 },
+  animate: shouldReduceMotion.value
+    ? { opacity: 1 }
+    : { opacity: 1, x: 0 },
+  exit: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, x: 16 },
+  transition: {
+    duration: shouldReduceMotion.value ? 0.1 : 0.24,
+    ease: MOTION_EASE
+  }
+}))
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',

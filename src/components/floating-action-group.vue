@@ -3,10 +3,7 @@
     class="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[210] sm:bottom-[calc(1rem+env(safe-area-inset-bottom))]"
     :style="{ right: floatingRightOffset }"
   >
-    <div
-      class="of-hidden card-soft p-1 backdrop-blur-sm transition-[max-height] duration-250 ease-out"
-      :class="showBackToTop ? 'max-h-[92px] sm:max-h-[100px]' : 'max-h-[44px] sm:max-h-[48px]'"
-    >
+    <div class="overflow-hidden card-soft p-1 backdrop-blur-sm">
       <div class="flex flex-col gap-1">
         <button
           type="button"
@@ -17,21 +14,29 @@
           <span class="text-base" :class="[themeIconClass]" />
         </button>
 
-        <button
-          type="button"
-          class="size-9 fcc rounded-lg surface-subtle text-gray-700 outline-none transition-all duration-200 ease-out sm:size-10 dark:text-gray-100 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
-          :class="showBackToTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'"
-          aria-label="回到顶部"
-          @click="scrollToTop"
-        >
-          <span class="i-carbon-arrow-up text-base" />
-        </button>
+        <AnimatePresence>
+          <motion.button
+            v-if="showBackToTop"
+            key="back-to-top"
+            type="button"
+            class="size-9 fcc rounded-lg surface-subtle text-gray-700 outline-none transition-colors duration-200 sm:size-10 dark:text-gray-100 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
+            aria-label="回到顶部"
+            :initial="backToTopMotion.initial"
+            :animate="backToTopMotion.animate"
+            :exit="backToTopMotion.exit"
+            :transition="backToTopMotion.transition"
+            @click="scrollToTop"
+          >
+            <span class="i-carbon-arrow-up text-base" />
+          </motion.button>
+        </AnimatePresence>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { AnimatePresence, motion } from 'motion-v'
 import { useThemeMode } from '~/composables/use-theme-mode'
 import { isPostListRoute } from '~/utils/route-page-kind'
 
@@ -42,6 +47,9 @@ const BUTTON_SIDE_OFFSET = '70px'
 const showBackToTop = ref(false)
 const route = useRoute()
 const { themePreference, cycleThemeMode } = useThemeMode()
+const prefersReducedMotion = usePreferredReducedMotion()
+const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
+const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
 
 const isListPage = computed(() => isPostListRoute(route.path))
 
@@ -67,12 +75,31 @@ const themeAriaLabel = computed(() => {
 })
 
 function updateBackToTopVisibility() {
-  showBackToTop.value = window.scrollY > SCROLL_THRESHOLD
+  const nextVisible = window.scrollY > SCROLL_THRESHOLD
+  if (nextVisible === showBackToTop.value)
+    return
+  showBackToTop.value = nextVisible
 }
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  window.scrollTo({ top: 0, behavior: shouldReduceMotion.value ? 'auto' : 'smooth' })
 }
+
+const backToTopMotion = computed(() => ({
+  initial: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, y: 8, scale: 0.98 },
+  animate: shouldReduceMotion.value
+    ? { opacity: 1 }
+    : { opacity: 1, y: 0, scale: 1 },
+  exit: shouldReduceMotion.value
+    ? { opacity: 0 }
+    : { opacity: 0, y: 7, scale: 0.985 },
+  transition: {
+    duration: shouldReduceMotion.value ? 0.08 : 0.18,
+    ease: MOTION_EASE
+  }
+}))
 
 onMounted(() => {
   updateBackToTopVisibility()

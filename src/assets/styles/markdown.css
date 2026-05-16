@@ -93,7 +93,7 @@ html.dark .prose {
 }
 
 a.item {
-  transition: 0.2s all ease-out;
+  transition: opacity 0.2s ease-out;
   text-decoration: none;
   border-bottom: none !important;
   opacity: 0.72;
@@ -195,7 +195,7 @@ h6:focus .header-anchor {
   text-overflow: ellipsis;
   height: 100%;
   overflow-y: auto;
-  --uno: rounded op0 mt-1 pb-5 transition duration-700;
+  --uno: rounded op0 mt-1 pb-5 transition duration-300;
 }
 
 *:hover > .table-of-contents > .table-of-contents-anchor,

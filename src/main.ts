@@ -43,7 +43,7 @@ export const createApp = ViteSSG(
         selectors: {
           html(ctx) {
             const isListRoute = isPostListRoute(ctx.to.path)
-            const shouldResetToTop = isListRoute && ctx.type !== 'history'
+            const shouldResetToTop = isListRoute
             const targetPosition = shouldResetToTop ? { top: 0, left: 0 } : ctx.savedPosition
 
             // only do the sliding transition when the scroll position is not 0

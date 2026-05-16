@@ -110,7 +110,9 @@ function centerCurrentPageOnMobile() {
 
 watch(() => props.currentPage, async () => {
   await nextTick()
-  requestAnimationFrame(centerCurrentPageOnMobile)
+  if (typeof window === 'undefined')
+    return
+  window.requestAnimationFrame(centerCurrentPageOnMobile)
 }, { immediate: true })
 
 // 计算要显示的页码
