@@ -163,6 +163,21 @@ export function useSiteSearchQuery() {
     })
   }
 
+  function primePrefixInput(prefixChar: PrefixStrategy['prefixChar']) {
+    scope.value = emptyScope()
+    keywordQuery.value = prefixChar
+    selectedSuggestIndex.value = -1
+    resetTagDeletePrime()
+    nextTick(() => {
+      const el = inputRef.value
+      if (!el)
+        return
+      el.focus()
+      const caret = el.value.length
+      el.setSelectionRange(caret, caret)
+    })
+  }
+
   /** 弹层打开时：拉候选 + 预加载 Worker（与全局 `/` 打开搜索共存，勿在 composable 内拦截 `/`） */
   function onOverlayOpened() {
     void loadCandidatesFromMeta()
@@ -329,6 +344,7 @@ export function useSiteSearchQuery() {
     resetForOverlayClose,
     onOverlayOpened,
     focusKeywordInput,
+    primePrefixInput,
     loadCandidatesFromMeta,
     resetTagDeletePrime
   }

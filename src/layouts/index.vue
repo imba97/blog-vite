@@ -40,6 +40,14 @@ function handleGlobalSearchShortcut(event: KeyboardEvent) {
 
   event.preventDefault()
   overlay.open()
+  requestAnimationFrame(() => {
+    const searchInput = document.getElementById('site-search-input')
+    if (!(searchInput instanceof HTMLInputElement))
+      return
+    searchInput.focus()
+    const caret = searchInput.value.length
+    searchInput.setSelectionRange(caret, caret)
+  })
 }
 
 onMounted(() => {

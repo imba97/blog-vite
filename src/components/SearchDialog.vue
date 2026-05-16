@@ -195,8 +195,22 @@ html.dark .tag-chip--primed {
             </div>
 
             <div class="fyc shrink-0 gap-2 px-3 pb-2 sm:px-4">
-              <code class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted dark:bg-white/10">#tag</code>
-              <code class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted dark:bg-white/10">/categorie</code>
+              <button
+                type="button"
+                class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
+                aria-label="插入标签搜索前缀 #"
+                @click="primePrefixInput('#')"
+              >
+                #tag
+              </button>
+              <button
+                type="button"
+                class="rounded bg-gray-200/90 px-1.5 py-px text-xs text-muted transition-colors dark:bg-white/10 hover:bg-gray-300/75 focus-ring-primary dark:hover:bg-white/15"
+                aria-label="插入分类搜索前缀 /"
+                @click="primePrefixInput('/')"
+              >
+                /categorie
+              </button>
             </div>
 
             <div class="min-h-0 flex flex-1 flex-col overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
@@ -323,6 +337,7 @@ const {
   resetForOverlayClose,
   onOverlayOpened,
   focusKeywordInput,
+  primePrefixInput,
   resetTagDeletePrime
 } = useSiteSearchQuery()
 
