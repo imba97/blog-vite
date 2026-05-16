@@ -3,7 +3,7 @@ import type { PrefixKind, PrefixStrategy, SearchScope } from '~/utils/site-searc
 import { useDebounceFn } from '@vueuse/core'
 import {
   ensureSiteSearchWorker,
-  searchViaWorker
+  searchLatestViaWorker
 } from '~/composables/site-search-worker'
 import {
   emptyScope,
@@ -298,7 +298,7 @@ export function useSiteSearchQuery() {
       if (gen !== searchGeneration)
         return
 
-      const result = await searchViaWorker({ tag, category, keywords: kw })
+      const result = await searchLatestViaWorker({ tag, category, keywords: kw })
       if (gen !== searchGeneration)
         return
 
