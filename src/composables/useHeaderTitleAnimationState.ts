@@ -54,6 +54,7 @@ interface UseHeaderTitleAnimationStateOptions {
  */
 export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationStateOptions) {
   const barVisible = ref(false)
+  const barLeaving = ref(false)
   /** When true, bar has mounted but title slot stays empty until bar intro completes. */
   const gateTitleUntilBarDone = ref(false)
   const presenceTitleKey = ref('')
@@ -61,11 +62,19 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
   const layoutTitleCache = ref('')
 
   let barIntroFallbackTimer: ReturnType<typeof setTimeout> | null = null
+  let barLeaveFallbackTimer: ReturnType<typeof setTimeout> | null = null
 
   function clearBarIntroFallback() {
     if (barIntroFallbackTimer != null) {
       clearTimeout(barIntroFallbackTimer)
       barIntroFallbackTimer = null
+    }
+  }
+
+  function clearBarLeaveFallback() {
+    if (barLeaveFallbackTimer != null) {
+      clearTimeout(barLeaveFallbackTimer)
+      barLeaveFallbackTimer = null
     }
   }
 
@@ -85,6 +94,7 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
 
   const containerVisible = computed(() =>
     barVisible.value
+    || barLeaving.value
     || Boolean(presenceTitleKey.value)
     || gateTitleUntilBarDone.value
   )
@@ -106,6 +116,8 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
       const has = Boolean(t) && Boolean(k)
 
       if (has) {
+        clearBarLeaveFallback()
+        barLeaving.value = false
         presenceTitleKey.value = k
         presenceTitle.value = t
         layoutTitleCache.value = t
@@ -121,6 +133,8 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
       }
 
       barVisible.value = false
+      clearBarLeaveFallback()
+      barLeaving.value = false
       presenceTitleKey.value = ''
       presenceTitle.value = ''
       gateTitleUntilBarDone.value = false
@@ -139,14 +153,23 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     }
   )
 
-  onUnmounted(() => clearBarIntroFallback())
+  onUnmounted(() => {
+    clearBarIntroFallback()
+    clearBarLeaveFallback()
+  })
 
   function onTitlePresenceExitComplete() {
     if (options.targetTitleKey.value && options.targetTitle.value.trim())
       return
+    clearBarLeaveFallback()
+    barLeaving.value = true
     barVisible.value = false
-    presenceTitle.value = ''
-    layoutTitleCache.value = ''
+    barLeaveFallbackTimer = setTimeout(() => {
+      barLeaveFallbackTimer = null
+      barLeaving.value = false
+      presenceTitle.value = ''
+      layoutTitleCache.value = ''
+    }, HEADER_TITLE_BAR_MS.leave + 50)
   }
 
   return {
