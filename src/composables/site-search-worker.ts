@@ -1,23 +1,19 @@
 import type { SearchHit } from '~/types/search-index'
-
-type WorkerFromMain
-  = | { type: 'init', baseUrl: string }
-    | { type: 'search', tag: string | null, category: string | null, keywords: string, limit: number, requestId: number }
-
-type WorkerToMain
-  = | { type: 'ready' }
-    | { type: 'error', message: string }
-    | { type: 'searchResult', hits: SearchHit[], requestId: number }
+import type {
+  SiteSearchMainToWorkerMessage,
+  SiteSearchWorkerToMainMessage
+} from '~/types/site-search-worker-protocol'
 
 export const siteSearchWorkerReady = ref(false)
 export const siteSearchWorkerError = ref<string | null>(null)
 
 class SiteSearchWorkerClient {
   private worker: Worker | null = null
-  private initPosted = false
+  private readyTask: Promise<void> | null = null
+  private readyTaskResolve: (() => void) | null = null
+  private readyTaskReject: ((error: Error) => void) | null = null
   private searchRequestId = 0
-  private initWaiters: Array<{ resolve: () => void, reject: (e: Error) => void }> = []
-  private pendingSearch = new Map<number, (hits: SearchHit[]) => void>()
+  private pendingLatestSearch: { requestId: number, resolve: (hits: SearchHit[]) => void } | null = null
 
   ensureReady(): Promise<void> {
     if (import.meta.env.SSR)
@@ -26,18 +22,21 @@ class SiteSearchWorkerClient {
     if (siteSearchWorkerReady.value)
       return Promise.resolve()
 
+    if (this.readyTask)
+      return this.readyTask
+
     const worker = this.getWorker()
-    return new Promise<void>((resolve, reject) => {
-      this.initWaiters.push({ resolve, reject })
-      if (!this.initPosted) {
-        this.initPosted = true
-        const msg: WorkerFromMain = {
-          type: 'init',
-          baseUrl: import.meta.env.BASE_URL || '/'
-        }
-        worker.postMessage(msg)
-      }
+    this.readyTask = new Promise<void>((resolve, reject) => {
+      this.readyTaskResolve = resolve
+      this.readyTaskReject = reject
     })
+    siteSearchWorkerError.value = null
+    const msg: SiteSearchMainToWorkerMessage = {
+      type: 'init',
+      baseUrl: import.meta.env.BASE_URL || '/'
+    }
+    worker.postMessage(msg)
+    return this.readyTask
   }
 
   async searchLatest(options: {
@@ -56,10 +55,9 @@ class SiteSearchWorkerClient {
     const limit = options.limit ?? 40
 
     return new Promise((resolve) => {
-      // 显式语义：仅保留最新请求，旧请求全部回收为空结果。
-      this.resolveAllPendingSearchesWithEmpty()
-      this.pendingSearch.set(requestId, resolve)
-      const msg: WorkerFromMain = {
+      this.resolvePendingLatestWithEmpty()
+      this.pendingLatestSearch = { requestId, resolve }
+      const msg: SiteSearchMainToWorkerMessage = {
         type: 'search',
         tag: options.tag,
         category: options.category,
@@ -72,16 +70,14 @@ class SiteSearchWorkerClient {
   }
 
   private dispatch = (ev: MessageEvent) => {
-    const d = ev.data as WorkerToMain
+    const d = ev.data as SiteSearchWorkerToMainMessage
     if (!d || typeof d !== 'object')
       return
 
     if (d.type === 'ready') {
       siteSearchWorkerReady.value = true
       siteSearchWorkerError.value = null
-      for (const w of this.initWaiters)
-        w.resolve()
-      this.initWaiters.length = 0
+      this.resolveReadyTask()
       return
     }
 
@@ -91,9 +87,11 @@ class SiteSearchWorkerClient {
     }
 
     if (d.type === 'searchResult') {
-      const cb = this.pendingSearch.get(d.requestId)
-      this.pendingSearch.delete(d.requestId)
-      cb?.(d.hits)
+      if (this.pendingLatestSearch?.requestId !== d.requestId)
+        return
+      const { resolve } = this.pendingLatestSearch
+      this.pendingLatestSearch = null
+      resolve(d.hits)
     }
   }
 
@@ -121,9 +119,8 @@ class SiteSearchWorkerClient {
   private handleWorkerErrorMessage(message: string) {
     siteSearchWorkerError.value = message
     siteSearchWorkerReady.value = false
-    this.initPosted = false
-    this.rejectAllInitWaiters(new Error(message))
-    this.resolveAllPendingSearchesWithEmpty()
+    this.rejectReadyTask(new Error(message))
+    this.resolvePendingLatestWithEmpty()
   }
 
   private handleWorkerFatal(message: string) {
@@ -137,16 +134,27 @@ class SiteSearchWorkerClient {
     }
   }
 
-  private resolveAllPendingSearchesWithEmpty() {
-    for (const resolve of this.pendingSearch.values())
-      resolve([])
-    this.pendingSearch.clear()
+  private resolvePendingLatestWithEmpty() {
+    if (!this.pendingLatestSearch)
+      return
+    this.pendingLatestSearch.resolve([])
+    this.pendingLatestSearch = null
   }
 
-  private rejectAllInitWaiters(err: Error) {
-    for (const w of this.initWaiters)
-      w.reject(err)
-    this.initWaiters.length = 0
+  private resolveReadyTask() {
+    this.readyTaskResolve?.()
+    this.clearReadyTaskReferences()
+  }
+
+  private rejectReadyTask(err: Error) {
+    this.readyTaskReject?.(err)
+    this.clearReadyTaskReferences()
+  }
+
+  private clearReadyTaskReferences() {
+    this.readyTask = null
+    this.readyTaskResolve = null
+    this.readyTaskReject = null
   }
 }
 
@@ -165,6 +173,3 @@ export async function searchLatestViaWorker(options: {
 }): Promise<SearchHit[]> {
   return client.searchLatest(options)
 }
-
-// 兼容旧调用点，后续可逐步迁移到 searchLatestViaWorker。
-export const searchViaWorker = searchLatestViaWorker

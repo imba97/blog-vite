@@ -1,17 +1,13 @@
 import type { SearchFullRecord, SearchHit } from '~/types/search-index'
+import type {
+  SiteSearchMainToWorkerMessage,
+  SiteSearchQueryMessage,
+  SiteSearchWorkerToMainMessage
+} from '~/types/site-search-worker-protocol'
 import MiniSearch from 'minisearch'
 
-type MainToWorker
-  = | { type: 'init', baseUrl: string }
-    | { type: 'search', tag: string | null, category: string | null, keywords: string, limit: number, requestId: number }
-
-type WorkerToMain
-  = | { type: 'ready' }
-    | { type: 'error', message: string }
-    | { type: 'searchResult', hits: SearchHit[], requestId: number }
-
-type SearchRequest = Extract<MainToWorker, { type: 'search' }>
-type SearchResultEmitter = (msg: WorkerToMain) => void
+type SearchRequest = SiteSearchQueryMessage
+type SearchResultEmitter = (msg: SiteSearchWorkerToMainMessage) => void
 
 const SEARCH_LIMIT_DEFAULT = 40
 const SNIPPET_WINDOW_SIZE = 72
@@ -25,6 +21,13 @@ const INDEX_SEARCH_OPTIONS = {
   boost: { title: 4, tagLine: 3, catLine: 2, body: 1 },
   fuzzy: 0.12,
   prefix: true
+}
+
+interface SearchCorpus {
+  mini: MiniSearch
+  docsByPath: Map<string, SearchFullRecord>
+  tagPathIndex: Map<string, Set<string>>
+  categoryPathIndex: Map<string, Set<string>>
 }
 
 function normalizeBase(baseUrl: string): string {
@@ -80,6 +83,119 @@ function intersectPathSets(left: Set<string>, right: Set<string>): Set<string> {
   return output
 }
 
+function createSearchCorpus(records: SearchFullRecord[]): SearchCorpus {
+  const docsByPath = new Map<string, SearchFullRecord>()
+  const tagPathIndex = new Map<string, Set<string>>()
+  const categoryPathIndex = new Map<string, Set<string>>()
+  const mini = new MiniSearch({
+    fields: ['title', 'body', 'tagLine', 'catLine'],
+    storeFields: ['path', 'title', 'date', 'text', 'tags', 'categories'],
+    searchOptions: INDEX_SEARCH_OPTIONS
+  })
+
+  mini.addAll(
+    records.map((d) => {
+      docsByPath.set(d.path, d)
+
+      for (const tag of d.tags) {
+        const paths = tagPathIndex.get(tag)
+        if (paths)
+          paths.add(d.path)
+        else
+          tagPathIndex.set(tag, new Set([d.path]))
+      }
+
+      for (const category of d.categories) {
+        const paths = categoryPathIndex.get(category)
+        if (paths)
+          paths.add(d.path)
+        else
+          categoryPathIndex.set(category, new Set([d.path]))
+      }
+
+      return {
+        id: d.path,
+        title: d.title,
+        body: d.text,
+        tagLine: d.tags.join(' '),
+        catLine: d.categories.join(' '),
+        path: d.path,
+        date: d.date,
+        text: d.text,
+        tags: d.tags,
+        categories: d.categories
+      }
+    })
+  )
+
+  return { mini, docsByPath, tagPathIndex, categoryPathIndex }
+}
+
+function resolveScopePaths(corpus: SearchCorpus, tag: string | null, category: string | null): Set<string> | null {
+  const tagPaths = tag ? (corpus.tagPathIndex.get(tag) ?? new Set()) : null
+  const categoryPaths = category ? (corpus.categoryPathIndex.get(category) ?? new Set()) : null
+
+  if (tagPaths && categoryPaths)
+    return intersectPathSets(tagPaths, categoryPaths)
+  if (tagPaths)
+    return tagPaths
+  if (categoryPaths)
+    return categoryPaths
+  return null
+}
+
+function hitsFromScopedPaths(corpus: SearchCorpus, scopePaths: Set<string>, limit: number): SearchHit[] {
+  const subset: SearchFullRecord[] = []
+  for (const path of scopePaths) {
+    const record = corpus.docsByPath.get(path)
+    if (!record)
+      continue
+    subset.push(record)
+    if (subset.length >= limit)
+      break
+  }
+  return hitsFromDocs(subset, limit)
+}
+
+function searchInCorpus(corpus: SearchCorpus, request: SearchRequest): SearchHit[] {
+  const kw = request.keywords.trim()
+  const scopePaths = resolveScopePaths(corpus, request.tag, request.category)
+  const limit = request.limit || SEARCH_LIMIT_DEFAULT
+
+  if (!kw) {
+    if (!scopePaths)
+      return []
+    return hitsFromScopedPaths(corpus, scopePaths, limit)
+  }
+
+  try {
+    const results = corpus.mini.search(kw, SEARCH_OPTIONS)
+    const filtered = scopePaths
+      ? results.filter(r => scopePaths.has(String(r.path ?? r.id)))
+      : results
+
+    return filtered.slice(0, limit).map((r) => {
+      const path = String(r.path ?? r.id)
+      const title = String(r.title ?? '')
+      const date = String(r.date ?? '')
+      const text = String(r.text ?? '')
+      const tags = asStringList(r.tags)
+      const categories = asStringList(r.categories)
+      return {
+        path,
+        title,
+        date,
+        tags,
+        categories,
+        snippet: buildSnippet(text, kw)
+      }
+    })
+  }
+  catch {
+    return []
+  }
+}
+
 export const __siteSearchWorkerTestables = {
   normalizeBase,
   buildSnippet,
@@ -87,11 +203,8 @@ export const __siteSearchWorkerTestables = {
 }
 
 export class SearchEngine {
-  private mini: MiniSearch | null = null
+  private corpus: SearchCorpus | null = null
   private initialized = false
-  private docsByPath = new Map<string, SearchFullRecord>()
-  private tagPathIndex = new Map<string, Set<string>>()
-  private categoryPathIndex = new Map<string, Set<string>>()
   private queuedSearch: { request: SearchRequest, emit: SearchResultEmitter } | null = null
   private searchFlushScheduled = false
   private searchFlushRunning = false
@@ -110,7 +223,7 @@ export class SearchEngine {
     if (!Array.isArray(records))
       throw new Error('搜索索引格式无效')
 
-    this.buildMiniSearch(records)
+    this.corpus = createSearchCorpus(records)
     this.initialized = true
   }
 
@@ -122,118 +235,10 @@ export class SearchEngine {
     }
   }
 
-  private buildMiniSearch(records: SearchFullRecord[]) {
-    this.docsByPath = new Map()
-    this.tagPathIndex = new Map()
-    this.categoryPathIndex = new Map()
-    this.mini = new MiniSearch({
-      fields: ['title', 'body', 'tagLine', 'catLine'],
-      storeFields: ['path', 'title', 'date', 'text', 'tags', 'categories'],
-      searchOptions: INDEX_SEARCH_OPTIONS
-    })
-
-    this.mini.addAll(
-      records.map((d) => {
-        this.docsByPath.set(d.path, d)
-
-        for (const tag of d.tags) {
-          const paths = this.tagPathIndex.get(tag)
-          if (paths)
-            paths.add(d.path)
-          else
-            this.tagPathIndex.set(tag, new Set([d.path]))
-        }
-
-        for (const category of d.categories) {
-          const paths = this.categoryPathIndex.get(category)
-          if (paths)
-            paths.add(d.path)
-          else
-            this.categoryPathIndex.set(category, new Set([d.path]))
-        }
-
-        return {
-          id: d.path,
-          title: d.title,
-          body: d.text,
-          tagLine: d.tags.join(' '),
-          catLine: d.categories.join(' '),
-          path: d.path,
-          date: d.date,
-          text: d.text,
-          tags: d.tags,
-          categories: d.categories
-        }
-      })
-    )
-  }
-
-  private resolveScopePaths(tag: string | null, category: string | null): Set<string> | null {
-    const tagPaths = tag ? (this.tagPathIndex.get(tag) ?? new Set()) : null
-    const categoryPaths = category ? (this.categoryPathIndex.get(category) ?? new Set()) : null
-
-    if (tagPaths && categoryPaths)
-      return intersectPathSets(tagPaths, categoryPaths)
-    if (tagPaths)
-      return tagPaths
-    if (categoryPaths)
-      return categoryPaths
-    return null
-  }
-
-  private hitsFromScopedPaths(scopePaths: Set<string>, limit: number): SearchHit[] {
-    const subset: SearchFullRecord[] = []
-    for (const path of scopePaths) {
-      const record = this.docsByPath.get(path)
-      if (!record)
-        continue
-      subset.push(record)
-      if (subset.length >= limit)
-        break
-    }
-    return hitsFromDocs(subset, limit)
-  }
-
   private search(request: SearchRequest): SearchHit[] {
-    const kw = request.keywords.trim()
-    const scopePaths = this.resolveScopePaths(request.tag, request.category)
-    const limit = request.limit || SEARCH_LIMIT_DEFAULT
-
-    if (!kw) {
-      if (!scopePaths)
-        return []
-      return this.hitsFromScopedPaths(scopePaths, limit)
-    }
-
-    if (!this.mini)
+    if (!this.corpus)
       return []
-
-    try {
-      const results = this.mini.search(kw, SEARCH_OPTIONS)
-      const filtered = scopePaths
-        ? results.filter(r => scopePaths.has(String(r.path ?? r.id)))
-        : results
-
-      return filtered.slice(0, limit).map((r) => {
-        const path = String(r.path ?? r.id)
-        const title = String(r.title ?? '')
-        const date = String(r.date ?? '')
-        const text = String(r.text ?? '')
-        const tags = asStringList(r.tags)
-        const categories = asStringList(r.categories)
-        return {
-          path,
-          title,
-          date,
-          tags,
-          categories,
-          snippet: buildSnippet(text, kw)
-        }
-      })
-    }
-    catch {
-      return []
-    }
+    return searchInCorpus(this.corpus, request)
   }
 
   private flushQueuedSearch() {
@@ -270,7 +275,7 @@ class WorkerMessageBridge {
     private readonly emit: SearchResultEmitter
   ) {}
 
-  async handleMessage(ev: MessageEvent<MainToWorker>) {
+  async handleMessage(ev: MessageEvent<SiteSearchMainToWorkerMessage>) {
     const msg = ev.data
     if (!msg || typeof msg !== 'object')
       return
@@ -299,6 +304,6 @@ class WorkerMessageBridge {
 const engine = new SearchEngine()
 const bridge = new WorkerMessageBridge(engine, msg => globalThis.postMessage(msg))
 
-globalThis.onmessage = (ev: MessageEvent<MainToWorker>) => {
+globalThis.onmessage = (ev: MessageEvent<SiteSearchMainToWorkerMessage>) => {
   void bridge.handleMessage(ev)
 }

@@ -304,6 +304,12 @@ export function useSiteSearchQuery() {
 
       hits.value = result
     }
+    catch {
+      if (gen !== searchGeneration)
+        return
+      // 初始化失败或 Worker 异常时，统一回退为空结果，避免 UI 悬挂在旧数据。
+      hits.value = []
+    }
     finally {
       if (gen === searchGeneration)
         pendingSearchVisual.value = false
