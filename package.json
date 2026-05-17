@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "cross-env NODE_ENV=production vite-ssg build && esno ./scripts/copy-fonts.ts && esno ./scripts/rss.ts",
     "generate-rss": "esno scripts/rss.ts",
+    "post:new": "esno scripts/create-post.ts",
     "generate-search-index": "esno scripts/search-index-cli.ts",
     "preview": "vite preview",
     "install:stable": "pnpm dlx esno ./scripts/pnpm-stable-install.ts",
