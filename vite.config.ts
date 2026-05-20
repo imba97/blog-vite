@@ -12,6 +12,7 @@ import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
 import matter from 'gray-matter'
 import anchor from 'markdown-it-anchor'
+import MarkdownItExtraLink from 'markdown-it-extra-link'
 import GitHubAlerts from 'markdown-it-github-alerts'
 import LinkAttributes from 'markdown-it-link-attributes'
 import TOC from 'markdown-it-table-of-contents'
@@ -138,6 +139,8 @@ export default defineConfig({
             transformerNotationWordHighlight()
           ]
         }))
+
+        md.use(MarkdownItExtraLink)
 
         md.use(anchor, {
           slugify,
