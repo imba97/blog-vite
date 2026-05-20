@@ -37,5 +37,8 @@ function parseSsgIncludeEnv(): RegExp[] {
 const ssgMatchers = parseSsgIncludeEnv()
 
 export function isSsgIncludedRoute(routePath: string): boolean {
+  // vite-ssg cannot emit file paths for dynamic route patterns like `/archives/:id(.*)`
+  if (/[:*]/.test(routePath))
+    return false
   return ssgMatchers.some(re => re.test(routePath))
 }
