@@ -114,7 +114,7 @@ export default defineConfig({
       markdownItOptions: {
         quotes: '""\'\''
       },
-      async markdownItSetup(md: { use: (plugin: any, ...params: any[]) => any }) {
+      async markdownSetup(md: { use: (plugin: any, ...params: any[]) => any }) {
         // 先添加我们的复制按钮插件
         md.use(CopyButtonPlugin({
           codeCopyButtonTitle: '复制代码'
