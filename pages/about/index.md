@@ -49,23 +49,23 @@ categories:
 
 不好打开的社交平台：
 
-[<span style="color: #4267b2">**Facebook**</span>](https://www.facebook.com/imbajq)、[<span style="color: #1da1f2">**Twitter**</span>](https://twitter.com/imbajq)、[<span style="color: #32afed">**Telegram**</span>](https://t.me/imba97)、[<span style="color: #f01414">**Youtube**</span>](https://www.youtube.com/channel/UC7al-r7SMJKT1qSUBhKL6nQ)
+<a href="https://www.facebook.com/imbajq" target="_blank" rel="noopener noreferrer" class="!text-[#4267b2] !font-bold">Facebook</a>、<a href="https://x.com/imbajq" target="_blank" rel="noopener noreferrer" class="!text-[#000000] !dark:bg-white rounded-sm !font-bold">X</a>、<a href="https://t.me/imba97" target="_blank" rel="noopener noreferrer" class="!text-[#32afed] !font-bold">Telegram</a>、<a href="https://www.youtube.com/channel/UC7al-r7SMJKT1qSUBhKL6nQ" target="_blank" rel="noopener noreferrer" class="!text-[#f01414] !font-bold">Youtube</a>
 
 好打开的社交平台：
 
-[<span style="color: #24292e; background-color: #FFF;">**Github**</span>](https://github.com/imba97)、[<span style="color: #000000; background-color: #FFF;">**Steam**</span>](https://steamcommunity.com/id/imba97)、[<span style="color: #00a5db">**Bilibili**</span>](https://space.bilibili.com/2198461)
+<a href="https://github.com/imba97" target="_blank" rel="noopener noreferrer" class="!text-[#24292e] !dark:bg-white rounded-sm !font-bold">Github</a>、<a href="https://steamcommunity.com/id/imba97" target="_blank" rel="noopener noreferrer" class="!text-[#000000] !dark:bg-white rounded-sm !font-bold">Steam</a>、<a href="https://space.bilibili.com/2198461" target="_blank" rel="noopener noreferrer" class="!text-[#00a5db] !font-bold">Bilibili</a>
 
 慎点：
 
-[<span style="color: #f05549">**全民K歌**</span>](http://kg.qq.com/node/personal?uid=6398948d26243383)
+<a href="http://kg.qq.com/node/personal?uid=6398948d26243383" target="_blank" rel="noopener noreferrer" class="!text-[#f05549] !font-bold">全民K歌</a>
 
 网站：
 
-[<span style="color: #1f9dc4">**Btools浏览器插件**</span>](http://btools.cc)
+<a href="http://btools.cc" target="_blank" rel="noopener noreferrer" class="!text-[#1f9dc4] !font-bold">Btools浏览器插件</a>
 
 公众平台：
 
-[<span style="color: #fe2076">**西瓜视频**</span>](https://www.ixigua.com/home/110137427957/)、[<span style="color: #ed4040">**今日头条**</span>](https://www.toutiao.com/c/user/110137427957/)、[<span style="color: #457eff">**百家号**</span>](https://baijiahao.baidu.com/u?app_id=1622469056879491)
+<a href="https://www.ixigua.com/home/110137427957/" target="_blank" rel="noopener noreferrer" class="!text-[#fe2076] !font-bold">西瓜视频</a>、<a href="https://www.toutiao.com/c/user/110137427957/" target="_blank" rel="noopener noreferrer" class="!text-[#ed4040] !font-bold">今日头条</a>、<a href="https://baijiahao.baidu.com/u?app_id=1622469056879491" target="_blank" rel="noopener noreferrer" class="!text-[#457eff] !font-bold">百家号</a>
 
 <div text="#44b549" font-bold>微信公众号</div>
 
