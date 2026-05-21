@@ -1,5 +1,3 @@
-import type { ShareMetaTag } from './scripts/seo/share-meta'
-import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -11,7 +9,6 @@ import {
 } from '@shikijs/transformers'
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
-import matter from 'gray-matter'
 import anchor from 'markdown-it-anchor'
 import MarkdownItExtraLink from 'markdown-it-extra-link'
 import GitHubAlerts from 'markdown-it-github-alerts'
@@ -29,31 +26,15 @@ import VueRouter from 'vue-router/vite'
 import CopyButtonPlugin from './scripts/copy-button-plugin'
 import { getGitMeta } from './scripts/get-git-meta'
 import NetlifyImagePlugin from './scripts/netlify-image-plugin'
-import { extractPostImage } from './scripts/seo/extract-post-image'
-import {
-  DEFAULT_OG_IMAGE,
-  extractImageFromMarkdownFile,
-  mergeFrontmatterFromMarkdownFile,
-  mergeShareMeta,
-  normalizeModuleIdToFilePath,
-  SITE_NAME,
-  toAbsoluteSiteUrl
-} from './scripts/seo/share-meta'
 import { slugify } from './scripts/slugify'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject'
 import PostsMeta from './scripts/vite/plugins/posts-meta'
 import SearchIndex from './scripts/vite/plugins/search-index'
+import { applyMarkdownRouteMeta } from './scripts/vite/route-frontmatter'
 import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes'
-import { postPublicPath } from './src/constants/route-policy'
-import { isPublishablePostData, normalizeNumericPostId } from './src/content/post-policy'
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url))
 const postsMarkdownRoot = path.normalize(r('posts'))
-
-function isPostMarkdownFile(filePath: string): boolean {
-  const abs = path.normalize(filePath)
-  return abs === postsMarkdownRoot || abs.startsWith(`${postsMarkdownRoot}${path.sep}`)
-}
 
 const gitMeta = getGitMeta()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -82,28 +63,7 @@ export default defineConfig({
       ],
       dts: r('.auto-generate/typed-router.d.ts'),
       extendRoute(route) {
-        const defaultFile = route.components.get('default')
-        if (!defaultFile)
-          return
-
-        if (defaultFile.endsWith('.md')) {
-          const { data, content } = matter(readFileSync(defaultFile, 'utf-8'))
-          const frontmatter = { ...data }
-          const extractedImage = extractPostImage(frontmatter as Record<string, unknown>, content)
-          if (extractedImage && typeof frontmatter.image !== 'string')
-            frontmatter.image = extractedImage
-
-          route.addToMeta({
-            frontmatter
-          })
-
-          if (isPostMarkdownFile(defaultFile) && isPublishablePostData(frontmatter)) {
-            const id = normalizeNumericPostId(frontmatter)!
-            const newPath = postPublicPath(id)
-            route.path = newPath
-            route.name = newPath
-          }
-        }
+        applyMarkdownRouteMeta(route as Parameters<typeof applyMarkdownRouteMeta>[0], postsMarkdownRoot)
       }
     }),
 
@@ -182,77 +142,6 @@ export default defineConfig({
         })
 
         md.use(GitHubAlerts)
-      },
-      frontmatterPreprocess(frontmatter: Record<string, unknown> | undefined, options: Record<string, unknown>, _id: string, defaults: (head: Record<string, unknown>, options: Record<string, unknown>) => Record<string, unknown>) {
-        const inputFrontmatter = frontmatter && typeof frontmatter === 'object'
-          ? { ...(frontmatter as Record<string, unknown>) }
-          : {}
-        const moduleFilePath = typeof _id === 'string' ? normalizeModuleIdToFilePath(_id) : ''
-        const frontmatterRecord = moduleFilePath
-          ? mergeFrontmatterFromMarkdownFile(moduleFilePath, inputFrontmatter)
-          : inputFrontmatter
-        const isPostPage = moduleFilePath ? isPostMarkdownFile(moduleFilePath) : false
-        const pagePath = isPostPage && isPublishablePostData(frontmatterRecord)
-          ? postPublicPath(normalizeNumericPostId(frontmatterRecord)!)
-          : '/'
-        const ogType = isPostPage ? 'article' : 'website'
-
-        let image = typeof frontmatterRecord.image === 'string' ? frontmatterRecord.image.trim() : ''
-        if (!image && moduleFilePath)
-          image = extractImageFromMarkdownFile(moduleFilePath, frontmatterRecord) ?? ''
-        if (!image)
-          image = DEFAULT_OG_IMAGE
-        frontmatterRecord.image = image
-
-        const title = typeof frontmatterRecord.title === 'string' && frontmatterRecord.title.trim()
-          ? frontmatterRecord.title.trim()
-          : SITE_NAME
-        const description = typeof frontmatterRecord.description === 'string' && frontmatterRecord.description.trim()
-          ? frontmatterRecord.description.trim()
-          : SITE_NAME
-
-        const head = defaults(frontmatterRecord, options) as Record<string, unknown>
-        const rawMeta = (head as { meta?: unknown }).meta
-        const existingMeta: ShareMetaTag[] = Array.isArray(rawMeta)
-          ? rawMeta.flatMap((item) => {
-              if (!item || typeof item !== 'object')
-                return []
-
-              const candidate = item as {
-                content?: unknown
-                name?: unknown
-                property?: unknown
-              }
-
-              if (typeof candidate.content !== 'string')
-                return []
-
-              const tag: ShareMetaTag = { content: candidate.content }
-              if (typeof candidate.name === 'string')
-                tag.name = candidate.name
-              if (typeof candidate.property === 'string')
-                tag.property = candidate.property
-
-              return [tag]
-            })
-          : []
-        const absoluteImage = toAbsoluteSiteUrl(image)
-        const meta = mergeShareMeta(existingMeta, {
-          title,
-          description,
-          absoluteImage,
-          pagePath,
-          ogType
-        })
-
-        return {
-          head: {
-            ...head,
-            title: (head.title as string | undefined) ?? title,
-            meta
-          },
-          frontmatter: frontmatterRecord
-        }
       }
     }),
 
