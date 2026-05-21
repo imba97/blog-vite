@@ -55,6 +55,7 @@ export interface PostListEntry {
   date: string
   tags: string[]
   categories: string[]
+  image?: string
 }
 
 export function toPostListEntry(data: PostFrontmatter, path: string): PostListEntry {
@@ -63,7 +64,8 @@ export function toPostListEntry(data: PostFrontmatter, path: string): PostListEn
     title: String(data.title ?? ''),
     date: formatPostDateString(data.date),
     tags: normalizeStringList(data.tags),
-    categories: normalizeStringList(data.categories)
+    categories: normalizeStringList(data.categories),
+    image: typeof data.image === 'string' && data.image.trim() ? data.image.trim() : undefined
   }
 }
 

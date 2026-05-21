@@ -11,6 +11,7 @@ import {
   sortPostListEntriesByDateDesc
 } from '../src/content/post-policy'
 import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
+import { extractPostImage } from './seo/extract-post-image'
 
 interface GeneratedPostMeta {
   path: string
@@ -18,6 +19,7 @@ interface GeneratedPostMeta {
   date: string
   tags: string[]
   categories: string[]
+  image?: string
 }
 
 export async function generatePostsMeta(outFile = '.auto-generate/posts-meta.ts'): Promise<void> {
@@ -29,7 +31,7 @@ export async function generatePostsMeta(outFile = '.auto-generate/posts-meta.ts'
       continue
 
     const raw = await readFile(file, 'utf-8')
-    const { data } = matter(raw)
+    const { data, content } = matter(raw)
 
     if (!isPublishablePostData(data))
       continue
@@ -43,7 +45,8 @@ export async function generatePostsMeta(outFile = '.auto-generate/posts-meta.ts'
       title: String(data.title ?? ''),
       date: formatPostDateString(data.date),
       tags: normalizeStringList(data.tags),
-      categories: normalizeStringList(data.categories)
+      categories: normalizeStringList(data.categories),
+      image: extractPostImage(data as Record<string, unknown>, content) ?? undefined
     })
   }
 
