@@ -123,16 +123,5 @@ export default defineConfig({
   transformers: [
     transformerDirectives(),
     transformerVariantGroup()
-  ],
-  content: {
-    pipeline: {
-      include: [
-
-      ],
-      exclude: [
-        'node_modules/**/*',
-        'dist/**/*'
-      ]
-    }
-  }
+  ]
 })
