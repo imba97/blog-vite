@@ -130,8 +130,8 @@ importers:
         specifier: ^9.2.0
         version: 9.2.0(@types/markdown-it@14.1.2)(markdown-it@14.2.0)
       markdown-it-extra-link:
-        specifier: ^0.2.0
-        version: 0.2.0(markdown-it@14.2.0)
+        specifier: ^0.3.0
+        version: 0.3.0(markdown-it@14.2.0)
       markdown-it-github-alerts:
         specifier: ^1.0.1
         version: 1.0.1(markdown-it@14.2.0)
@@ -2740,8 +2740,8 @@ packages:
       '@types/markdown-it': '*'
       markdown-it: '*'
 
-  markdown-it-extra-link@0.2.0:
-    resolution: {integrity: sha512-pPRb8V9NJ/Fg2Pl2bpGyspGtIhoC360LGMxesqBnp4LWU5yeG0b4JWJZr8LxuQQlQSfI0J8NMXGCzdd3zEYqYA==}
+  markdown-it-extra-link@0.3.0:
+    resolution: {integrity: sha512-tXSmz09S4vE6oQ2oHb8D6DcYeZ1RNvHoe/i2kAZ3JEKKe5zIOwu5OW7roG6vBy58Z9EcClJhDpHwY00M8oh8NQ==}
     peerDependencies:
       markdown-it: ^14.1.0
 
@@ -6277,7 +6277,7 @@ snapshots:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.2.0
 
-  markdown-it-extra-link@0.2.0(markdown-it@14.2.0):
+  markdown-it-extra-link@0.3.0(markdown-it@14.2.0):
     dependencies:
       gray-matter: 4.0.3
       markdown-it: 14.2.0

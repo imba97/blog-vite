@@ -59,7 +59,7 @@
     "gray-matter": "^4.0.3",
     "markdown-it": "^14.2.0",
     "markdown-it-anchor": "^9.2.0",
-    "markdown-it-extra-link": "^0.2.0",
+    "markdown-it-extra-link": "^0.3.0",
     "markdown-it-github-alerts": "^1.0.1",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-table-of-contents": "^1.2.0",
