@@ -4,6 +4,7 @@ import { dirname } from 'node:path'
 import { Feed } from 'feed'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
+import MarkdownItExtraLinkRss from 'markdown-it-extra-link/rss'
 import { glob } from 'tinyglobby'
 import { postPublicPath } from '../src/constants/route-policy'
 import { isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
@@ -27,6 +28,9 @@ const markdown = MarkdownIt({
   html: true,
   breaks: true,
   linkify: true
+})
+markdown.use(MarkdownItExtraLinkRss, {
+  baseUrl: DOMAIN
 })
 
 async function run() {
