@@ -3,7 +3,7 @@
     class="pb-24 transition-colors duration-200"
     @click="handleMainClick"
   >
-    <section :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container']">
+    <section :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container', { 'prose-shell--article': isArticlePage }]">
       <RouterView />
     </section>
     <section
@@ -17,11 +17,18 @@
         <span>评论区域将在可见后加载…</span>
       </div>
     </section>
+    <PostImageViewer
+      v-model:show="postImageViewerShow"
+      v-model:active-index="postImageViewerActiveIndex"
+      :images="postImageViewerImages"
+    />
   </main>
 </template>
 
 <script lang="ts" setup>
-import { isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
+import PostImageViewer from '~/components/PostImageViewer.vue'
+import { usePostImageViewer } from '~/composables/use-post-image-viewer'
+import { isArticlePostRoute, isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
 import { navigateSpaOrExternal, shouldDelegateSpaNavigation } from '~/utils/spa-navigation'
 
 const route = useRoute()
@@ -29,8 +36,15 @@ const router = useRouter()
 const commentsShellRef = ref<HTMLElement | null>(null)
 const shouldMountComments = ref(false)
 let commentsObserver: IntersectionObserver | null = null
+const {
+  show: postImageViewerShow,
+  images: postImageViewerImages,
+  activeIndex: postImageViewerActiveIndex,
+  reset: resetPostImageViewer
+} = usePostImageViewer()
 
 const isPostPage = computed(() => isReadableLayoutRoute(route.path))
+const isArticlePage = computed(() => isArticlePostRoute(route.path))
 const shouldShowComments = computed(() => shouldShowTwikooSection(route.path))
 
 function handleMainClick(event: MouseEvent) {
@@ -85,6 +99,7 @@ function setupCommentsObserver() {
 watch(
   () => route.path,
   () => {
+    resetPostImageViewer()
     shouldMountComments.value = false
     nextTick(() => {
       setupCommentsObserver()
@@ -107,5 +122,6 @@ watch(shouldShowComments, () => {
 
 onUnmounted(() => {
   disposeCommentsObserver()
+  resetPostImageViewer()
 })
 </script>

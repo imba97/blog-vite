@@ -66,6 +66,10 @@ html.dark .prose pre.shiki span {
   margin: 1.8em 0;
 }
 
+.prose.prose-shell--article img:not(.no-preview) {
+  cursor: zoom-in;
+}
+
 .prose {
   --fg-light: #6b7280;
   --fg: #4b5563;
