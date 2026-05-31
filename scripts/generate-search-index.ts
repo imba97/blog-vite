@@ -4,6 +4,7 @@ import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { glob } from 'tinyglobby'
 import { postPublicPath } from '../src/constants/route-policy'
+import { comparePostDateDesc } from '../src/content/post-date'
 import {
   formatPostDateString,
   isPublishablePostData,
@@ -81,7 +82,7 @@ export async function generateSearchIndex(outDir: string): Promise<void> {
     })
   }
 
-  records.sort((a, b) => +new Date(b.date) - +new Date(a.date))
+  records.sort((a, b) => comparePostDateDesc(a.date, b.date))
 
   const metaOnly: SearchMetaRecord[] = records.map(({ text: _t, ...m }) => m)
 

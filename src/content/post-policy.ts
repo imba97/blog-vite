@@ -1,5 +1,6 @@
 import type { PostFrontmatter } from '../types/post-frontmatter'
 import { postPublicPath } from '../constants/route-policy'
+import { comparePostDateDesc, normalizePostDateString } from './post-date'
 
 export function normalizeNumericPostId(data: Record<string, unknown>): string | null {
   if (data.id == null || data.id === '')
@@ -19,13 +20,7 @@ export function normalizeStringList(value: unknown): string[] {
 }
 
 export function formatPostDateString(value: unknown): string {
-  if (value == null)
-    return ''
-  if (typeof value === 'string')
-    return value
-  if (value instanceof Date)
-    return value.toISOString()
-  return String(value)
+  return normalizePostDateString(value)
 }
 
 /**
@@ -70,5 +65,5 @@ export function toPostListEntry(data: PostFrontmatter, path: string): PostListEn
 }
 
 export function sortPostListEntriesByDateDesc<T extends { date: string }>(entries: T[]): T[] {
-  return [...entries].sort((a, b) => +new Date(b.date) - +new Date(a.date))
+  return [...entries].sort((a, b) => comparePostDateDesc(a.date, b.date))
 }

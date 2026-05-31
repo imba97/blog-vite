@@ -28,7 +28,7 @@
                   <span>{{ post.title }}</span>
                 </h2>
                 <time class="shrink-0 text-xs list-meta tracking-wide font-mono sm:text-sm" :datetime="post.date">
-                  {{ dayjs(post.date).format('YYYY-MM-DD') }}
+                  {{ formatPostDateYmdInShanghai(post.date) }}
                 </time>
               </div>
               <slot name="post-extra" :post="post" />
@@ -83,8 +83,8 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion-v'
+import { formatPostDateYmdInShanghai } from '~/content/post-date'
 import { usePostsStore } from '~/store/post'
 import Pagination from './Pagination.vue'
 

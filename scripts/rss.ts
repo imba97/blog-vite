@@ -7,7 +7,8 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItExtraLinkRss from 'markdown-it-extra-link/rss'
 import { glob } from 'tinyglobby'
 import { postPublicPath } from '../src/constants/route-policy'
-import { isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
+import { comparePostDateDesc, parsePostDateToTimestamp } from '../src/content/post-date'
+import { formatPostDateString, isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
 import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
 
 const DOMAIN = 'https://imba97.com'
@@ -50,7 +51,7 @@ async function buildBlogRSS() {
       rss: 'https://imba97.com/feed.xml'
     }
   }
-  const posts = (await Promise.all(
+  const rssRecords = (await Promise.all(
     files.filter(i => i !== POSTS_ROOT_INDEX_FILE)
       .map(async (i) => {
         const raw = await readFile(i, 'utf-8')
@@ -69,19 +70,32 @@ async function buildBlogRSS() {
           ? DOMAIN + data.image
           : data.image
 
-        return {
-          ...data,
-          id: link,
-          link,
-          image,
-          date: new Date(data.date as string | Date),
-          content: html,
-          author: [AUTHOR]
-        } as Item
-      })
-  )).filter((x): x is Item => x != null)
+        const normalizedDate = formatPostDateString(data.date)
+        const parsedTimestamp = parsePostDateToTimestamp(normalizedDate)
+        if (Number.isNaN(parsedTimestamp)) {
+          console.warn(`[rss] Skip post with invalid date: ${i} (${normalizedDate || 'empty'})`)
+          return null
+        }
 
-  posts.sort((a, b) => +new Date(b.date as Date) - +new Date(a.date as Date))
+        const postDate = new Date(parsedTimestamp)
+
+        return {
+          dateRaw: normalizedDate,
+          item: {
+            ...data,
+            id: link,
+            link,
+            image,
+            date: postDate,
+            content: html,
+            author: [AUTHOR]
+          } as Item
+        }
+      })
+  )).filter((x): x is { dateRaw: string, item: Item } => x != null)
+
+  rssRecords.sort((a, b) => comparePostDateDesc(a.dateRaw, b.dateRaw))
+  const posts = rssRecords.map(record => record.item)
 
   await writeFeed('feed', options, posts)
 }

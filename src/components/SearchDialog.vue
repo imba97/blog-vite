@@ -308,7 +308,6 @@ html.dark .tag-chip--primed {
 </template>
 
 <script lang="ts" setup>
-import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion-v'
 import AutoLink from '~/components/AutoLink.vue'
 import {
@@ -317,6 +316,7 @@ import {
 } from '~/composables/site-search-worker'
 import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { useSiteSearchQuery } from '~/composables/use-site-search-query'
+import { formatPostDateZhInShanghai } from '~/content/post-date'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 
 const overlay = useSearchOverlayStore()
@@ -383,7 +383,7 @@ function onSearchFieldShellClick(e: MouseEvent) {
 
 function formatDate(iso: string) {
   try {
-    return dayjs(iso).format('ll')
+    return formatPostDateZhInShanghai(iso)
   }
   catch {
     return iso
