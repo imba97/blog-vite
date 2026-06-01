@@ -8,7 +8,7 @@
           aria-label="返回首页"
           @click="goHome"
         >
-          <img src="/assets/images/favicon.png" alt="站点图标" class="size-10 shrink-0 object-cover">
+          <img :src="currentFavicon" alt="站点图标" class="size-10 shrink-0 object-cover">
         </button>
 
         <div
@@ -104,12 +104,14 @@ import { useMobileNavDrawerReturnFocusBus } from '~/event-bus/mobile-nav'
 import { usePostsStore } from '~/store/post'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 import { isArticlePostRoute } from '~/utils/route-page-kind'
+import { getCurrentFavicon } from '~/utils/seasonal-avatar'
 
 const router = useRouter()
 const route = useRoute()
 const postsStore = usePostsStore()
 const searchOverlay = useSearchOverlayStore()
 const isPostPage = computed(() => isArticlePostRoute(route.path))
+const currentFavicon = computed(() => getCurrentFavicon())
 const isDrawerOpen = ref(false)
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
 const searchButtonRef = ref<HTMLButtonElement | null>(null)
