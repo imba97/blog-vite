@@ -1,4 +1,4 @@
-import { getCurrentFavicon } from '../seasonal-avatar'
+import { DEFAULT_FAVICON } from '../seasonal-avatar'
 
 const SITE_NAME = 'imba97 Blog'
 const SITE_URL = 'https://imba97.com'
@@ -15,6 +15,7 @@ function toAbsoluteSiteUrl(input: string): string {
 export interface ShareMetaInput {
   path: string
   frontmatter?: Record<string, unknown>
+  defaultImage?: string
 }
 
 function getStringField(value: unknown): string {
@@ -24,7 +25,8 @@ function getStringField(value: unknown): string {
 export function createShareMeta(input: ShareMetaInput) {
   const title = getStringField(input.frontmatter?.title) || SITE_NAME
   const description = getStringField(input.frontmatter?.description) || SITE_NAME
-  const image = getStringField(input.frontmatter?.image) || getCurrentFavicon()
+  const defaultImage = getStringField(input.defaultImage) || DEFAULT_FAVICON
+  const image = getStringField(input.frontmatter?.image) || defaultImage
   const absoluteImage = toAbsoluteSiteUrl(image)
   const pagePath = input.path || '/'
   const ogType = /^\/post\/\d+$/.test(pagePath) ? 'article' : 'website'

@@ -104,14 +104,14 @@ import { useMobileNavDrawerReturnFocusBus } from '~/event-bus/mobile-nav'
 import { usePostsStore } from '~/store/post'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 import { isArticlePostRoute } from '~/utils/route-page-kind'
-import { getCurrentFavicon } from '~/utils/seasonal-avatar'
+import { DEFAULT_FAVICON, getCurrentFavicon } from '~/utils/seasonal-avatar'
 
 const router = useRouter()
 const route = useRoute()
 const postsStore = usePostsStore()
 const searchOverlay = useSearchOverlayStore()
 const isPostPage = computed(() => isArticlePostRoute(route.path))
-const currentFavicon = computed(() => getCurrentFavicon())
+const currentFavicon = ref(DEFAULT_FAVICON)
 const isDrawerOpen = ref(false)
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
 const searchButtonRef = ref<HTMLButtonElement | null>(null)
@@ -119,6 +119,10 @@ const searchButtonRef = ref<HTMLButtonElement | null>(null)
 const returnFocusBus = useMobileNavDrawerReturnFocusBus()
 returnFocusBus.on(() => {
   menuButtonRef.value?.focus()
+})
+
+onMounted(() => {
+  currentFavicon.value = getCurrentFavicon()
 })
 
 const {
