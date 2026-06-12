@@ -14,26 +14,38 @@ export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
 
     switch (event) {
       case 'page_view':
-        window.gtag('config', GA_MEASUREMENT_ID, {
-          page_path: params.page_path,
-          page_title: params.page_title
-        })
+        this.sendPageView(params as AnalyticsEventPayload['page_view'])
         break
       case 'article_click':
-        window.gtag('event', 'article_click', {
-          post_path: params.post_path,
-          post_title: params.post_title,
-          source: params.source
-        })
+        this.sendArticleClick(params as AnalyticsEventPayload['article_click'])
         break
       case 'search':
-        window.gtag('event', 'search', {
-          search_term: params.keyword,
-          tag: params.tag,
-          category: params.category,
-          result_count: params.result_count
-        })
+        this.sendSearch(params as AnalyticsEventPayload['search'])
         break
     }
+  }
+
+  private sendPageView(params: AnalyticsEventPayload['page_view']) {
+    window.gtag!('config', GA_MEASUREMENT_ID, {
+      page_path: params.page_path,
+      page_title: params.page_title
+    })
+  }
+
+  private sendArticleClick(params: AnalyticsEventPayload['article_click']) {
+    window.gtag!('event', 'article_click', {
+      post_path: params.post_path,
+      post_title: params.post_title,
+      source: params.source
+    })
+  }
+
+  private sendSearch(params: AnalyticsEventPayload['search']) {
+    window.gtag!('event', 'search', {
+      search_term: params.keyword,
+      tag: params.tag,
+      category: params.category,
+      result_count: params.result_count
+    })
   }
 }
