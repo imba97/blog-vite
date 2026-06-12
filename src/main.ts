@@ -7,7 +7,7 @@ import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
 import { setupCopyCodeDelegation } from './composables/use-copy-code'
-import { initAnalytics } from './utils/analytics/51.la'
+import { initAnalytics } from './utils/analytics'
 import { isPostListRoute } from './utils/route-page-kind'
 
 import './assets/styles/main.css'
@@ -32,7 +32,7 @@ export const createApp = ViteSSG(
     app.use(createPinia())
 
     if (!import.meta.env.SSR) {
-      initAnalytics()
+      initAnalytics(router)
 
       const disposeCopyCode = setupCopyCodeDelegation()
       if (import.meta.hot)
