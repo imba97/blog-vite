@@ -1,11 +1,9 @@
 <template>
   <div mt-8 gap-6 grid="~ cols-1 md:cols-2">
-    <a
+    <AutoLink
       v-for="item in list"
       :key="item.url"
       :href="item.url"
-      target="_blank"
-      rel="noopener noreferrer"
       important="decoration-none"
       :aria-label="`访问友链：${item.name}`"
       class="group block text-inherit b-b-none! focus-ring-primary hover:b-b-none!"
@@ -44,11 +42,13 @@
         </div>
         <span class="i-carbon-arrow-up-right shrink-0 text-gray-400 opacity-0 transition-all duration-200 -translate-x-0.5 group-hover:translate-x-0 dark:text-gray-500 group-hover:opacity-80" aria-hidden="true" />
       </div>
-    </a>
+    </AutoLink>
   </div>
 </template>
 
 <script lang="ts" setup>
+import AutoLink from '~/components/AutoLink.vue'
+
 const failedAvatars = ref<Record<string, boolean>>({})
 
 function handleAvatarError(url: string) {

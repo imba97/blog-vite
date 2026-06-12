@@ -28,8 +28,10 @@
 <script lang="ts" setup>
 import PostImageViewer from '~/components/PostImageViewer.vue'
 import { usePostImageViewer } from '~/composables/use-post-image-viewer'
+import { tracker } from '~/utils/analytics'
 import { isArticlePostRoute, isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
 import { navigateSpaOrExternal, shouldDelegateSpaNavigation } from '~/utils/spa-navigation'
+import { isExternalUrl } from '~/utils/url'
 
 const route = useRoute()
 const router = useRouter()
@@ -56,6 +58,20 @@ function handleMainClick(event: MouseEvent) {
   const href = anchor.getAttribute('href')
   if (!href)
     return
+
+  if (isExternalUrl(href)) {
+    if (
+      !event.defaultPrevented
+      && event.button === 0
+      && !event.metaKey
+      && !event.ctrlKey
+      && !event.shiftKey
+      && !event.altKey
+    ) {
+      tracker.outboundClick({ url: href })
+    }
+    return
+  }
 
   if (!shouldDelegateSpaNavigation(event, anchor, href))
     return

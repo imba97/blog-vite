@@ -15,6 +15,13 @@ class Tracker {
     this.track('search', params)
   }
 
+  outboundClick(params: Pick<AnalyticsEventPayload['outbound_click'], 'url'>) {
+    this.track('outbound_click', {
+      url: params.url,
+      page_path: typeof window !== 'undefined' ? window.location.pathname : undefined
+    })
+  }
+
   init(router: Router) {
     for (const adapter of AnalyticsAdapter.getRegistered())
       adapter.init(router)

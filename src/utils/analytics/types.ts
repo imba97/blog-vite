@@ -1,4 +1,4 @@
-export type AnalyticsEventName = 'page_view' | 'post_click' | 'search'
+export type AnalyticsEventName = 'page_view' | 'post_click' | 'search' | 'outbound_click'
 
 export interface AnalyticsEventPayload {
   page_view: {
@@ -15,6 +15,10 @@ export interface AnalyticsEventPayload {
     tag?: string
     category?: string
     result_count: number
+  }
+  outbound_click: {
+    url: string
+    page_path?: string
   }
 }
 

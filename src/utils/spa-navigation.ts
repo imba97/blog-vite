@@ -1,4 +1,5 @@
 import type { Router } from 'vue-router'
+import { tracker } from '~/utils/analytics'
 import { isExternalUrl } from '~/utils/url'
 
 const MAILTO_TEL_RE = /^(?:mailto:|tel:)/i
@@ -28,6 +29,7 @@ export function shouldDelegateSpaNavigation(
 }
 
 export function openExternalHref(href: string) {
+  tracker.outboundClick({ url: href })
   window.open(href, '_blank', 'noopener,noreferrer')
 }
 

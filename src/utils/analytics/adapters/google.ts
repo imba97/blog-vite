@@ -22,6 +22,9 @@ export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
       case 'search':
         this.sendSearch(params as AnalyticsEventPayload['search'])
         break
+      case 'outbound_click':
+        this.sendOutboundClick(params as AnalyticsEventPayload['outbound_click'])
+        break
     }
   }
 
@@ -46,6 +49,13 @@ export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
       tag: params.tag,
       category: params.category,
       result_count: params.result_count
+    })
+  }
+
+  private sendOutboundClick(params: AnalyticsEventPayload['outbound_click']) {
+    window.gtag!('event', 'outbound_click', {
+      link_url: params.url,
+      page_path: params.page_path
     })
   }
 }

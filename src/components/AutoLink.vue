@@ -38,5 +38,6 @@ function navigate(event: MouseEvent) {
   event.preventDefault()
 
   navigateSpaOrExternal(router, props.href)
+  event.stopPropagation()
 }
 </script>
