@@ -263,7 +263,7 @@ html.dark .tag-chip--primed {
                       <AutoLink
                         :href="item.path"
                         class="group search-hit-link min-w-0 focus-ring-primary"
-                        @click="close"
+                        @click="onSearchResultClick(item)"
                       >
                         <div class="min-w-0 flex flex-col max-sm:gap-1.5 sm:gap-1">
                           <div class="min-w-0 break-words search-hit-title leading-snug sm:leading-normal">
@@ -318,6 +318,7 @@ import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-
 import { useSiteSearchQuery } from '~/composables/use-site-search-query'
 import { formatPostDateZhInShanghai } from '~/content/post-date'
 import { useSearchOverlayStore } from '~/store/search-overlay'
+import { tracker } from '~/utils/analytics'
 
 const overlay = useSearchOverlayStore()
 const prefersReducedMotion = usePreferredReducedMotion()
@@ -392,6 +393,15 @@ function formatDate(iso: string) {
 
 function close() {
   overlay.close()
+}
+
+function onSearchResultClick(item: { path: string, title: string }) {
+  tracker.postClick({
+    post_path: item.path,
+    post_title: item.title,
+    source: 'search'
+  })
+  close()
 }
 
 watch(() => overlay.isOpen, (open) => {

@@ -1,11 +1,18 @@
 import type { Router } from 'vue-router'
-import { initLaAnalytics } from './51.la'
-import { initGoogleAnalytics } from './google'
+import { GoogleAnalyticsAdapter } from './adapters/google'
+import { La51AnalyticsAdapter } from './adapters/la51'
+import { tracker } from './tracker'
+
+export { AnalyticsAdapter } from './adapter'
+export type { AnalyticsAdapterClass } from './adapter'
+export { tracker } from './tracker'
+export type { AnalyticsEventName, AnalyticsEventPayload } from './types'
 
 export function initAnalytics(router: Router) {
   if (!import.meta.env.PROD)
     return
 
-  initLaAnalytics()
-  initGoogleAnalytics(router)
+  GoogleAnalyticsAdapter.register()
+  La51AnalyticsAdapter.register()
+  tracker.init(router)
 }

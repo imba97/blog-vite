@@ -1,0 +1,32 @@
+export type AnalyticsEventName = 'page_view' | 'article_click' | 'search'
+
+export interface AnalyticsEventPayload {
+  page_view: {
+    page_path: string
+    page_title?: string
+  }
+  article_click: {
+    post_path: string
+    post_title: string
+    source: 'list' | 'search'
+  }
+  search: {
+    keyword: string
+    tag?: string
+    category?: string
+    result_count: number
+  }
+}
+
+export interface LaAnalytics {
+  init: (options: { id: string, ck: string, hashMode?: boolean }) => void
+  track?: (event: string, params?: Record<string, unknown>) => void
+}
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[]
+    gtag?: (...args: unknown[]) => void
+    LA?: LaAnalytics
+  }
+}

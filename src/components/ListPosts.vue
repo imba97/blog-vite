@@ -20,6 +20,7 @@
             :to="post.path"
             class="group block rounded-xl px-3 py-2.5 transition-colors duration-200 -mx-1.5 focus-ring-primary"
             :aria-label="`阅读文章：${post.title}`"
+            @click="trackArticleClickFromList(post)"
           >
             <article class="min-h-10 space-y-0.5">
               <div class="flex items-start justify-between gap-4 sm:items-center">
@@ -86,6 +87,7 @@
 import { AnimatePresence, motion } from 'motion-v'
 import { formatPostDateYmdInShanghai } from '~/content/post-date'
 import { usePostsStore } from '~/store/post'
+import { tracker } from '~/utils/analytics'
 import Pagination from './Pagination.vue'
 
 const postsStore = usePostsStore()
@@ -126,5 +128,13 @@ const listMotion = computed(() => ({
 
 function changePage(newPage: number) {
   postsStore.setPage(newPage)
+}
+
+function trackArticleClickFromList(post: { path: string, title: string }) {
+  tracker.postClick({
+    post_path: post.path,
+    post_title: post.title,
+    source: 'list'
+  })
 }
 </script>

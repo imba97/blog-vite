@@ -5,6 +5,7 @@ import {
   ensureSiteSearchWorker,
   searchLatestViaWorker
 } from '~/composables/site-search-worker'
+import { tracker } from '~/utils/analytics'
 import {
   emptyScope,
   filterSuggestCandidates,
@@ -303,6 +304,12 @@ export function useSiteSearchQuery() {
         return
 
       hits.value = result
+      tracker.search({
+        keyword: kw,
+        tag,
+        category,
+        result_count: result.length
+      })
     }
     catch {
       if (gen !== searchGeneration)
