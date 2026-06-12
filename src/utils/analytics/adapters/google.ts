@@ -16,8 +16,8 @@ export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
       case 'page_view':
         this.sendPageView(params as AnalyticsEventPayload['page_view'])
         break
-      case 'article_click':
-        this.sendArticleClick(params as AnalyticsEventPayload['article_click'])
+      case 'post_click':
+        this.sendPostClick(params as AnalyticsEventPayload['post_click'])
         break
       case 'search':
         this.sendSearch(params as AnalyticsEventPayload['search'])
@@ -32,8 +32,8 @@ export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
     })
   }
 
-  private sendArticleClick(params: AnalyticsEventPayload['article_click']) {
-    window.gtag!('event', 'article_click', {
+  private sendPostClick(params: AnalyticsEventPayload['post_click']) {
+    window.gtag!('event', 'post_click', {
       post_path: params.post_path,
       post_title: params.post_title,
       source: params.source

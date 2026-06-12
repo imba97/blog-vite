@@ -1,11 +1,11 @@
-export type AnalyticsEventName = 'page_view' | 'article_click' | 'search'
+export type AnalyticsEventName = 'page_view' | 'post_click' | 'search'
 
 export interface AnalyticsEventPayload {
   page_view: {
     page_path: string
     page_title?: string
   }
-  article_click: {
+  post_click: {
     post_path: string
     post_title: string
     source: 'list' | 'search'

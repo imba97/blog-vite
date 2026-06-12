@@ -7,8 +7,8 @@ class Tracker {
     this.track('page_view', params)
   }
 
-  postClick(params: AnalyticsEventPayload['article_click']) {
-    this.track('article_click', params)
+  postClick(params: AnalyticsEventPayload['post_click']) {
+    this.track('post_click', params)
   }
 
   search(params: AnalyticsEventPayload['search']) {
