@@ -27,6 +27,11 @@ to = "/post/:id"
 status = 301
 
 [[redirects]]
+from = "/favicon.png"
+to = "/assets/images/favicon.png"
+status = 301
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
