@@ -1,15 +1,14 @@
 <template>
   <a
     :href="props.href"
-    pr fyc gap-1
-    class="[&:hover_.external-icon]:(opacity-100)"
+    fyc gap-1
+    :class="showExternalIcon ? 'pr [&:hover_.external-icon]:(opacity-100)' : undefined"
     @click="navigate"
   >
     <slot />
     <span
-      v-show="isExternalUrl(props.href)"
+      v-if="showExternalIcon && isExternalUrl(props.href)"
       class="external-icon"
-
       i-iconamoon-link-external-duotone pa right--1 top--1 size-4 bg-primary opacity-0 transition-opacity duration-300 dark:bg-primary-light
     />
   </a>
@@ -22,8 +21,11 @@ import { isExternalUrl } from '~/utils/url'
 const props = withDefaults(
   defineProps<{
     href: string
+    showExternalIcon?: boolean
   }>(),
-  {}
+  {
+    showExternalIcon: true
+  }
 )
 
 const router = useRouter()

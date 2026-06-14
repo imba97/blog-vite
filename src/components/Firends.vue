@@ -4,6 +4,7 @@
       v-for="item in list"
       :key="item.url"
       :href="item.url"
+      :show-external-icon="false"
       important="decoration-none"
       :aria-label="`访问友链：${item.name}`"
       class="group block text-inherit b-b-none! focus-ring-primary hover:b-b-none!"
