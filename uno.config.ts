@@ -11,6 +11,9 @@ import {
   transformerVariantGroup
 } from 'unocss'
 import { colors } from './scripts/unocss/colors'
+import { navbar } from './src/configs/nav'
+
+const navIconSafelist = navbar.flatMap(({ icon }) => icon.split(/\s+/))
 
 const breakpoints = {
   'xs': '320px',
@@ -23,6 +26,7 @@ const breakpoints = {
 }
 
 export default defineConfig({
+  safelist: navIconSafelist,
   theme: {
     colors,
     breakpoints
