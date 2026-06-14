@@ -12,7 +12,8 @@ export class La51AnalyticsAdapter extends AnalyticsAdapter {
     window.LA.init({
       id: LA_SITE_ID,
       ck: LA_SITE_ID,
-      hashMode: true
+      hashMode: true,
+      autoTrack: true
     })
   }
 

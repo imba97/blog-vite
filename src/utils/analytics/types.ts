@@ -23,7 +23,7 @@ export interface AnalyticsEventPayload {
 }
 
 export interface LaAnalytics {
-  init: (options: { id: string, ck: string, hashMode?: boolean }) => void
+  init: (options: { id: string, ck: string, hashMode?: boolean, autoTrack?: boolean }) => void
   track?: (event: string, params?: Record<string, unknown>) => void
 }
 
