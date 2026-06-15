@@ -1,17 +1,8 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
-import { glob } from 'tinyglobby'
-import { postPublicPath } from '../src/constants/route-policy'
-import { comparePostDateDesc } from '../src/content/post-date'
-import {
-  formatPostDateString,
-  isPublishablePostData,
-  normalizeNumericPostId,
-  normalizeStringList
-} from '../src/content/post-policy'
-import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
+import { normalizeStringList } from '../src/content/post-policy'
+import { parsePostFiles } from './parse-post-files'
 
 const markdown = MarkdownIt({
   html: true,
@@ -52,37 +43,18 @@ function markdownToPlain(content: string): string {
 
 /** 与 post store + SSG includedRoutes 对齐：非 draft、有 date、数字 id */
 export async function generateSearchIndex(outDir: string): Promise<void> {
-  const files = await glob(POSTS_CONTENT_GLOB)
-  const records: SearchFullRecord[] = []
+  const posts = await parsePostFiles()
 
-  for (const file of files) {
-    if (file === POSTS_ROOT_INDEX_FILE)
-      continue
-
-    const raw = await readFile(file, 'utf-8')
-    const { data, content } = matter(raw)
-
-    if (!isPublishablePostData(data))
-      continue
-
-    const idStr = normalizeNumericPostId(data as Record<string, unknown>)!
-    const path = postPublicPath(idStr)
-    const meta: SearchMetaRecord = {
-      id: idStr,
-      path,
-      title: String(data.title ?? ''),
-      date: formatPostDateString(data.date),
-      tags: normalizeStringList(data.tags),
-      categories: normalizeStringList(data.categories)
-    }
-
-    records.push({
-      ...meta,
-      text: markdownToPlain(content)
-    })
-  }
-
-  records.sort((a, b) => comparePostDateDesc(a.date, b.date))
+  // parsePostFiles 已按日期降序排列，并发读取提升构建性能
+  const records: SearchFullRecord[] = posts.map(({ idStr, path, data, content, date }) => ({
+    id: idStr,
+    path,
+    title: String(data.title ?? ''),
+    date,
+    tags: normalizeStringList(data.tags),
+    categories: normalizeStringList(data.categories),
+    text: markdownToPlain(content)
+  }))
 
   const metaOnly: SearchMetaRecord[] = records.map(({ text: _t, ...m }) => m)
 

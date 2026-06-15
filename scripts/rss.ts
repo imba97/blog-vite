@@ -1,15 +1,11 @@
 import type { FeedOptions, Item } from 'feed'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { Feed } from 'feed'
-import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import MarkdownItExtraLinkRss from 'markdown-it-extra-link/rss'
-import { glob } from 'tinyglobby'
-import { postPublicPath } from '../src/constants/route-policy'
-import { comparePostDateDesc, parsePostDateToTimestamp } from '../src/content/post-date'
-import { formatPostDateString, isPublishablePostData, normalizeNumericPostId } from '../src/content/post-policy'
-import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
+import { parsePostDateToTimestamp } from '../src/content/post-date'
+import { parsePostFiles } from './parse-post-files'
 
 const DOMAIN = 'https://imba97.com'
 const FOLLOW_CHALLENGE_FEED_ID = '41798923170845756'
@@ -34,14 +30,10 @@ markdown.use(MarkdownItExtraLinkRss, {
   baseUrl: DOMAIN
 })
 
-async function run() {
-  await buildBlogRSS()
-}
-
 async function buildBlogRSS() {
-  const files = await glob(POSTS_CONTENT_GLOB)
+  const posts = await parsePostFiles()
 
-  const options = {
+  const options: FeedOptions = {
     title: 'imba97',
     description: 'imba97 Blog',
     id: 'https://imba97.com/',
@@ -51,53 +43,33 @@ async function buildBlogRSS() {
       rss: 'https://imba97.com/feed.xml'
     }
   }
-  const rssRecords = (await Promise.all(
-    files.filter(i => i !== POSTS_ROOT_INDEX_FILE)
-      .map(async (i) => {
-        const raw = await readFile(i, 'utf-8')
-        const { data, content } = matter(raw)
 
-        if (!isPublishablePostData(data))
-          return null
+  const items: Item[] = []
+  for (const { file, path, data, content, date } of posts) {
+    const parsedTimestamp = parsePostDateToTimestamp(date)
+    if (Number.isNaN(parsedTimestamp)) {
+      console.warn(`[rss] Skip post with invalid date: ${file} (${date || 'empty'})`)
+      continue
+    }
 
-        const idStr = normalizeNumericPostId(data as Record<string, unknown>)!
-        const link = DOMAIN + postPublicPath(idStr)
+    const link = DOMAIN + path
+    const html = markdown.render(content).replace('src="/', `src="${DOMAIN}/`)
+    const image = typeof data.image === 'string' && data.image.startsWith('/')
+      ? DOMAIN + data.image
+      : data.image
 
-        const html = markdown.render(content)
-          .replace('src="/', `src="${DOMAIN}/`)
+    items.push({
+      ...data,
+      id: link,
+      link,
+      image,
+      date: new Date(parsedTimestamp),
+      content: html,
+      author: [AUTHOR]
+    } as Item)
+  }
 
-        const image = typeof data.image === 'string' && data.image.startsWith('/')
-          ? DOMAIN + data.image
-          : data.image
-
-        const normalizedDate = formatPostDateString(data.date)
-        const parsedTimestamp = parsePostDateToTimestamp(normalizedDate)
-        if (Number.isNaN(parsedTimestamp)) {
-          console.warn(`[rss] Skip post with invalid date: ${i} (${normalizedDate || 'empty'})`)
-          return null
-        }
-
-        const postDate = new Date(parsedTimestamp)
-
-        return {
-          dateRaw: normalizedDate,
-          item: {
-            ...data,
-            id: link,
-            link,
-            image,
-            date: postDate,
-            content: html,
-            author: [AUTHOR]
-          } as Item
-        }
-      })
-  )).filter((x): x is { dateRaw: string, item: Item } => x != null)
-
-  rssRecords.sort((a, b) => comparePostDateDesc(a.dateRaw, b.dateRaw))
-  const posts = rssRecords.map(record => record.item)
-
-  await writeFeed('feed', options, posts)
+  await writeFeed('feed', options, items)
 }
 
 async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
@@ -106,8 +78,8 @@ async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
   options.favicon = 'https://imba97.com/favicon.png'
 
   const feed = new Feed(options)
-
-  items.forEach(item => feed.addItem(item))
+  for (const item of items)
+    feed.addItem(item)
 
   await mkdir(dirname(`./dist/${name}`), { recursive: true })
   const rssXml = injectFollowChallengeToRssRoot(feed.rss2())
@@ -123,4 +95,4 @@ function injectFollowChallengeToRssRoot(xml: string) {
   return xml.replace('<channel>', `${FOLLOW_CHALLENGE_XML}\n<channel>`)
 }
 
-run()
+buildBlogRSS()

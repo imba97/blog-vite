@@ -11,41 +11,33 @@ export function setupCopyCodeDelegation(options: CopyCodeOptions = {}): () => vo
 
   const timeoutIdMap: WeakMap<HTMLElement, ReturnType<typeof setTimeout>> = new WeakMap()
 
-  function copyToClipboard(text: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(resolve).catch(fallback)
+  async function copyToClipboard(text: string): Promise<void> {
+    // 优先使用现代 Clipboard API（需安全上下文）
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text)
+        return
       }
-      else {
-        fallback()
+      catch {
+        // Clipboard API 失败（权限被拒等），回退到旧方案
       }
+    }
 
-      function fallback() {
-        try {
-          const element = document.createElement('textarea')
-          element.value = text
-          element.style.position = 'fixed'
-          element.style.left = '-9999px'
-          element.style.top = '-9999px'
+    // 安全上下文不可用或 API 失败时的兼容回退
+    const element = document.createElement('textarea')
+    element.value = text
+    element.style.position = 'fixed'
+    element.style.left = '-9999px'
+    element.style.top = '-9999px'
 
-          document.body.appendChild(element)
-          element.select()
+    document.body.appendChild(element)
+    element.select()
 
-          const success = document.execCommand('copy')
-          document.body.removeChild(element)
+    const success = document.execCommand('copy')
+    document.body.removeChild(element)
 
-          if (success) {
-            resolve()
-          }
-          else {
-            reject(new Error('Copy command failed'))
-          }
-        }
-        catch (error) {
-          reject(error)
-        }
-      }
-    })
+    if (!success)
+      throw new Error('Copy command failed')
   }
 
   function handleCopy(button: HTMLElement) {

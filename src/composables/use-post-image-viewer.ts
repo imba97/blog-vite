@@ -34,7 +34,6 @@ function shouldIgnoreImage(img: HTMLImageElement): boolean {
 function collectImages(container: HTMLElement): CollectableImage[] {
   const images = Array.from(container.querySelectorAll('img'))
   return images
-    .filter((img): img is HTMLImageElement => img instanceof HTMLImageElement)
     .filter(img => !shouldIgnoreImage(img))
     .map((img) => {
       const item = resolveImageItem(img)

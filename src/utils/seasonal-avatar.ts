@@ -75,10 +75,6 @@ function warnInvalidRule(ruleName: string, reason: string): void {
   console.warn(`[seasonal-avatar] invalid rule "${ruleName}": ${reason}`)
 }
 
-function unique(list: string[]): string[] {
-  return [...new Set(list)]
-}
-
 function hashString(input: string): number {
   let hash = 2166136261
   for (let i = 0; i < input.length; i += 1) {
@@ -330,7 +326,7 @@ export function getActiveSeasonalAvatars(now = new Date()): string[] {
   const matched = compiledRules.flatMap((rule) => {
     return isCompiledRuleActive(rule, currentMoment) ? [rule.avatar] : []
   })
-  return unique(matched)
+  return [...new Set(matched)]
 }
 
 export function isChildrensDayInShanghai(now = new Date()): boolean {

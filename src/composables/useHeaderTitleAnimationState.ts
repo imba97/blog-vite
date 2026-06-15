@@ -55,10 +55,14 @@ interface UseHeaderTitleAnimationStateOptions {
 export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationStateOptions) {
   const prefersReducedMotion = usePreferredReducedMotion()
   const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
-  const barEnterMs = computed(() => shouldReduceMotion.value ? 90 : HEADER_TITLE_BAR_MS.enter)
-  const barLeaveMs = computed(() => shouldReduceMotion.value ? 80 : HEADER_TITLE_BAR_MS.leave)
-  const titleEnterMs = computed(() => shouldReduceMotion.value ? 100 : HEADER_TITLE_TEXT_MS.enter)
-  const titleLeaveMs = computed(() => shouldReduceMotion.value ? 90 : HEADER_TITLE_TEXT_MS.leave)
+
+  /** 各阶段动画时长（ms），随减少动画喜好统一计算 */
+  const motionMs = computed(() => ({
+    barEnter: shouldReduceMotion.value ? 90 : HEADER_TITLE_BAR_MS.enter,
+    barLeave: shouldReduceMotion.value ? 80 : HEADER_TITLE_BAR_MS.leave,
+    titleEnter: shouldReduceMotion.value ? 100 : HEADER_TITLE_TEXT_MS.enter,
+    titleLeave: shouldReduceMotion.value ? 90 : HEADER_TITLE_TEXT_MS.leave
+  }))
 
   const resolvedHeaderBarMotion = computed(() => ({
     initial: shouldReduceMotion.value
@@ -67,12 +71,12 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: barEnterMs.value / 1000, ease: [0, 0, 0.2, 1] as const }
+      transition: { duration: motionMs.value.barEnter / 1000, ease: [0, 0, 0.2, 1] as const }
     },
     exit: {
       opacity: 0,
       y: shouldReduceMotion.value ? 0 : 12,
-      transition: { duration: barLeaveMs.value / 1000, ease: [0.4, 0, 1, 1] as const }
+      transition: { duration: motionMs.value.barLeave / 1000, ease: [0.4, 0, 1, 1] as const }
     }
   }))
 
@@ -83,12 +87,12 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     animate: {
       opacity: 1,
       x: 0,
-      transition: { duration: titleEnterMs.value / 1000, ease: [0, 0, 0.2, 1] as const }
+      transition: { duration: motionMs.value.titleEnter / 1000, ease: [0, 0, 0.2, 1] as const }
     },
     exit: {
       opacity: 0,
       x: shouldReduceMotion.value ? 0 : -18,
-      transition: { duration: titleLeaveMs.value / 1000, ease: [0.4, 0, 1, 1] as const }
+      transition: { duration: motionMs.value.titleLeave / 1000, ease: [0.4, 0, 1, 1] as const }
     }
   }))
 
@@ -128,7 +132,7 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     barIntroFallbackTimer = setTimeout(() => {
       barIntroFallbackTimer = null
       onBarIntroComplete()
-    }, barEnterMs.value + 40)
+    }, motionMs.value.barEnter + 40)
   }
 
   const containerVisible = computed(() =>
@@ -208,7 +212,7 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
       barLeaving.value = false
       presenceTitle.value = ''
       layoutTitleCache.value = ''
-    }, barLeaveMs.value + 40)
+    }, motionMs.value.barLeave + 40)
   }
 
   return {
