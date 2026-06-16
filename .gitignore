@@ -16,3 +16,6 @@ public/search-full.json
 .auto-generate
 
 .pnpm-store/
+
+# AI
+.qoder
