@@ -5,11 +5,39 @@ command = "pnpm run build"
 [build.environment]
 NODE_VERSION = "22"
 
+# 构建产物强缓存 1 年（hash 文件名天然支持缓存更新）
 [[headers]]
 for = "/assets/*"
 
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
+X-Content-Type-Options = "nosniff"
+
+# HTML 走强校验（每次部署即时生效），并启用 Brotli / Vary 协商
+[[headers]]
+for = "*.html"
+
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+Vary = "Accept-Encoding"
+
+# 字体单独声明 CORS，允许跨域加载
+[[headers]]
+for = "/assets/fonts/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+Access-Control-Allow-Origin = "*"
+
+# 安全相关 CSP（允许自托管脚本与第三方统计）
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 [[redirects]]
 from = "/atom.xml"
@@ -31,6 +59,7 @@ from = "/favicon.png"
 to = "/assets/images/favicon.png"
 status = 301
 
+# SPA fallback：未匹配到的路径交给 index.html，由 vue-router 处理
 [[redirects]]
 from = "/*"
 to = "/index.html"

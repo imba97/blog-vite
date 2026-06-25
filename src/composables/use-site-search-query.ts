@@ -306,8 +306,8 @@ export function useSiteSearchQuery() {
       hits.value = result
       tracker.search({
         keyword: kw,
-        tag,
-        category,
+        tag: tag ?? undefined,
+        category: category ?? undefined,
         result_count: result.length
       })
     }

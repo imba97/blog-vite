@@ -1,6 +1,8 @@
 .prose {
   color: var(--fg);
-  max-width: none;
+  /* 不在此处设置 max-width：宽度约束由父容器 `.page-container-readable`
+     （UnoCSS 工具类 `max-w-[48rem]`）提供。原 `max-width: none` 会因 CSS
+     加载顺序问题覆盖父容器约束，导致正文变为 100% 页面宽度。 */
   font-size: 1rem;
   line-height: 1.8;
 }

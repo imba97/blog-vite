@@ -3,7 +3,10 @@
     class="pb-24 transition-colors duration-200"
     @click="handleMainClick"
   >
-    <section :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container', { 'prose-shell--article': isArticlePage }]">
+    <section
+      :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container', { 'prose-shell--article': isArticlePage }]"
+      :data-article-ready="isArticlePage ? articleReady : undefined"
+    >
       <RouterView />
     </section>
     <section
@@ -27,6 +30,7 @@
 
 <script lang="ts" setup>
 import PostImageViewer from '~/components/PostImageViewer.vue'
+import { useArticleStyles } from '~/composables/use-article-styles'
 import { usePostImageViewer } from '~/composables/use-post-image-viewer'
 import { tracker } from '~/utils/analytics'
 import { isArticlePostRoute, isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
@@ -38,6 +42,9 @@ const router = useRouter()
 const commentsShellRef = ref<HTMLElement | null>(null)
 const shouldMountComments = ref(false)
 let commentsObserver: IntersectionObserver | null = null
+
+// 仅在进入文章详情页时按需加载文章专属 CSS，缩短首屏关键链
+const { ready: articleReady } = useArticleStyles()
 const {
   show: postImageViewerShow,
   images: postImageViewerImages,

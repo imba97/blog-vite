@@ -140,3 +140,15 @@ html:not(.dark) [img-dark] {
 .fade-leave-to {
   opacity: 0;
 }
+
+/* 文章正文防 FOUC：在文章专属 CSS chunk 加载并应用前先隐藏，
+   加载完成后再以短渐显过渡显示，避免首次进入文章页时样式跳变。
+   仅作用于带 `prose-shell--article` 修饰的文章正文容器。 */
+[data-article-ready='false'].prose-shell--article {
+  opacity: 0;
+}
+
+[data-article-ready='true'].prose-shell--article {
+  opacity: 1;
+  transition: opacity 0.18s ease-out;
+}
