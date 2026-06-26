@@ -5,9 +5,15 @@
   >
     <section
       :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container', { 'prose-shell--article': isArticlePage }]"
-      :data-article-ready="isArticlePage ? articleReady : undefined"
     >
-      <RouterView />
+      <div
+        v-if="isArticlePage && !articleReady"
+        class="min-h-40 fcc py-20 text-muted"
+        aria-label="文章加载中"
+      >
+        <span class="i-eos-icons-loading animate-spin text-xl" aria-hidden="true" />
+      </div>
+      <RouterView v-else />
     </section>
     <section
       v-if="shouldShowComments"
