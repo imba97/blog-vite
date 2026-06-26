@@ -1,32 +1,15 @@
 import type { HtmlTagDescriptor } from 'vite'
 import { GA_MEASUREMENT_ID } from '../../src/utils/analytics/config'
 
+// 51la、GA 的 SDK 脚本均由 AnalyticsAdapter 基类在浏览器端动态注入，
+// 此处只保留 GA 的 preconnect 优化与 inline gtag 初始化（必须在 SDK 之前定义 dataLayer）
 export const analyticsHeadTags: HtmlTagDescriptor[] = [
   {
-    // 51.la SDK：defer 让脚本在 HTML 解析完成后执行，避免阻塞首屏渲染
-    tag: 'script',
-    attrs: {
-      charset: 'UTF-8',
-      id: 'LA_COLLECT',
-      src: 'https://sdk.51.la/js-sdk-pro.min.js',
-      defer: true
-    },
-    injectTo: 'head'
-  },
-  {
-    // gtag.js：与 51.la 并行下载，不阻塞 HTML 解析
+    // preconnect：提前建立到 GTM 的 TCP/TLS 握手，加速 gtag.js 下载
     tag: 'link',
     attrs: {
       rel: 'preconnect',
       href: 'https://www.googletagmanager.com'
-    },
-    injectTo: 'head'
-  },
-  {
-    tag: 'script',
-    attrs: {
-      defer: true,
-      src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
     },
     injectTo: 'head'
   },

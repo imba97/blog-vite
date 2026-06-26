@@ -5,6 +5,11 @@ import { GA_MEASUREMENT_ID } from '../config'
 export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
   readonly name = 'google'
 
+  protected override readonly url = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
+
+  // GA 通过 head 内 inline 脚本调 gtag('config', ...) 完成初始化，
+  // 不依赖 onScriptLoaded 钩子
+
   track<E extends AnalyticsEventName>(
     event: E,
     params: AnalyticsEventPayload[E]
