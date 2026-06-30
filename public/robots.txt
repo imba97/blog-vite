@@ -1,0 +1,15 @@
+# imba97's blog — https://imba97.com
+
+User-agent: *
+Allow: /
+
+# 缓存与构建产物，无需索引
+Disallow: /assets/
+Disallow: /search-full.json
+Disallow: /search-meta.json
+
+# 翻页过深会产生大量重复内容，从第 2 页之后屏蔽即可
+Disallow: /page/*/page/
+
+# RSS 订阅源
+Sitemap: https://imba97.com/feed.xml
