@@ -44,6 +44,33 @@
   mask-repeat: no-repeat;
 }
 
+.search-overlay-enter-active,
+.search-overlay-leave-active {
+  transition: opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.search-overlay-enter-from,
+.search-overlay-leave-to {
+  opacity: 0;
+}
+
+.search-overlay-enter-active .search-dialog-panel,
+.search-overlay-leave-active .search-dialog-panel {
+  transition:
+    opacity 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.search-overlay-enter-from .search-dialog-panel {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+}
+
+.search-overlay-leave-to .search-dialog-panel {
+  opacity: 0;
+  transform: translateY(8px) scale(0.99);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tag-chip {
     transition: none;
@@ -51,6 +78,21 @@
 
   .tag-chip--primed {
     animation: none;
+  }
+
+  .search-overlay-enter-active,
+  .search-overlay-leave-active {
+    transition-duration: 0.08s;
+  }
+
+  .search-overlay-enter-active .search-dialog-panel,
+  .search-overlay-leave-active .search-dialog-panel {
+    transition-duration: 0.1s;
+  }
+
+  .search-overlay-enter-from .search-dialog-panel,
+  .search-overlay-leave-to .search-dialog-panel {
+    transform: none;
   }
 }
 </style>
@@ -82,29 +124,19 @@ html.dark .tag-chip--primed {
 
 <template>
   <Teleport to="body">
-    <AnimatePresence>
-      <motion.div
+    <Transition name="search-overlay">
+      <div
         v-if="overlay.isOpen"
-        key="search-overlay"
         class="fixed inset-0 z-[100] flex items-start justify-center bg-black/45 px-4 pb-6 pt-[min(12vh,6rem)] backdrop-blur-[2px] sm:items-center sm:pt-6"
-        :initial="overlayMotion.initial"
-        :animate="overlayMotion.animate"
-        :exit="overlayMotion.exit"
-        :transition="overlayMotion.transition"
         role="presentation"
         @click.self="close"
       >
-        <motion.div
-          key="search-dialog"
+        <div
           role="dialog"
           aria-modal="true"
           aria-label="站内搜索"
-          class="h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/91 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
+          class="search-dialog-panel h-[min(72vh,560px)] max-h-[min(72vh,560px)] max-w-xl min-h-0 w-full flex flex-col overflow-hidden border border-subtle rounded-2xl bg-white/91 shadow-2xl backdrop-blur-xl dark:bg-neutral-900/88"
           tabindex="-1"
-          :initial="panelMotion.initial"
-          :animate="panelMotion.animate"
-          :exit="panelMotion.exit"
-          :transition="panelMotion.transition"
           @click.stop
         >
           <div class="fbc shrink-0 border-b border-subtle px-3 py-2 sm:px-4">
@@ -301,14 +333,13 @@ html.dark .tag-chip--primed {
               </div>
             </div>
           </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        </div>
+      </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script lang="ts" setup>
-import { AnimatePresence, motion } from 'motion-v'
 import AutoLink from '~/components/AutoLink.vue'
 import {
   siteSearchWorkerError,
@@ -321,35 +352,6 @@ import { useSearchOverlayStore } from '~/store/search-overlay'
 import { tracker } from '~/utils/analytics'
 
 const overlay = useSearchOverlayStore()
-const prefersReducedMotion = usePreferredReducedMotion()
-const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
-const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
-
-const overlayMotion = computed(() => ({
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.08 : 0.2,
-    ease: MOTION_EASE
-  }
-}))
-
-const panelMotion = computed(() => ({
-  initial: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: 10, scale: 0.985 },
-  animate: shouldReduceMotion.value
-    ? { opacity: 1 }
-    : { opacity: 1, y: 0, scale: 1 },
-  exit: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: 8, scale: 0.99 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.1 : 0.22,
-    ease: MOTION_EASE
-  }
-}))
 
 const {
   scopeTag,

@@ -117,3 +117,25 @@ export function dedupeStylesheetsInHtml(html: string, route?: string): string {
   }
   return result
 }
+
+/**
+ * DM Mono 仅用于文章页代码块（src/assets/styles/markdown.css），
+ * 其 latin 子集字体在非文章页无需 preload，避免浪费首页带宽。
+ * 字体文件名由 UnoCSS createLocalFontProcessor 按字族 slug 命名（dmmono-<hash>.woff2）。
+ */
+const ARTICLE_ONLY_FONT_SLUGS = ['dmmono']
+
+export function pruneArticleFontPreloadsInHtml(html: string, route?: string): string {
+  const isArticlePage = !!route && /^\/post\//.test(route)
+  if (isArticlePage)
+    return html
+  return html.replace(
+    /<link[^>]+rel=["']preload["'][^>]*as=["']font["'][^>]*>/gi,
+    (tag) => {
+      const hrefMatch = tag.match(/href=["']\/assets\/fonts\/([a-z0-9-]+)-[a-z0-9]+\.woff2["']/i)
+      if (hrefMatch && ARTICLE_ONLY_FONT_SLUGS.includes(hrefMatch[1]))
+        return ''
+      return tag
+    }
+  )
+}

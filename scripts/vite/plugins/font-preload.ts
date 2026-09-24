@@ -60,15 +60,6 @@ export default function FontPreload(): Plugin {
           })
         }
 
-        // 入口脚本 fetchpriority='high'：提示浏览器优先调度首屏关键 JS
-        const entryMatch = html.match(/<script\s+type="module"[^>]*src="(\/assets\/entry-[^"]+\.js)"[^>]*>/)
-        if (entryMatch) {
-          html = html.replace(
-            entryMatch[0],
-            entryMatch[0].replace('<script ', '<script fetchpriority="high" ')
-          )
-        }
-
         return { html, tags }
       }
     }

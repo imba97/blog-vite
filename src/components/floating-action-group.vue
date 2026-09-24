@@ -1,3 +1,34 @@
+<style scoped>
+.back-to-top-enter-active,
+.back-to-top-leave-active {
+  transition:
+    opacity 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.back-to-top-enter-from {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+.back-to-top-leave-to {
+  opacity: 0;
+  transform: translateY(7px) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top-enter-active,
+  .back-to-top-leave-active {
+    transition-duration: 0.08s;
+  }
+
+  .back-to-top-enter-from,
+  .back-to-top-leave-to {
+    transform: none;
+  }
+}
+</style>
+
 <template>
   <div
     class="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[210] sm:bottom-[calc(1rem+env(safe-area-inset-bottom))]"
@@ -14,29 +45,23 @@
           <span class="text-base" :class="[themeIconClass]" />
         </button>
 
-        <AnimatePresence>
-          <motion.button
+        <Transition name="back-to-top">
+          <button
             v-if="showBackToTop"
-            key="back-to-top"
             type="button"
             class="size-9 fcc rounded-lg surface-subtle text-gray-700 outline-none transition-colors duration-200 sm:size-10 dark:text-gray-100 hover:text-primary-6 focus-ring-primary dark:hover:text-primary-4"
             aria-label="回到顶部"
-            :initial="backToTopMotion.initial"
-            :animate="backToTopMotion.animate"
-            :exit="backToTopMotion.exit"
-            :transition="backToTopMotion.transition"
             @click="scrollToTop"
           >
             <span class="i-carbon-arrow-up text-base" />
-          </motion.button>
-        </AnimatePresence>
+          </button>
+        </Transition>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { AnimatePresence, motion } from 'motion-v'
 import { useThemeMode } from '~/composables/use-theme-mode'
 import { isPostListRoute } from '~/utils/route-page-kind'
 
@@ -49,7 +74,6 @@ const route = useRoute()
 const { themePreference, cycleThemeMode } = useThemeMode()
 const prefersReducedMotion = usePreferredReducedMotion()
 const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
-const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
 
 const isListPage = computed(() => isPostListRoute(route.path))
 
@@ -84,22 +108,6 @@ function updateBackToTopVisibility() {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: shouldReduceMotion.value ? 'auto' : 'smooth' })
 }
-
-const backToTopMotion = computed(() => ({
-  initial: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: 8, scale: 0.98 },
-  animate: shouldReduceMotion.value
-    ? { opacity: 1 }
-    : { opacity: 1, y: 0, scale: 1 },
-  exit: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: 7, scale: 0.985 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.08 : 0.18,
-    ease: MOTION_EASE
-  }
-}))
 
 onMounted(() => {
   updateBackToTopVisibility()

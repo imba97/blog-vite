@@ -1,15 +1,42 @@
+<style scoped>
+.post-list-enter-active,
+.post-list-leave-active {
+  transition:
+    opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.post-list-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-list-enter-active,
+  .post-list-leave-active {
+    transition-duration: 0.08s;
+  }
+
+  .post-list-enter-from,
+  .post-list-leave-to {
+    transform: none;
+  }
+}
+</style>
+
 <template>
   <div size-full flex flex-col>
-    <AnimatePresence mode="wait">
-      <motion.ul
+    <Transition mode="out-in" name="post-list">
+      <ul
         :key="`post-list-page-${postsStore.page}`"
         pl-0
         space-y-2.5
         class="[&>li]:(py-0.5 before:hidden)"
-        :initial="listMotion.initial"
-        :animate="listMotion.animate"
-        :exit="listMotion.exit"
-        :transition="listMotion.transition"
       >
         <li
           v-for="post in paginatedPosts"
@@ -25,7 +52,7 @@
             <article class="min-h-10 space-y-0.5">
               <div class="flex items-start justify-between gap-4 sm:items-center">
                 <h2 class="relative m-0 text-lg list-title font-normal leading-snug transition-colors duration-200 sm:text-xl group-hover:text-primary-3 dark:group-hover:text-primary-light">
-                  <span class="i-carbon-chevron-right pa top-1/2 hidden text-primary-3/70 opacity-0 transition-opacity duration-200 -left-8 sm:block -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 dark:text-primary-light/70 group-hover:opacity-65" aria-hidden="true" />
+                  <span class="i-carbon-chevron-right pa top-1/2 hidden text-primary-3/70 opacity-0 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.25,1,0.5,1)] -left-8 sm:block -translate-x-1 -translate-y-1/2 group-hover:translate-x-0 dark:text-primary-light/70 group-hover:opacity-65" aria-hidden="true" />
                   <span>{{ post.title }}</span>
                 </h2>
                 <time class="shrink-0 text-xs list-meta tracking-wide font-mono sm:text-sm" :datetime="post.date">
@@ -36,8 +63,8 @@
             </article>
           </RouterLink>
         </li>
-      </motion.ul>
-    </AnimatePresence>
+      </ul>
+    </Transition>
 
     <div class="min-w-0 w-full">
       <Pagination
@@ -78,7 +105,6 @@
 </template>
 
 <script setup lang="ts">
-import { AnimatePresence, motion } from 'motion-v'
 import AutoLink from '~/components/AutoLink.vue'
 import { formatPostDateYmdInShanghai } from '~/content/post-date'
 import { usePostsStore } from '~/store/post'
@@ -102,24 +128,6 @@ const paginatedPosts = computed(() => {
   const end = start + postsStore.size
   return postsStore.posts.slice(start, end)
 })
-
-const prefersReducedMotion = usePreferredReducedMotion()
-const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
-const LIST_MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
-
-const listMotion = computed(() => ({
-  initial: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: 6 },
-  animate: { opacity: 1, y: 0 },
-  exit: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, y: -4 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.08 : 0.2,
-    ease: LIST_MOTION_EASE
-  }
-}))
 
 function changePage(newPage: number) {
   postsStore.setPage(newPage)

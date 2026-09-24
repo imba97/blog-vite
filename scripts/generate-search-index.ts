@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import MarkdownIt from 'markdown-it'
-import { normalizeStringList } from '../src/content/post-policy'
-import { parsePostFiles } from './parse-post-files'
+import { normalizeStringList } from '../src/content/post-policy.ts'
+import { parsePostFiles } from './parse-post-files.ts'
 
 const markdown = MarkdownIt({
   html: true,

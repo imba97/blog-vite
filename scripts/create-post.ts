@@ -1,6 +1,6 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import process from 'node:process'
-import matter from 'gray-matter'
+import matter from '@11ty/gray-matter'
 import { glob } from 'tinyglobby'
 
 const POSTS_CONTENT_GLOB = 'posts/**/index.md'

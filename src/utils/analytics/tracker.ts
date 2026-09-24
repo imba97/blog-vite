@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
-import type { AnalyticsEventName, AnalyticsEventPayload } from './types'
-import { AnalyticsAdapter } from './adapter'
+import type { AnalyticsEventName, AnalyticsEventPayload } from './types.ts'
+import { AnalyticsAdapter } from './adapter.ts'
 
 class Tracker {
   pageView(params: AnalyticsEventPayload['page_view']) {

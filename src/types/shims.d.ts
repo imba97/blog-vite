@@ -1,4 +1,4 @@
-import type { PostFrontmatter } from './post-frontmatter'
+import type { PostFrontmatter } from './post-frontmatter.ts'
 import 'vue-router'
 
 declare module 'vue-router' {

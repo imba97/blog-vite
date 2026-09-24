@@ -1,11 +1,15 @@
 import type MarkdownIt from 'markdown-it'
 
+// @types/markdown-it 的默认导出是构造函数 const（export =），
+// 实例类型需从构造函数取
+type MarkdownItInstance = InstanceType<typeof MarkdownIt>
+
 export interface CopyButtonPluginOptions {
   codeCopyButtonTitle?: string
 }
 
 export default function copyButtonPlugin(options: CopyButtonPluginOptions = {}) {
-  return (md: MarkdownIt) => {
+  return (md: MarkdownItInstance) => {
     const { codeCopyButtonTitle = '复制代码' } = options
 
     // 检查 renderer 是否存在
@@ -15,7 +19,7 @@ export default function copyButtonPlugin(options: CopyButtonPluginOptions = {}) 
     }
 
     const fence = md.renderer.rules.fence!
-    type FenceRule = NonNullable<MarkdownIt['renderer']['rules']['fence']>
+    type FenceRule = NonNullable<MarkdownItInstance['renderer']['rules']['fence']>
 
     md.renderer.rules.fence = (...args: Parameters<FenceRule>): ReturnType<FenceRule> => {
       const [tokens, idx] = args

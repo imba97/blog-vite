@@ -1,34 +1,75 @@
+<style scoped>
+.drawer-overlay-enter-active,
+.drawer-overlay-leave-active {
+  transition: opacity 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.drawer-overlay-enter-from,
+.drawer-overlay-leave-to {
+  opacity: 0;
+}
+
+.drawer-panel-enter-active {
+  transition:
+    opacity 0.24s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.drawer-panel-leave-active {
+  transition:
+    opacity 0.24s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.drawer-panel-enter-from {
+  opacity: 0;
+  transform: translateX(18px);
+}
+
+.drawer-panel-leave-to {
+  opacity: 0;
+  transform: translateX(16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-overlay-enter-active,
+  .drawer-overlay-leave-active {
+    transition-duration: 0.08s;
+  }
+
+  .drawer-panel-enter-active,
+  .drawer-panel-leave-active {
+    transition-duration: 0.1s;
+  }
+
+  .drawer-panel-enter-from,
+  .drawer-panel-leave-to {
+    transform: none;
+  }
+}
+</style>
+
 <template>
-  <AnimatePresence>
-    <motion.button
+  <Transition name="drawer-overlay">
+    <button
       v-if="open"
-      key="mobile-drawer-overlay"
       type="button"
       class="fixed inset-0 z-[90] bg-black/35 backdrop-blur-[1px] sm:hidden"
-      :initial="overlayMotion.initial"
-      :animate="overlayMotion.animate"
-      :exit="overlayMotion.exit"
-      :transition="overlayMotion.transition"
       aria-label="关闭导航抽屉"
       @click="close"
     />
-  </AnimatePresence>
+  </Transition>
 
-  <AnimatePresence>
-    <motion.aside
+  <Transition name="drawer-panel">
+    <aside
       v-if="open"
       id="mobile-nav-drawer"
-      key="mobile-drawer-panel"
       ref="drawerRef"
       role="dialog"
       aria-modal="true"
       aria-label="移动端导航抽屉"
       tabindex="-1"
       class="fixed right-0 top-0 z-[91] h-full w-[min(82vw,18rem)] border-l border-subtle surface-base shadow-2xl sm:hidden"
-      :initial="panelMotion.initial"
-      :animate="panelMotion.animate"
-      :exit="panelMotion.exit"
-      :transition="panelMotion.transition"
     >
       <div class="h-16 fbc border-b border-subtle px-4">
         <span class="text-sm text-muted">导航</span>
@@ -55,12 +96,11 @@
           <span>{{ item.text }}</span>
         </AutoLink>
       </nav>
-    </motion.aside>
-  </AnimatePresence>
+    </aside>
+  </Transition>
 </template>
 
 <script lang="ts" setup>
-import { AnimatePresence, motion } from 'motion-v'
 import { acquireBodyScrollLock, releaseBodyScrollLock } from '~/composables/use-body-scroll-lock'
 import { navbar } from '~/configs/nav'
 import { useMobileNavDrawerReturnFocusBus } from '~/event-bus/mobile-nav'
@@ -70,35 +110,6 @@ const returnFocusBus = useMobileNavDrawerReturnFocusBus()
 
 const route = useRoute()
 const drawerRef = ref<HTMLElement | null>(null)
-const prefersReducedMotion = usePreferredReducedMotion()
-const shouldReduceMotion = computed(() => prefersReducedMotion.value === 'reduce')
-const MOTION_EASE = [0.2, 0.8, 0.2, 1] as const
-
-const overlayMotion = computed(() => ({
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.08 : 0.18,
-    ease: MOTION_EASE
-  }
-}))
-
-const panelMotion = computed(() => ({
-  initial: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, x: 18 },
-  animate: shouldReduceMotion.value
-    ? { opacity: 1 }
-    : { opacity: 1, x: 0 },
-  exit: shouldReduceMotion.value
-    ? { opacity: 0 }
-    : { opacity: 0, x: 16 },
-  transition: {
-    duration: shouldReduceMotion.value ? 0.1 : 0.24,
-    ease: MOTION_EASE
-  }
-}))
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',

@@ -1,5 +1,5 @@
 import type { HtmlTagDescriptor } from 'vite'
-import { GA_MEASUREMENT_ID } from '../../src/utils/analytics/config'
+import { GA_MEASUREMENT_ID } from '../../src/utils/analytics/config.ts'
 
 // 51la、GA 的 SDK 脚本均由 AnalyticsAdapter 基类在浏览器端动态注入，
 // 此处只保留 GA 的 preconnect 优化与 inline gtag 初始化（必须在 SDK 之前定义 dataLayer）

@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import matter from 'gray-matter'
-import { postPublicPath } from '../../src/constants/route-policy'
-import { isPublishablePostData, normalizeNumericPostId } from '../../src/content/post-policy'
-import { extractPostImage } from '../seo/extract-post-image'
+import matter from '@11ty/gray-matter'
+import { postPublicPath } from '../../src/constants/route-policy.ts'
+import { isPublishablePostData, normalizeNumericPostId } from '../../src/content/post-policy.ts'
+import { extractPostImage } from '../seo/extract-post-image.ts'
 
 interface RouteLike {
   components: Map<string, string>
@@ -28,8 +28,14 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
   if (extractedImage && typeof frontmatter.image !== 'string')
     frontmatter.image = extractedImage
 
+  // 路由 meta 只保留分享卡片（src/utils/seo/share-meta.ts）用到的字段，
+  // 完整文章元数据由 .auto-generate/posts-meta 提供，避免同一份数据进两份首屏 bundle
   route.addToMeta({
-    frontmatter
+    frontmatter: {
+      title: frontmatter.title,
+      description: frontmatter.description,
+      image: frontmatter.image
+    }
   })
 
   if (!isPostMarkdownFile(defaultFile, postsMarkdownRoot) || !isPublishablePostData(frontmatter))

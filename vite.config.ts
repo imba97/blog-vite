@@ -23,17 +23,17 @@ import Inspect from 'vite-plugin-inspect'
 import Exclude from 'vite-plugin-optimize-exclude'
 import { VueRouterAutoImports } from 'vue-router/unplugin'
 import VueRouter from 'vue-router/vite'
-import CopyButtonPlugin from './scripts/copy-button-plugin'
-import { getGitMeta } from './scripts/get-git-meta'
-import NetlifyImagePlugin from './scripts/netlify-image-plugin'
-import { slugify } from './scripts/slugify'
-import { dedupeStylesheetsInHtml } from './scripts/vite/dedupe-stylesheets'
-import FontPreload from './scripts/vite/plugins/font-preload'
-import HtmlHeadInject from './scripts/vite/plugins/html-head-inject'
-import PostsMeta from './scripts/vite/plugins/posts-meta'
-import SearchIndex from './scripts/vite/plugins/search-index'
-import { applyMarkdownRouteMeta } from './scripts/vite/route-frontmatter'
-import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes'
+import CopyButtonPlugin from './scripts/copy-button-plugin.ts'
+import { getGitMeta } from './scripts/get-git-meta.ts'
+import NetlifyImagePlugin from './scripts/netlify-image-plugin.ts'
+import { slugify } from './scripts/slugify.ts'
+import { dedupeStylesheetsInHtml, pruneArticleFontPreloadsInHtml } from './scripts/vite/dedupe-stylesheets.ts'
+import FontPreload from './scripts/vite/plugins/font-preload.ts'
+import HtmlHeadInject from './scripts/vite/plugins/html-head-inject.ts'
+import PostsMeta from './scripts/vite/plugins/posts-meta.ts'
+import SearchIndex from './scripts/vite/plugins/search-index.ts'
+import { applyMarkdownRouteMeta } from './scripts/vite/route-frontmatter.ts'
+import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes.ts'
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url))
 const postsMarkdownRoot = path.normalize(r('posts'))
@@ -161,7 +161,9 @@ export default defineConfig({
         // vite-ssg 在 SSR 阶段会再注入一份 `<link rel="stylesheet">`，
         // 与 Vite 产物中的同名 link 重复下载，去重只保留首条；
         // 同时在非文章页丢弃 `assets/article.css`，该样式仅在文章页需要
-        return dedupeStylesheetsInHtml(html, route)
+        const deduped = dedupeStylesheetsInHtml(html, route)
+        // DM Mono 只在文章页代码块使用，非文章页不 preload 其字体
+        return pruneArticleFontPreloadsInHtml(deduped, route)
       }
     }
   }),
@@ -195,27 +197,11 @@ export default defineConfig({
           ) {
             return 'article'
           }
-          if (
-            id.includes('/src/composables/site-search-worker.ts')
-            || id.includes('/src/components/SearchDialog.vue')
-            || id.includes('/src/composables/use-site-search-query.ts')
-            || id.includes('/src/workers/site-search.worker.ts')
-            || id.includes('minisearch')
-          ) {
-            return 'search'
-          }
-          if (
-            id.includes('/src/components/Twikoo.vue')
-            || id.includes('/src/composables/useTwikooComments.ts')
-            || id.includes('twikoo')
-          ) {
-            return 'comments'
-          }
-          if (id.includes('motion-v'))
-            return 'motion'
-          if (id.includes('floating-vue'))
-            return 'ui'
-          // 不再把所有 node_modules 统一塞进 vendor，避免单 chunk 过大
+          // 注意：不要为「仅动态 import 的 JS 模块」设置 manualChunks 分组
+          // （此前的 search/comments 分组已移除），Rollup 会把分组内模块的
+          // 依赖（包括 vue 运行时）一并合并进该 chunk，导致入口静态依赖整组，
+          // 1MB 的 twikoo 曾因此被拉进每个页面的首屏。article 组只含样式
+          // 与文章页专属资源，无运行时依赖，不受此影响。
           // 让 Vite 按依赖关系自动拆分（通常按包名分组，体积更均匀）
           return undefined
         },

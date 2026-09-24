@@ -1,3 +1,87 @@
+<style scoped>
+.header-bar-enter-active {
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 退出与进入互为镜像；退出用 easeInQuart，尾部加速度比 easeInExpo
+   平缓，后半段不会「猛地收掉」。位移与透明度同曲线同时长，同步结束 */
+.header-bar-leave-active {
+  transition:
+    opacity 0.4s cubic-bezier(0.5, 0, 0.75, 0),
+    transform 0.4s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+/* 位移 + 高度收缩到一半的组合：滑入时竖线从下方「长出来」 */
+.header-bar-enter-from,
+.header-bar-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scaleY(0.5);
+}
+
+/* 进入 easeOutQuart / 退出 easeInQuart 互为镜像：Expo 系曲线前载/后载
+   太极端（0.4s 的动画 0.2s 就「看起来演完」），Quart 系把动画过程
+   均匀分布在整个时长里。透明度 0.6s 比位移 0.4s 稍晚结束，
+   到位/离场后还留一段柔和的淡入淡出 */
+.header-title-enter-active {
+  transition:
+    opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 退出：位移 0.6s easeInQuart（切入 easeOutQuart 的时间镜像），
+   透明度延迟 0.2s 开始、0.4s 淡出——前 0.2s 文字以完全不透明状态
+   滑入左侧渐隐区（mask 效果清晰展现），后 0.4s 边滑边隐，
+   两者在 0.6s 同时结束 */
+.header-title-leave-active {
+  transition:
+    opacity 0.4s cubic-bezier(0.5, 0, 0.75, 0) 0.2s,
+    transform 0.6s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+.header-title-enter-from {
+  opacity: 0;
+  transform: translateX(-18px);
+}
+
+.header-title-leave-to {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+.header-title-mask {
+  mask-image: linear-gradient(to right, transparent 0, #000 8px);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-bar-enter-active {
+    transition-duration: 0.09s;
+  }
+
+  .header-bar-leave-active {
+    transition-duration: 0.08s;
+  }
+
+  .header-title-enter-active {
+    transition-duration: 0.1s;
+  }
+
+  .header-title-leave-active {
+    transition-duration: 0.09s;
+    transition-delay: 0s;
+  }
+
+  .header-bar-enter-from,
+  .header-bar-leave-to,
+  .header-title-enter-from,
+  .header-title-leave-to {
+    transform: none;
+  }
+}
+</style>
+
 <template>
   <header class="sticky left-0 top-0 z-40 border-b border-subtle bg-white/90 backdrop-blur-md dark:bg-neutral-900/92">
     <div class="site-container h-16 flex items-center justify-between gap-5">
@@ -13,21 +97,19 @@
 
         <div
           v-if="containerVisible"
-          class="min-w-0 fyc gap-2 overflow-hidden"
+          class="min-w-0 fyc"
         >
-          <AnimatePresence>
-            <motion.div
+          <Transition name="header-bar" :appear="enableBarAppear" @after-enter="onBarIntroComplete">
+            <div
               v-if="barVisible"
-              key="post-title-bar"
               class="h-[34px] w-[5px] shrink-0 rounded-sm bg-primary-2/45 dark:bg-primary-light/55"
-              :initial="headerBarMotion.initial"
-              :animate="headerBarMotion.animate"
-              :exit="headerBarMotion.exit"
-              :on-animation-complete="onBarIntroComplete"
             />
-          </AnimatePresence>
+          </Transition>
 
-          <div class="relative h-[30px] max-w-70 min-w-0 overflow-hidden">
+          <!-- 原 gap-2 的 8px 改为标题容器的 pl-2，渐隐区正好落在这段空隙上，
+               文字相对竖线的位置不变；长标题 marquee 的边缘渐隐由
+               HeaderMarqueeTitle 内部处理 -->
+          <div class="header-title-mask relative h-[30px] max-w-70 min-w-0 overflow-hidden pl-2">
             <div
               aria-hidden="true"
               class="invisible truncate text-base font-medium sm:text-lg"
@@ -35,21 +117,22 @@
               {{ layoutTitle }}
             </div>
 
-            <AnimatePresence mode="wait" :on-exit-complete="onTitlePresenceExitComplete">
-              <motion.div
+            <Transition
+              name="header-title"
+              mode="out-in"
+              @after-leave="onTitlePresenceExitComplete"
+            >
+              <div
                 v-if="showTitleMotion"
                 :key="presenceTitleKey"
-                class="absolute inset-0"
-                :initial="headerTitleMotion.initial"
-                :animate="headerTitleMotion.animate"
-                :exit="headerTitleMotion.exit"
+                class="absolute inset-y-0 left-2 right-0"
               >
                 <HeaderMarqueeTitle
                   :title="presenceTitle"
                   text-class="text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
                 />
-              </motion.div>
-            </AnimatePresence>
+              </div>
+            </Transition>
           </div>
         </div>
       </div>
@@ -96,7 +179,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AnimatePresence, motion } from 'motion-v'
 import MobileNavDrawer from '~/components/mobile-nav-drawer.vue'
 import { useHeaderTitleAnimationState } from '~/composables/useHeaderTitleAnimationState'
 import { navbar } from '~/configs/nav'
@@ -121,8 +203,14 @@ returnFocusBus.on(() => {
   menuButtonRef.value?.focus()
 })
 
+// 竖线进入动画只在 hydration 之后的挂载（SPA 导航进入文章页）启用：
+// 直开文章页时 SSR 已把竖线画出来，若 hydration 时再放 appear 动画
+// 会出现「先可见 → 闪隐 → 再淡入」的闪烁
+const enableBarAppear = ref(false)
+
 onMounted(() => {
   currentFavicon.value = getCurrentFavicon()
+  enableBarAppear.value = true
 })
 
 const {
@@ -132,8 +220,6 @@ const {
   showTitleMotion,
   presenceTitleKey,
   presenceTitle,
-  headerBarMotion,
-  headerTitleMotion,
   onBarIntroComplete,
   onTitlePresenceExitComplete
 } = useHeaderTitleAnimationState({

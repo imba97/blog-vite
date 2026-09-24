@@ -1,6 +1,6 @@
-import type { AnalyticsEventName, AnalyticsEventPayload } from '../types'
-import { AnalyticsAdapter } from '../adapter'
-import { LA_SITE_ID } from '../config'
+import type { AnalyticsEventName, AnalyticsEventPayload } from '../types.ts'
+import { AnalyticsAdapter } from '../adapter.ts'
+import { LA_SITE_ID } from '../config.ts'
 
 export class La51AnalyticsAdapter extends AnalyticsAdapter {
   readonly name = '51la'

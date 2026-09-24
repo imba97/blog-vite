@@ -1,13 +1,18 @@
-minimumReleaseAge: 0
-
-shellEmulator: true
+minimumReleaseAgeExcludePrune: true
+minimumReleaseAgeExclude:
+  - '@twikoojs/shared'
+  - twikoo
+  - vite
 
 trustPolicy: no-downgrade
-
 trustPolicyExclude:
-  - chokidar@4.0.3
+  - chokidar
 
+shellEmulator: true
 verifyDepsBeforeRun: false
+
+patchedDependencies:
+  vite-ssg: patches/vite-ssg.patch
 
 allowBuilds:
   '@parcel/watcher': true

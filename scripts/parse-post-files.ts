@@ -1,14 +1,14 @@
 import { readFile } from 'node:fs/promises'
-import matter from 'gray-matter'
+import matter from '@11ty/gray-matter'
 import { glob } from 'tinyglobby'
-import { postPublicPath } from '../src/constants/route-policy'
-import { comparePostDateDesc } from '../src/content/post-date'
+import { postPublicPath } from '../src/constants/route-policy.ts'
+import { comparePostDateDesc } from '../src/content/post-date.ts'
 import {
   formatPostDateString,
   isPublishablePostData,
   normalizeNumericPostId
-} from '../src/content/post-policy'
-import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths'
+} from '../src/content/post-policy.ts'
+import { POSTS_CONTENT_GLOB, POSTS_ROOT_INDEX_FILE } from './post-content-paths.ts'
 
 export interface ParsedPostFile {
   /** 源文件路径（相对仓库根） */
@@ -28,8 +28,20 @@ export interface ParsedPostFile {
 /**
  * 并发读取所有已发布文章，解析 frontmatter，
  * 并按日期降序返回（与列表、搜索索引、RSS 对齐）。
+ *
+ * 进程内缓存：posts-meta / search-index 等多个生成器在同一构建进程里
+ * 会重复调用本函数，全量解析所有 markdown 开销不小，结果在单次
+ * 进程生命周期内不变（dev 下本就没有 watch 重跑），故 memoize。
  */
-export async function parsePostFiles(): Promise<ParsedPostFile[]> {
+let cached: Promise<ParsedPostFile[]> | null = null
+
+export function parsePostFiles(): Promise<ParsedPostFile[]> {
+  if (!cached)
+    cached = doParsePostFiles()
+  return cached
+}
+
+async function doParsePostFiles(): Promise<ParsedPostFile[]> {
   const files = await glob(POSTS_CONTENT_GLOB)
   const candidates = files.filter(f => f !== POSTS_ROOT_INDEX_FILE)
 

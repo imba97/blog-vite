@@ -1,44 +1,16 @@
 import type { Ref } from 'vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 
-/** Bar motion durations (seconds) — keep aligned with UX expectations. */
+/** Bar motion durations (milliseconds) — keep aligned with the CSS transitions in header.vue. */
 export const HEADER_TITLE_BAR_MS = {
-  enter: 220,
-  leave: 200
+  enter: 400,
+  leave: 400
 } as const
 
-/** Title motion durations (seconds). */
+/** Title motion durations (milliseconds). */
 export const HEADER_TITLE_TEXT_MS = {
-  enter: 280,
-  leave: 220
-} as const
-
-export const headerBarMotion = {
-  initial: { opacity: 0, y: 12 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: HEADER_TITLE_BAR_MS.enter / 1000, ease: [0, 0, 0.2, 1] as const }
-  },
-  exit: {
-    opacity: 0,
-    y: 12,
-    transition: { duration: HEADER_TITLE_BAR_MS.leave / 1000, ease: [0.4, 0, 1, 1] as const }
-  }
-} as const
-
-export const headerTitleMotion = {
-  initial: { opacity: 0, x: 18 },
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: HEADER_TITLE_TEXT_MS.enter / 1000, ease: [0, 0, 0.2, 1] as const }
-  },
-  exit: {
-    opacity: 0,
-    x: -18,
-    transition: { duration: HEADER_TITLE_TEXT_MS.leave / 1000, ease: [0.4, 0, 1, 1] as const }
-  }
+  enter: 600,
+  leave: 600
 } as const
 
 interface UseHeaderTitleAnimationStateOptions {
@@ -47,10 +19,10 @@ interface UseHeaderTitleAnimationStateOptions {
 }
 
 /**
- * Drives bar + title visibility for motion-v in the header.
- * - No→post: bar first, then title after bar `onAnimationComplete` while `gateTitleUntilBarDone`.
- * - Post→post: title only swaps (AnimatePresence mode wait + key); gate stays open.
- * - Post→home: title exits; `onExitComplete` hides bar.
+ * Drives bar + title visibility for the header <Transition> animations.
+ * - No→post: bar first, then title after bar `@after-enter` while `gateTitleUntilBarDone`.
+ * - Post→post: title only swaps (Transition mode out-in + key); gate stays open.
+ * - Post→home: title exits; `@after-leave` hides bar.
  */
 export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationStateOptions) {
   const prefersReducedMotion = usePreferredReducedMotion()
@@ -62,38 +34,6 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     barLeave: shouldReduceMotion.value ? 80 : HEADER_TITLE_BAR_MS.leave,
     titleEnter: shouldReduceMotion.value ? 100 : HEADER_TITLE_TEXT_MS.enter,
     titleLeave: shouldReduceMotion.value ? 90 : HEADER_TITLE_TEXT_MS.leave
-  }))
-
-  const resolvedHeaderBarMotion = computed(() => ({
-    initial: shouldReduceMotion.value
-      ? { opacity: 0 }
-      : { opacity: 0, y: 12 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: motionMs.value.barEnter / 1000, ease: [0, 0, 0.2, 1] as const }
-    },
-    exit: {
-      opacity: 0,
-      y: shouldReduceMotion.value ? 0 : 12,
-      transition: { duration: motionMs.value.barLeave / 1000, ease: [0.4, 0, 1, 1] as const }
-    }
-  }))
-
-  const resolvedHeaderTitleMotion = computed(() => ({
-    initial: shouldReduceMotion.value
-      ? { opacity: 0 }
-      : { opacity: 0, x: 18 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: motionMs.value.titleEnter / 1000, ease: [0, 0, 0.2, 1] as const }
-    },
-    exit: {
-      opacity: 0,
-      x: shouldReduceMotion.value ? 0 : -18,
-      transition: { duration: motionMs.value.titleLeave / 1000, ease: [0.4, 0, 1, 1] as const }
-    }
   }))
 
   const barVisible = ref(false)
@@ -193,7 +133,10 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
         scheduleBarIntroFallback()
       else
         clearBarIntroFallback()
-    }
+    },
+    // immediate: without a mount animation there is no initial `@after-enter`
+    // to clear the gate on direct page load, so schedule the fallback at setup.
+    { immediate: true }
   )
 
   onUnmounted(() => {
@@ -222,8 +165,6 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
     showTitleMotion,
     presenceTitleKey,
     presenceTitle,
-    headerBarMotion: resolvedHeaderBarMotion,
-    headerTitleMotion: resolvedHeaderTitleMotion,
     onBarIntroComplete,
     onTitlePresenceExitComplete
   }

@@ -1,5 +1,5 @@
 import type { Router } from 'vue-router'
-import type { AnalyticsEventName, AnalyticsEventPayload } from './types'
+import type { AnalyticsEventName, AnalyticsEventPayload } from './types.ts'
 
 export type AnalyticsAdapterClass = new () => AnalyticsAdapter
 

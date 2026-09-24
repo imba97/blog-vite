@@ -1,6 +1,6 @@
-import type { AnalyticsEventName, AnalyticsEventPayload } from '../types'
-import { AnalyticsAdapter } from '../adapter'
-import { GA_MEASUREMENT_ID } from '../config'
+import type { AnalyticsEventName, AnalyticsEventPayload } from '../types.ts'
+import { AnalyticsAdapter } from '../adapter.ts'
+import { GA_MEASUREMENT_ID } from '../config.ts'
 
 export class GoogleAnalyticsAdapter extends AnalyticsAdapter {
   readonly name = 'google'

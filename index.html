@@ -8,6 +8,21 @@
     <link rel="alternate" type="application/rss+xml" title="imba97 Blog" href="/feed.xml" />
     <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <script>
+      // 防暗色模式 FOUC：绘制前根据本地偏好/系统主题预置 dark class
+      // 与 src/composables/use-theme-mode.ts 的 THEME_STORAGE_KEY 保持一致
+      ;(function () {
+        try {
+          var p = localStorage.getItem('imba97-theme-preference')
+          if (p)
+            p = p.replace(/^"|"$/g, '')
+          var dark = p === 'dark' || ((!p || p === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark)
+            document.documentElement.classList.add('dark')
+        }
+        catch (e) {}
+      })()
+    </script>
     <title>imba97 Blog</title>
   </head>
   <body class="font-sans text-gray-700 dark:text-gray-200 relative">

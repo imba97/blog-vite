@@ -43,6 +43,11 @@ import { isArticlePostRoute, isReadableLayoutRoute, shouldShowTwikooSection } fr
 import { navigateSpaOrExternal, shouldDelegateSpaNavigation } from '~/utils/spa-navigation'
 import { isExternalUrl } from '~/utils/url'
 
+// 显式异步引入（覆盖 unplugin-vue-components 的静态 auto-import），
+// 否则 Twikoo 及其 manualChunks 的 comments chunk 会成为入口的静态依赖，
+// 在每个页面首屏被 modulepreload 全量下载（约 1MB raw）
+const Twikoo = defineAsyncComponent(() => import('~/components/Twikoo.vue'))
+
 const route = useRoute()
 const router = useRouter()
 const commentsShellRef = ref<HTMLElement | null>(null)

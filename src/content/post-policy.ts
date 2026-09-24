@@ -1,6 +1,6 @@
-import type { PostFrontmatter } from '../types/post-frontmatter'
-import { postPublicPath } from '../constants/route-policy'
-import { comparePostDateDesc, normalizePostDateString } from './post-date'
+import type { PostFrontmatter } from '../types/post-frontmatter.ts'
+import { postPublicPath } from '../constants/route-policy.ts'
+import { comparePostDateDesc, normalizePostDateString } from './post-date.ts'
 
 export function normalizeNumericPostId(data: Record<string, unknown>): string | null {
   if (data.id == null || data.id === '')

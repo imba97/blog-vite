@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite'
-import { generateSearchIndex } from '../../generate-search-index'
+import { generateSearchIndex } from '../../generate-search-index.ts'
 
 /**
  * 开发启动与每次构建前写入 public/search-*.json，随 Vite 拷贝至 dist。
