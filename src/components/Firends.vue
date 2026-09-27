@@ -111,6 +111,12 @@ const list = [
     url: 'https://upxuu.com',
     avatar: 'https://upxuu.com/images/20260214145619.jpg',
     description: '逐光而上'
+  },
+  {
+    name: 'linmeng\'blog',
+    url: 'https://kslinmeng.cn/',
+    avatar: 'https://cdn.kslinmeng.cn/gh/tanf/my-photos@main/new-windows1/20260901222623983.png',
+    description: '爱吃柠檬'
   }
 ]
 </script>
