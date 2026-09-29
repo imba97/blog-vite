@@ -85,6 +85,11 @@ from = "/favicon.png"
 to = "/assets/images/favicon.png"
 status = 301
 
+[[redirects]]
+from = "/avatar.png"
+to = "/assets/images/favicon.png"
+status = 301
+
 # SPA fallback：未匹配到的路径交给 index.html，由 vue-router 处理
 [[redirects]]
 from = "/*"
