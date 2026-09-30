@@ -6,7 +6,7 @@ import process from 'node:process'
  * vite-ssg 后处理钩子：
  * 1. 去重每个渲染好的页面 HTML 中的 `<link rel="stylesheet" href="...">` 标签
  *    （vite-ssg 与 Vite 默认产物会重复写入同一资源）。
- * 2. 文章专属 CSS chunk（prose / markdown / shiki / twoslash / github-alerts）
+ * 2. 文章专属 CSS chunk（prose / markdown / shiki / github-alerts）
  *    通过 Vite `manualChunks: 'article'` 隔离，在非文章详情页（首页 / 分页 /
  *    关于 / 友链等）移除对应 link 以避免拖累首屏；在文章详情页主动注入 link
  *    避免内容闪烁。

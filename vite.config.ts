@@ -7,7 +7,6 @@ import {
   transformerNotationHighlight,
   transformerNotationWordHighlight
 } from '@shikijs/transformers'
-import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
 import anchor from 'markdown-it-anchor'
 import MarkdownItExtraLink from 'markdown-it-extra-link'
@@ -110,10 +109,6 @@ export default defineConfig({
           defaultColor: false,
           cssVariablePrefix: '--s-',
           transformers: [
-            transformerTwoslash({
-              explicitTrigger: true,
-              renderer: rendererRich()
-            }),
             transformerNotationDiff(),
             transformerNotationHighlight(),
             transformerNotationWordHighlight()
@@ -187,8 +182,7 @@ export default defineConfig({
         manualChunks(id: string) {
           // 文章详情页专属样式：与 reset 分到独立 chunk，避免拖累首页 LCP
           if (
-            id.includes('@shikijs/twoslash')
-            || id.includes('shiki-magic-move')
+            id.includes('shiki-magic-move')
             || id.includes('markdown-it-github-alerts')
             || id.includes('/src/assets/styles/prose.css')
             || id.includes('/src/assets/styles/markdown.css')
