@@ -8,6 +8,23 @@
   justify-content: center;
   background: rgb(0 0 0 / 90%);
   padding: calc(12px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+  /* The whole overlay pans the image, so no browser gesture may take over. */
+  touch-action: none;
+  cursor: grab;
+}
+
+.post-image-viewer.is-dragging {
+  cursor: grabbing;
+}
+
+/* The caption and the controls never start a drag, so they keep their cursor. */
+.post-image-viewer .post-image-viewer__footer {
+  cursor: default;
+}
+
+.post-image-viewer .post-image-viewer__icon-btn,
+.post-image-viewer .post-image-viewer__mobile-nav-btn {
+  cursor: pointer;
 }
 
 .post-image-viewer__content {
@@ -147,8 +164,13 @@
       <div
         v-if="show && currentImage"
         class="post-image-viewer"
+        :class="{ 'is-dragging': isDragging }"
         :style="viewerStyleVars"
-        @click.self="close"
+        @click.self="onBackdropClick"
+        @mousedown="onMouseDown"
+        @touchstart="onTouchStart"
+        @touchmove="onTouchMove"
+        @touchend="onTouchEnd"
         @wheel="onWheel"
       >
         <PostImageViewerIconButton
@@ -208,9 +230,7 @@
 
         <div
           class="post-image-viewer__content"
-          @touchstart="onTouchStart"
-          @touchmove="onTouchMove"
-          @touchend="onTouchEnd"
+          @click="onContentClick"
         >
           <img
             v-show="!imageFailed"
@@ -219,7 +239,6 @@
             :alt="currentImage.alt || 'Post image preview'"
             :style="imageStyle"
             draggable="false"
-            @mousedown="onMouseDown"
             @error="imageFailed = true"
           >
           <div v-if="imageFailed" class="post-image-viewer__error">
@@ -267,10 +286,12 @@ const emit = defineEmits<{
 
 const maxScale = 5
 const minScale = 0.75
+const dragThreshold = 4
 const scale = ref(1)
 const translateX = ref(0)
 const translateY = ref(0)
 const isDragging = ref(false)
+const pointerMoved = ref(false)
 const imageFailed = ref(false)
 const previewImageRef = ref<HTMLImageElement | null>(null)
 
@@ -312,10 +333,39 @@ function resetTransform() {
   translateY.value = 0
   pinchDistance.value = null
   imageFailed.value = false
+  pointerMoved.value = false
 }
 
 function close() {
   emit('update:show', false)
+}
+
+/**
+ * Releasing a drag outside the image makes the browser dispatch the trailing
+ * click on the nearest common ancestor, which must not count as a tap on the
+ * backdrop. The flag is consumed so the next real click still closes.
+ */
+function consumeDragClick() {
+  if (!pointerMoved.value)
+    return false
+  pointerMoved.value = false
+  return true
+}
+
+function onBackdropClick() {
+  if (consumeDragClick())
+    return
+  close()
+}
+
+function onContentClick(event: MouseEvent) {
+  if (consumeDragClick())
+    return
+  // The image itself keeps its drag interaction, anywhere else in the image
+  // box is the backdrop left behind by a moved image.
+  if (event.target === previewImageRef.value)
+    return
+  close()
 }
 
 function updateIndex(nextIndex: number) {
@@ -358,20 +408,43 @@ function onWheel(event: WheelEvent) {
   scale.value = nextScale
 }
 
-function onMouseDown(event: MouseEvent) {
-  event.preventDefault()
+function markPointerMoved(offsetX: number, offsetY: number) {
+  if (!pointerMoved.value && Math.hypot(offsetX, offsetY) >= dragThreshold)
+    pointerMoved.value = true
+}
+
+// Controls and the caption keep their own pointer behavior, everything else in
+// the overlay pans the image.
+function isDragSurface(target: EventTarget | null) {
+  if (!(target instanceof Element))
+    return false
+  return !target.closest('.post-image-viewer__footer, .post-image-viewer__icon-btn, .post-image-viewer__mobile-nav')
+}
+
+function startDrag(clientX: number, clientY: number) {
   isDragging.value = true
-  dragStartX.value = event.clientX
-  dragStartY.value = event.clientY
+  pointerMoved.value = false
+  dragStartX.value = clientX
+  dragStartY.value = clientY
   startTranslateX.value = translateX.value
   startTranslateY.value = translateY.value
+}
+
+function onMouseDown(event: MouseEvent) {
+  if (event.button !== 0 || !isDragSurface(event.target))
+    return
+  event.preventDefault()
+  startDrag(event.clientX, event.clientY)
 }
 
 function onMouseMove(event: MouseEvent) {
   if (!isDragging.value)
     return
-  translateX.value = startTranslateX.value + (event.clientX - dragStartX.value)
-  translateY.value = startTranslateY.value + (event.clientY - dragStartY.value)
+  const offsetX = event.clientX - dragStartX.value
+  const offsetY = event.clientY - dragStartY.value
+  markPointerMoved(offsetX, offsetY)
+  translateX.value = startTranslateX.value + offsetX
+  translateY.value = startTranslateY.value + offsetY
 }
 
 function onMouseUp() {
@@ -387,17 +460,16 @@ function distanceBetweenTouches(event: TouchEvent) {
 
 function onTouchStart(event: TouchEvent) {
   if (event.touches.length === 1) {
+    if (!isDragSurface(event.target))
+      return
     const touch = event.touches[0]
-    isDragging.value = true
-    dragStartX.value = touch.clientX
-    dragStartY.value = touch.clientY
-    startTranslateX.value = translateX.value
-    startTranslateY.value = translateY.value
+    startDrag(touch.clientX, touch.clientY)
     return
   }
 
   if (event.touches.length === 2) {
     isDragging.value = false
+    pointerMoved.value = true
     pinchDistance.value = distanceBetweenTouches(event)
     pinchStartScale.value = scale.value
   }
@@ -406,13 +478,17 @@ function onTouchStart(event: TouchEvent) {
 function onTouchMove(event: TouchEvent) {
   if (event.touches.length === 1 && isDragging.value) {
     const touch = event.touches[0]
-    translateX.value = startTranslateX.value + (touch.clientX - dragStartX.value)
-    translateY.value = startTranslateY.value + (touch.clientY - dragStartY.value)
+    const offsetX = touch.clientX - dragStartX.value
+    const offsetY = touch.clientY - dragStartY.value
+    markPointerMoved(offsetX, offsetY)
+    translateX.value = startTranslateX.value + offsetX
+    translateY.value = startTranslateY.value + offsetY
     return
   }
 
   if (event.touches.length === 2) {
     event.preventDefault()
+    pointerMoved.value = true
     const nextDistance = distanceBetweenTouches(event)
     if (!pinchDistance.value || !nextDistance)
       return
