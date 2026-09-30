@@ -23,6 +23,7 @@ import Exclude from 'vite-plugin-optimize-exclude'
 import { VueRouterAutoImports } from 'vue-router/unplugin'
 import VueRouter from 'vue-router/vite'
 import CopyButtonPlugin from './scripts/copy-button-plugin.ts'
+import { resolveShikiLangs } from './scripts/generate-shiki-langs.ts'
 import { getGitMeta } from './scripts/get-git-meta.ts'
 import NetlifyImagePlugin from './scripts/netlify-image-plugin.ts'
 import { slugify } from './scripts/slugify.ts'
@@ -39,6 +40,10 @@ const postsMarkdownRoot = path.normalize(r('posts'))
 
 const gitMeta = getGitMeta()
 const isProduction = process.env.NODE_ENV === 'production'
+
+// 在配置加载阶段就校验 shiki 语言清单：文章的代码块语言与 src/generated/shiki-langs.ts
+// 不一致时立刻报错，避免拖到第一次 transform 才抛出、或静默降级成纯文本。
+const shikiLangs = resolveShikiLangs()
 
 export default defineConfig({
   define: {
@@ -102,6 +107,10 @@ export default defineConfig({
           md.use(NetlifyImagePlugin())
 
         md.use(await MarkdownItShiki({
+          // 只加载 posts/ 实际用到的语言：不传 langs 时 @shikijs/markdown-it 会加载
+          // shiki 内置的全部 242 个语法包；白名单后只加载 17 个。
+          // 清单由 scripts/generate-shiki-langs.ts 生成并校验覆盖范围。
+          langs: shikiLangs,
           themes: {
             dark: 'vitesse-dark',
             light: 'vitesse-light'
@@ -182,8 +191,7 @@ export default defineConfig({
         manualChunks(id: string) {
           // 文章详情页专属样式：与 reset 分到独立 chunk，避免拖累首页 LCP
           if (
-            id.includes('shiki-magic-move')
-            || id.includes('markdown-it-github-alerts')
+            id.includes('markdown-it-github-alerts')
             || id.includes('/src/assets/styles/prose.css')
             || id.includes('/src/assets/styles/markdown.css')
             || id.includes('/src/assets/styles/copy-button')

@@ -10,6 +10,8 @@
     "generate-rss": "esno scripts/rss.ts",
     "post:new": "esno scripts/create-post.ts",
     "generate-search-index": "esno scripts/search-index-cli.ts",
+    "generate-langs": "esno scripts/shiki-langs-cli.ts",
+    "shiki-profile": "esno scripts/shiki-langs-cli.ts --profile",
     "preview": "vite preview",
     "install:stable": "pnpm dlx esno ./scripts/pnpm-stable-install.ts",
     "env:check": "pnpm dlx esno ./scripts/pnpm-env-check.ts",
@@ -17,7 +19,6 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "@shikijs/magic-move": "^4.4.3",
     "@unhead/vue": "^3.4.1",
     "@unocss/reset": "^66.10.5",
     "@vueuse/core": "^15.0.0",

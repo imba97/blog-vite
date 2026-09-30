@@ -9,7 +9,6 @@
 import 'markdown-it-github-alerts/styles/github-base.css'
 import 'markdown-it-github-alerts/styles/github-colors-dark-class.css'
 import 'markdown-it-github-alerts/styles/github-colors-light.css'
-import '@shikijs/magic-move/style.css'
 import './prose.css'
 import './markdown.css'
 import './copy-button.scss'

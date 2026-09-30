@@ -3,6 +3,9 @@ import antfu from '@antfu/eslint-config'
 export default antfu({
   unocss: true,
 
+  // 生成物（`pnpm run generate-langs` 维护），不参与 lint
+  ignores: ['src/generated/**'],
+
   rules: {
     'style/comma-dangle': ['warn', 'never']
   },
