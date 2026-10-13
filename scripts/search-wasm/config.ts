@@ -7,7 +7,7 @@ import process from 'node:process'
 export interface SearchWasmConfig {
   /** 源码仓库（默认 GitHub，可用 SSH 或带 token 的 https） */
   repo: string
-  /** 分支 / tag / 提交号 */
+  /** 分支 / tag / 提交号；`latest`（默认）表示构建时解析为最新的正式 tag（形如 vX.Y.Z） */
   ref: string
   /** 私有仓库时的访问 token（会被注入 clone URL 并自动打码） */
   token: string | null
@@ -48,7 +48,8 @@ const root = process.cwd()
 export function resolveConfig(): SearchWasmConfig {
   return {
     repo: process.env.SEARCH_WASM_REPO || 'https://github.com/imba97/bigseek.git',
-    ref: process.env.SEARCH_WASM_REF || 'main',
+    // 默认取最新正式 tag：发版后不需要改配置，也不会把主干未发布的提交带进生产
+    ref: process.env.SEARCH_WASM_REF || 'latest',
     token: process.env.SEARCH_WASM_TOKEN || null,
     localDir: process.env.SEARCH_WASM_LOCAL_DIR ? path.resolve(process.env.SEARCH_WASM_LOCAL_DIR) : null,
     cacheDir: path.join(root, 'node_modules', '.cache', 'bigseek', 'src'),

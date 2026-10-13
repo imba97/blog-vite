@@ -142,8 +142,43 @@ function ensureCargo(cfg: SearchWasmConfig): string {
   return cargo
 }
 
+/** 带 token 的 clone / fetch URL（私有仓库用；日志里自动打码） */
+function repoUrl(cfg: SearchWasmConfig): string {
+  return cfg.token ? cfg.repo.replace(/^https:\/\//, `https://x-access-token:${cfg.token}@`) : cfg.repo
+}
+
+/**
+ * 解析实际使用的 ref。
+ *
+ * `latest`（默认）会在构建时查一次远端 tag，取版本号最大的**正式版**（形如 `vX.Y.Z`）。
+ * 这样发版之后不需要改任何配置，同时也不会把主干上未发布的提交带进生产。
+ * 预发布（`v0.2.0-rc.1`）与其它命名不会被自动选中，需要显式写 `SEARCH_WASM_REF`。
+ */
+function resolveRef(cfg: SearchWasmConfig): string {
+  if (cfg.ref !== 'latest')
+    return cfg.ref
+
+  const output = run('git', ['ls-remote', '--tags', '--refs', '--sort=-v:refname', repoUrl(cfg), 'v*'], {
+    capture: true,
+    echo: false,
+    secrets: cfg.token ? [cfg.token] : []
+  })
+
+  const tags = output
+    .split('\n')
+    .map(line => line.trim().split(/\s+/)[1] ?? '')
+    .map(ref => ref.replace('refs/tags/', ''))
+    .filter(ref => /^v\d+\.\d+\.\d+$/.test(ref))
+
+  if (tags.length === 0)
+    throw new Error(`在 ${cfg.repo} 上没找到形如 vX.Y.Z 的正式 tag；请用 SEARCH_WASM_REF 显式指定版本`)
+
+  log(`latest → ${tags[0]}（远端现有 ${tags.length} 个正式 tag，最近的：${tags.slice(0, 3).join(', ')}）`)
+  return tags[0]
+}
+
 /** 拉取（或更新）搜索库源码；`SEARCH_WASM_LOCAL_DIR` 时直接用本地目录 */
-function ensureSource(cfg: SearchWasmConfig): string {
+function ensureSource(cfg: SearchWasmConfig, ref: string): string {
   if (cfg.localDir) {
     if (!existsSync(path.join(cfg.localDir, 'Cargo.toml')))
       throw new Error(`SEARCH_WASM_LOCAL_DIR=${cfg.localDir} 里没有 Cargo.toml`)
@@ -152,21 +187,19 @@ function ensureSource(cfg: SearchWasmConfig): string {
   }
 
   const dest = cfg.cacheDir
-  const url = cfg.token
-    ? cfg.repo.replace(/^https:\/\//, `https://x-access-token:${cfg.token}@`)
-    : cfg.repo
+  const url = repoUrl(cfg)
   const secrets = cfg.token ? [cfg.token] : []
 
   if (existsSync(path.join(dest, '.git'))) {
     log(`更新已有 clone：${dest}`)
-    run('git', ['fetch', '--depth', '1', 'origin', cfg.ref], { cwd: dest, secrets })
+    run('git', ['fetch', '--depth', '1', 'origin', ref], { cwd: dest, secrets })
     run('git', ['checkout', '--force', 'FETCH_HEAD'], { cwd: dest, secrets })
   }
   else {
     rmSync(dest, { recursive: true, force: true })
     mkdirSync(path.dirname(dest), { recursive: true })
-    log(`clone ${cfg.repo}@${cfg.ref} → ${dest}`)
-    run('git', ['clone', '--depth', '1', '--branch', cfg.ref, url, dest], { secrets })
+    log(`clone ${cfg.repo}@${ref} → ${dest}`)
+    run('git', ['clone', '--depth', '1', '--branch', ref, url, dest], { secrets })
   }
   return dest
 }
@@ -224,10 +257,11 @@ async function main(): Promise<void> {
   log('生成 public/search-full.json')
   await generateSearchIndex('public')
 
-  // ---- 2. 源码 ----
-  const sourceDir = ensureSource(cfg)
+  // ---- 2. 源码（ref 为 `latest` 时在这里解析成最新的正式 tag）----
+  const ref = resolveRef(cfg)
+  const sourceDir = ensureSource(cfg, ref)
   const commit = gitCommit(sourceDir)
-  log(`搜索库源码 commit：${commit}`)
+  log(`搜索库源码：${ref} @ ${commit}`)
 
   // ---- 3. 工具链 ----
   const cargo = ensureCargo(cfg)
@@ -348,7 +382,8 @@ async function main(): Promise<void> {
   const indexFile = path.join(cfg.wasmDir, 'search.idx')
   const manifest = {
     source: cfg.repo,
-    ref: cfg.ref,
+    // 记录解析后的真实 ref（`latest` 会被换成具体 tag），排查线上问题时能一眼看出用的哪个版本
+    ref,
     commit,
     builtAt: new Date().toISOString(),
     docs,

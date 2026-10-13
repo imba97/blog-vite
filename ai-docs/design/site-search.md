@@ -233,7 +233,7 @@ VITE_SEARCH_ENGINE=minisearch  // 强制旧引擎（A/B 或应急）
 | 变量 | 默认 | 说明 |
 | --- | --- | --- |
 | `SEARCH_WASM_REPO` | `https://github.com/imba97/bigseek.git` | 源码仓库 |
-| `SEARCH_WASM_REF` | `main` | 分支 / tag / 提交号（建议 Netlify 上锁 tag 或 commit） |
+| `SEARCH_WASM_REF` | `latest` | 分支 / tag / 提交号。`latest` = 构建时解析为**最新的正式 tag**（`vX.Y.Z`）；要固定版本或使用预发布 tag 时显式指定 |
 | `SEARCH_WASM_TOKEN` | 空 | 私有仓库时的 token，日志里自动打码 |
 | `SEARCH_WASM_LOCAL_DIR` | 空 | 直接用本地目录，跳过 clone（单仓库联调/离线开发） |
 | `SEARCH_WASM_OPTIONAL` | `1` | 失败是否降级继续 |
@@ -247,8 +247,13 @@ Netlify 相关说明：
 
 - **`wasm-pack` 一定不会预装**，所以脚本默认自动安装；否则每次构建都会静默回退，这套东西等于白做。
 - `netlify.toml` 里设了 `SEARCH_WASM_BOOTSTRAP=1`：镜像自带 Rust 时无副作用，不带时会装 rustup（minimal profile）。
-- 生产环境建议把 `SEARCH_WASM_REF` 锁到 tag 或 commit（`netlify.toml` 里有注释行），
-  避免搜索库主干改动直接影响发版。
+- **版本策略：默认跟最新正式 tag**（`SEARCH_WASM_REF` 不设即为 `latest`）。
+  构建时用 `git ls-remote --tags --refs --sort=-v:refname <repo> 'v*'` 取版本号最大的 `vX.Y.Z`，
+  所以发版之后**不需要改任何配置**，同时主干上未发布的提交也不会进生产。
+  两点边界：
+  - 预发布 tag（`v0.2.0-rc.1`）与其它命名不会被自动选中，要用就显式写 `SEARCH_WASM_REF`；
+  - 需要钉死版本（可复现构建 / 回滚）时同样显式写，例如 `SEARCH_WASM_REF = "v0.1.1"`。
+  实际用到的版本会记进 `public/search/manifest.json` 的 `ref` + `commit` 字段，线上可直接核对。
 - 私有仓库需要 `SEARCH_WASM_TOKEN`（日志里自动打码）。
 
 Netlify 侧新增 `/search/*` 的 `Cache-Control: public, max-age=3600, must-revalidate`（与 `/search-full.json` 同策略：
