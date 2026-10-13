@@ -85,7 +85,8 @@
 
 ### 3.1 仓库与产物
 
-搜索库落在**独立仓库** [`bigseek`](https://github.com/imba97/bigseek)（本地已 `git init` + 首个提交，待 push）：
+搜索库落在**独立仓库** [`bigseek`](https://github.com/imba97/bigseek)：已发布到 crates.io（当前 0.1.4），
+每个 `vX.Y.Z` tag 的 GitHub Release 带 7 个附件（wasm / glue / 两个 `.d.ts` / `build-index-linux-x64` / 两份向量）：
 
 ```
 src/tokenize.rs        归一化 + CJK bigram（native 与 wasm 共用同一份实现）
@@ -97,6 +98,9 @@ src/wasm.rs            wasm-bindgen 边界（手工拼 js_sys 对象，不引 se
 src/bin/build-index.rs 构建期 CLI（--posts-dir / --input）+ `--verify` 召回自检
 testdata/tokenize-vectors.json     跨语言分词向量（Rust 与 TS 共用）
 testdata/post-policy-vectors.json  跨语言发布规则向量（Rust 与 TS 共用）
+tests/tokenize_vectors.rs          分词向量回归
+tests/post_policy_vectors.rs       发布规则向量回归
+tests/posts_fixture.rs             fixture 语料的直读解析
 tests/wasm_abi.rs                  wasm ABI 契约测试（纯 Rust 编写，wasm-pack test --node 执行）
 tests/direct_read_parity.rs        直读 vs JSON 的真实语料差分对拍（opt-in）
 tests/real_corpus.rs               真实语料召回回归（opt-in）
@@ -105,17 +109,22 @@ tests/real_corpus.rs               真实语料召回回归（opt-in）
 > 仓库里**没有任何 JS 代码**：早期的 `scripts/smoke-wasm.mjs`（Node 冒烟）与
 > `scripts/bench-wasm.mjs`（测量工具）已移除，前者由 `tests/wasm_abi.rs` 取代（见 §3.3）。
 
-博客侧接线：
+博客侧接线（客户端逻辑已抽成 npm 包 `bigseek`，本仓库只留接线）：
 
 ```
 scripts/search-wasm/config.ts             环境变量 → 构建配置
 scripts/search-wasm/build.ts              取产物（Release 下载 / 源码编译）→ 各项自检 → 原子落地
-scripts/search-wasm/parity.ts             TS 分词器 vs Rust 向量对拍
-scripts/search-wasm/post-policy-parity.ts TS 发布规则 vs Rust 向量对拍
-src/utils/search-tokenize.ts              TS 侧分词器镜像（wasm 与 MiniSearch 回退共用）
-src/workers/site-search.worker.ts         双引擎 Worker
+scripts/search-wasm/parity.ts             分词对拍（分词器从 npm 包引入，与 Rust 读同一份向量）
+scripts/search-wasm/post-policy-parity.ts 发布规则对拍
+src/workers/site-search.worker.ts         Worker 入口：一行 `serveSearch()`（协议 / 引擎调度 / 回退都在包里）
+src/composables/site-search-worker.ts     主线程客户端：`createSearchClient()` 的薄包装
+src/composables/use-site-search-query.ts  搜索框状态与查询节流
+src/utils/site-search-parse.ts            结果解析
 public/search/                            产物目录（wasm / glue / search.idx / manifest.json，已 gitignore）
 ```
+
+> 迁移后删除：`src/utils/search-tokenize.ts`、`src/types/search-wasm.ts`、
+> `src/types/site-search-worker-protocol.ts`；`minisearch` 也不再是博客的直接依赖。详见 §5。
 
 ### 3.2 索引格式（v1）
 
@@ -173,7 +182,7 @@ query(q, tag, category, limit)
 | 文档级召回 | 237/597 = **39.7%** | **598/598 = 100%** | **598/598 = 100%** |
 | 冷启动 | 79 ms 建索引 + 1.4 ms 解析 | 300 ms 建索引（手机 ~1 s） | **1.2~1.5 ms 加载，零建索引** |
 | 索引内存 | 4.6 MiB（JS 堆） | 14.5 MiB（JS 堆） | wasm 线性内存，字节切片按需读 |
-| 平均查询 | 0.3 ms | 0.3~2 ms | **1.14 ms**（含 OR 回退与子串校验） |
+| 平均查询 | 0.3 ms | 0.3~2 ms | **0.37 ms**（混合集）/ **1.11 ms**（单字、短词），v0.1.4 起 |
 | 下载体积 | 401 KiB / gzip 165 KiB | 同左 | 654 KiB / gzip 约 225 KiB |
 | 索引词条 | 12197 | 24134 | 24154 |
 
@@ -189,9 +198,9 @@ query(q, tag, category, limit)
 | 字符串池（含正文，摘要需要） | 388 KiB |
 | 分面 | 3 KiB |
 | **search.idx 合计** | **654 KiB** |
-| `bigseek_bg.wasm` | **75.4 KiB** |
+| `bigseek_bg.wasm` | **85.6 KiB**（v0.1.4 起；v0.1.2 为 75.4 KiB，原因见 §5） |
 | `bigseek.js`（glue） | 12.4 KiB |
-| Worker chunk 变化 | 21.7 → 23.6 KB |
+| Worker chunk 变化 | 21.7 → **25.8 KB**（包 0.1.1，实测线上产物） |
 
 > ⚠️ **体积不是本方案的收益点**：654 KiB 比原来的 401 KiB 更大，gzip 后约 225 KiB vs 165 KiB
 > （+约 60 KiB，3G 下约 +0.5 s）。换来的是冷启动从 300 ms 降到 1.5 ms、内存从 14.5 MiB 降到 wasm 线性内存、
@@ -206,9 +215,13 @@ VITE_SEARCH_ENGINE=wasm        // 强制 wasm，失败即报错（便于排查�
 VITE_SEARCH_ENGINE=minisearch  // 强制旧引擎（A/B 或应急）
 ```
 
-- Worker 的 `ready` 消息新增 `engine: 'wasm' | 'minisearch'`，dev 下会打印一行，方便确认线上跑的是哪个。
-- 两条路径共用 `src/utils/search-tokenize.ts`，所以**回退不是「降级到残废」**：MiniSearch 路径同样是 100% 召回。
+- Worker 的 `ready` 消息带 `engine: 'wasm' | 'minisearch'`，dev 下会打印一行，方便确认线上跑的是哪个。
+- 两条路径共用同一份分词器（现在是 npm 包 `bigseek` 导出的 `miniSearchTokenizer`，与 Rust 读同一份向量），
+  所以**回退不是「降级到残废」**：MiniSearch 路径同样是 100% 召回。
 - `public/search-full.json` 仍然产出（回退路径懒加载用），wasm 路径不会去取它。
+- 包里还有三个 0.1.1 起才有的行为：查询默认 10 s 超时；引擎初始化失败后**不**按键重试（要重试显式
+  `reload()`，否则每个按键都会重新拉一遍语料）；Worker 与客户端之间有 `PROTOCOL_VERSION` 握手，
+  旧的 worker chunk 被缓存时给出明确报错，而不是让查询永远等不到回包。
 
 ### 3.7 构建接线
 
@@ -301,10 +314,11 @@ URL 不带 hash，索引每次构建都会变，必须回源校验）。
 | Netlify 首次构建（release 模式） | 预期 +~10 s，**不需要 Rust / wasm-pack / rustup**（未在 Netlify 实测，属估算） |
 | Netlify 首次构建（source 模式） | 预计 +1.5~3 分钟（需下载 crate、wasm-bindgen-cli、binaryen） |
 | 下载体积 | +约 60 KiB gzip |
-| 查询延迟 | 0.3 ms → 1.14 ms（无观感差异） |
+| 查询延迟 | 0.3 ms → 0.37~1.11 ms（v0.1.4 起，无观感差异） |
 
-> ⚠️ release 模式的耗时尚无实测数据：它依赖 release 里带 `build-index-linux-x64` 与两份向量，
-> 而现有 tag（v0.1.0 / v0.1.1）的 release 还没有这些附件。等下一个带附件的版本发布后再补实测值。
+> ✅ release 模式**已在生产验证**（原先这条是估算）：线上 `public/search/manifest.json` 记录着
+> `wasmSource: "release"`，最早的实测记录是 `ref: "v0.1.2"`（2026-10-13），当前是 `ref: "v0.1.4"`；
+> 说明 Netlify 只下载附件、没有编译。核对方法见 §5.3。
 
 回滚只需一步：`VITE_SEARCH_ENGINE=minisearch`（或删掉 `public/search/`）。
 搜索库本身出问题也不会阻断发布（默认 `SEARCH_WASM_OPTIONAL=1`）。
@@ -359,19 +373,24 @@ build-index --input <search-full.json> --output <search.idx>      # 读 JSON（�
 #### 依赖隔离
 
 `comrak` / `serde_yaml_ng` / `regex` 只挂在 `cli` feature 上，`wasm` 是独立 feature。
-实测直读模式上线后 `bigseek_bg.wasm` 仍是 **75.4 KiB**，一点没变。
+实测直读模式上线后 wasm 体积没有变大——feature 隔离成立。v0.1.4 的 85.6 KiB 来自 `opt-level = 3`
+（查询 −27~32%，只多 12.4 KiB），与 `cli` feature 无关；实测数据写在搜索库 `Cargo.toml` 的注释里。
 
 ## 4. 验证方式（可复现）
 
 ```bash
 # 搜索库自身（注意：测试不要加 --release，release 为 wasm 体积设了 panic=abort）
+# 下面这七条就是 CI 的 ci.yaml 跑的；提交后必须逐条跑过，完整规则见搜索库根的 AGENT.md
 cd bigseek
-cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings
-cargo test                     # cli 在 default 里，无需额外 feature 参数
-wasm-pack build --target web --release --out-dir pkg --no-default-features --features wasm
-cargo run --release --bin build-index -- \
+cargo fmt --all --check
+cargo clippy --all-targets --all-features --locked -- -D warnings
+cargo test --locked             # cli 在 default 里，无需额外 feature 参数
+cargo run --release --locked --bin build-index -- \
+  --posts-dir tests/fixtures/posts --output target/smoke-posts.idx --verify
+cargo run --release --locked --bin build-index -- \
   --input tests/fixtures/search-full.json --output target/smoke.idx --verify
 wasm-pack test --node --no-default-features --features wasm
+wasm-pack build --target web --release --out-dir pkg --no-pack --no-default-features --features wasm
 
 # 直读 vs JSON 的差分对拍（真实语料，要求 144 篇正文逐字一致）
 BLOG_POSTS_DIR=../imba97-blog-vite/posts \
@@ -395,6 +414,60 @@ pnpm run build
 >
 > **wasm-pack 必须带 `--no-default-features`**：`cli`（comrak / serde_yaml_ng / regex）在 default 里，
 > 忘了加不会坏（实测 wasm 只大 5 KiB），但构建会变慢。
+>
+> 搜索库仓库根的 [`AGENT.md`](https://github.com/imba97/bigseek/blob/main/AGENT.md) 把上面这七条命令、
+> 本地与 CI 的差异（Node/libuv、`panic = "abort"`、代理）、提交与发版约定都写下来了。
+
+## 5. 变更记录：客户端抽包 + 0.1.4 上线（2026-10-13）
+
+后来的一次重构与它的实测结果，用来取代上文里已经过时的部分。
+
+### 5.1 客户端逻辑抽成 npm 包 `bigseek`
+
+原先 TS 侧的分词镜像、worker 协议、引擎调度、MiniSearch 回退、结果解析都在博客仓库里；
+现在它们属于 npm 包 [`bigseek`](https://www.npmjs.com/package/bigseek)（本地 `^0.1.1`，
+发布走 GitHub OIDC，带 provenance attestation），博客只剩接线：
+
+| 原先在本仓库 | 现在 |
+| --- | --- |
+| `src/utils/search-tokenize.ts` | 包导出的 `miniSearchTokenizer` / `normalizeForSearch` / `isCjkLike` |
+| `src/types/search-wasm.ts` | 包导出的 `SearchHit` 等类型 |
+| `src/types/site-search-worker-protocol.ts` | 包内部的 `PROTOCOL_VERSION` 与消息类型 |
+| worker 里的引擎调度 + 回退 | `serveSearch()`（Worker 侧）/ `createSearchClient()`（主线程） |
+| 直接依赖 `minisearch` | 包内动态 import，`minisearch` 不再是博客的依赖 |
+
+同一份分词向量因此从「两边各自实现、各自测试」变成「包与 Rust 两侧测试」，
+博客构建里只保留 `parity.ts` / `post-policy-parity.ts` 两道对拍。
+
+### 5.2 搜索库 v0.1.3 / v0.1.4 的性能与健壮性
+
+| 项 | v0.1.2（当时） | v0.1.4（现在） | 备注 |
+| --- | --- | --- | --- |
+| `bigseek_bg.wasm` | 75.4 KiB | **85.6 KiB** | `opt-level` 由 `"z"` 改 `3`：查询 −27~32%，只多 12.4 KiB |
+| 混合查询集 | 0.831 ms | **0.369 ms** | Node 里 2000 次查询，同一份 144 篇索引 |
+| 单字 / 短词 | 2.100 ms | **1.111 ms** | 前缀展开 + 命中多的场景 |
+| 索引构建（CLI 端到端） | 113 ms | **~85 ms** | 带 `--verify` 的 272 → ~150 ms（自检部分 −47%） |
+| `search.idx` | sha256 `650db427743d9a41` | **完全相同** | 性能改造没有动索引字节 |
+| 召回自检 | 100% | 100% | 抽样现在也覆盖 categories（原先漏了） |
+
+同时修掉两处只在边界上暴露的缺陷：索引加载对损坏输入更严（段边界、varint 超长编码、分面计数上界），
+以及 `--verify` 的直方图把「出现于 N 篇」记成 N−1（小语料上会直接报「抽样为空」，已补回归测试）。
+细节与提交见搜索库 `AGENT.md` 的「踩过的坑」。
+
+### 5.3 线上核对方法（可复现）
+
+```bash
+curl -s  https://imba97.com/search/manifest.json      # ref / wasmSource / 各文件 sha256
+curl -sI https://imba97.com/search/bigseek_bg.wasm    # 期望 Content-Type: application/wasm
+```
+
+要确认「线上用的就是那个 release 的产物」，注意 **release 页面的 HTML 里抓不到附件链接**
+（附件列表是 `include-fragment` 懒加载的，抓页面会误判成"没有附件"）。用这个地址：
+
+```bash
+curl -sL https://github.com/imba97/bigseek/releases/expanded_assets/v0.1.4
+# 再对每个附件算 sha256，与 manifest.json 里的值比对；本地构建的 worker chunk 也应与线上逐字节一致
+```
 
 ## 附：本文件里「现状」相关数字的测量方法
 
