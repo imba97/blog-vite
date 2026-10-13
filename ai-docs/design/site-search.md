@@ -6,7 +6,7 @@
 > Rust/WASM 的真正价值在于把该修复带来的冷启动/内存成本收回去，以及长期掌控分词与排序——
 > **不是**索引下载体积（实测预建二进制索引 + 正文比原来的 JSON 更大）。
 >
-> 本文档同时是**实施记录**：Rust 库已落地为独立仓库 `imba97-blog-search`，由 Netlify 构建期拉取编译，
+> 本文档同时是**实施记录**：Rust 库已落地为独立仓库 `bigseek`，由 Netlify 构建期拉取编译，
 > 产物落进 `public/search/`，Worker 侧双引擎可切换。落地结果见 §3。
 
 ## 1. 现状架构与数据流
@@ -85,7 +85,7 @@
 
 ### 3.1 仓库与产物
 
-搜索库落在**独立仓库** [`imba97-blog-search`](https://github.com/imba97/imba97-blog-search)（本地已 `git init` + 首个提交，待 push）：
+搜索库落在**独立仓库** [`bigseek`](https://github.com/imba97/bigseek)（本地已 `git init` + 首个提交，待 push）：
 
 ```
 src/tokenize.rs        归一化 + CJK bigram（native 与 wasm 共用同一份实现）
@@ -189,8 +189,8 @@ query(q, tag, category, limit)
 | 字符串池（含正文，摘要需要） | 388 KiB |
 | 分面 | 3 KiB |
 | **search.idx 合计** | **654 KiB** |
-| `blog_search_bg.wasm` | **75.4 KiB** |
-| `blog_search.js`（glue） | 12.4 KiB |
+| `bigseek_bg.wasm` | **75.4 KiB** |
+| `bigseek.js`（glue） | 12.4 KiB |
 | Worker chunk 变化 | 21.7 → 23.6 KB |
 
 > ⚠️ **体积不是本方案的收益点**：654 KiB 比原来的 401 KiB 更大，gzip 后约 225 KiB vs 165 KiB
@@ -221,7 +221,7 @@ VITE_SEARCH_ENGINE=minisearch  // 强制旧引擎（A/B 或应急）
 
 `build.ts` 的流程与设计取舍：
 
-1. **原子落地**：先构建到 `node_modules/.cache/blog-search/staging`，最后一次性拷贝；
+1. **原子落地**：先构建到 `node_modules/.cache/bigseek/staging`，最后一次性拷贝；
    任何一步失败都清掉 `public/search/`，让运行期干净地回退，而不是拿到半套产物。
 2. **默认可降级**：`SEARCH_WASM_OPTIONAL=1`（默认），失败只警告不阻断站点发布，并打印醒目横幅；
    设 `0` 则中断构建。
@@ -232,7 +232,7 @@ VITE_SEARCH_ENGINE=minisearch  // 强制旧引擎（A/B 或应急）
 
 | 变量 | 默认 | 说明 |
 | --- | --- | --- |
-| `SEARCH_WASM_REPO` | `https://github.com/imba97/imba97-blog-search.git` | 源码仓库 |
+| `SEARCH_WASM_REPO` | `https://github.com/imba97/bigseek.git` | 源码仓库 |
 | `SEARCH_WASM_REF` | `main` | 分支 / tag / 提交号（建议 Netlify 上锁 tag 或 commit） |
 | `SEARCH_WASM_TOKEN` | 空 | 私有仓库时的 token，日志里自动打码 |
 | `SEARCH_WASM_LOCAL_DIR` | 空 | 直接用本地目录，跳过 clone（单仓库联调/离线开发） |
@@ -317,13 +317,13 @@ build-index --input <search-full.json> --output <search.idx>      # 读 JSON（�
 #### 依赖隔离
 
 `comrak` / `serde_yaml_ng` / `regex` 只挂在 `cli` feature 上，`wasm` 是独立 feature。
-实测直读模式上线后 `blog_search_bg.wasm` 仍是 **75.4 KiB**，一点没变。
+实测直读模式上线后 `bigseek_bg.wasm` 仍是 **75.4 KiB**，一点没变。
 
 ## 4. 验证方式（可复现）
 
 ```bash
 # 搜索库自身（注意：测试不要加 --release，release 为 wasm 体积设了 panic=abort）
-cd imba97-blog-search
+cd bigseek
 cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings
 cargo test                     # cli 在 default 里，无需额外 feature 参数
 wasm-pack build --target web --release --out-dir pkg --no-default-features --features wasm
@@ -343,7 +343,7 @@ cargo test --test real_corpus -- --nocapture
 
 # 博客侧（一条命令跑完：拉源码 → 分词/发布规则向量对拍 → 直读建索引 + 召回自检
 #          → 双路径哈希门禁 → wasm 编译 + 冒烟 → 原子落地）
-SEARCH_WASM_LOCAL_DIR=../imba97-blog-search pnpm run search:wasm
+SEARCH_WASM_LOCAL_DIR=../bigseek pnpm run search:wasm
 pnpm run build
 ```
 

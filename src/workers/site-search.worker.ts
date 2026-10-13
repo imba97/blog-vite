@@ -259,10 +259,10 @@ async function fetchBytes(url: string, label: string): Promise<Uint8Array> {
   return new Uint8Array(await res.arrayBuffer())
 }
 
-/** 运行时动态 import `public/search/blog_search.js`（不经 Vite 打包，故用 @vite-ignore） */
+/** 运行时动态 import `public/search/bigseek.js`（不经 Vite 打包，故用 @vite-ignore） */
 async function importWasmGlue(baseUrl: string): Promise<WasmSearchModule> {
   const base = globalThis.location?.href ?? 'http://localhost/'
-  const url = new URL(`${normalizeBase(baseUrl)}search/blog_search.js`, base).href
+  const url = new URL(`${normalizeBase(baseUrl)}search/bigseek.js`, base).href
   return (await import(/* @vite-ignore */ url)) as WasmSearchModule
 }
 
@@ -291,7 +291,7 @@ class WasmSearchBackend implements SearchBackend {
     const base = normalizeBase(baseUrl)
     const [glue, wasmBytes, indexBytes] = await Promise.all([
       importWasmGlue(base),
-      fetchBytes(`${base}search/blog_search_bg.wasm`, 'wasm 模块'),
+      fetchBytes(`${base}search/bigseek_bg.wasm`, 'wasm 模块'),
       fetchBytes(`${base}search/search.idx`, '搜索索引')
     ])
 

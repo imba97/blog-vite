@@ -47,11 +47,11 @@ const root = process.cwd()
 
 export function resolveConfig(): SearchWasmConfig {
   return {
-    repo: process.env.SEARCH_WASM_REPO || 'https://github.com/imba97/imba97-blog-search.git',
+    repo: process.env.SEARCH_WASM_REPO || 'https://github.com/imba97/bigseek.git',
     ref: process.env.SEARCH_WASM_REF || 'main',
     token: process.env.SEARCH_WASM_TOKEN || null,
     localDir: process.env.SEARCH_WASM_LOCAL_DIR ? path.resolve(process.env.SEARCH_WASM_LOCAL_DIR) : null,
-    cacheDir: path.join(root, 'node_modules', '.cache', 'blog-search', 'src'),
+    cacheDir: path.join(root, 'node_modules', '.cache', 'bigseek', 'src'),
     wasmDir: path.join(root, 'public', 'search'),
     postsDir: path.join(root, 'posts'),
     fullIndexFile: path.join(root, 'public', 'search-full.json'),

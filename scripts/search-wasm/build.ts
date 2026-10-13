@@ -10,11 +10,11 @@ import { runParityCheck } from './parity.ts'
 import { runPostPolicyParity } from './post-policy-parity.ts'
 
 /**
- * 搜索 wasm 的构建入口：拉取 `imba97-blog-search`、编译、自检，把产物放进 `public/search/`。
+ * 搜索 wasm 的构建入口：拉取 `bigseek`、编译、自检，把产物放进 `public/search/`。
  *
  * 产物四件套：
- * - `blog_search_bg.wasm`  wasm-pack 产物（检索内核）
- * - `blog_search.js`       wasm-bindgen glue，Worker 里用运行时动态 import 加载
+ * - `bigseek_bg.wasm`  wasm-pack 产物（检索内核）
+ * - `bigseek.js`       wasm-bindgen glue，Worker 里用运行时动态 import 加载
  * - `search.idx`           build-index 产出的紧凑索引（含正文，供摘要使用）
  * - `manifest.json`        记录 commit / 体积 / hash，排查线上问题用
  *
@@ -265,7 +265,7 @@ async function main(): Promise<void> {
   }
 
   // ---- 5. 索引：直读 posts/ 生成 + 召回自检 ----
-  const staging = path.join(root, 'node_modules', '.cache', 'blog-search', 'staging')
+  const staging = path.join(root, 'node_modules', '.cache', 'bigseek', 'staging')
   rmSync(staging, { recursive: true, force: true })
   mkdirSync(staging, { recursive: true })
   const stagedIndex = path.join(staging, 'search.idx')
@@ -336,7 +336,7 @@ async function main(): Promise<void> {
   // 非法字节流是否抛可捕获异常）已改为 Rust 编写的 `tests/wasm_abi.rs`，
   // 由搜索库 CI 的 `wasm-pack test --node` 执行，博客构建里不再跑 JS 测试。
   mkdirSync(cfg.wasmDir, { recursive: true })
-  for (const file of ['blog_search.js', 'blog_search_bg.wasm']) {
+  for (const file of ['bigseek.js', 'bigseek_bg.wasm']) {
     const from = path.join(pkgDir, file)
     if (!existsSync(from))
       throw new Error(`wasm-pack 产物缺少 ${file}`)
@@ -344,7 +344,7 @@ async function main(): Promise<void> {
   }
   cpSync(stagedIndex, path.join(cfg.wasmDir, 'search.idx'))
 
-  const wasmFile = path.join(cfg.wasmDir, 'blog_search_bg.wasm')
+  const wasmFile = path.join(cfg.wasmDir, 'bigseek_bg.wasm')
   const indexFile = path.join(cfg.wasmDir, 'search.idx')
   const manifest = {
     source: cfg.repo,
@@ -354,14 +354,14 @@ async function main(): Promise<void> {
     docs,
     terms,
     files: {
-      'blog_search_bg.wasm': { bytes: readFileSync(wasmFile).length, sha256: sha256(wasmFile) },
+      'bigseek_bg.wasm': { bytes: readFileSync(wasmFile).length, sha256: sha256(wasmFile) },
       'search.idx': { bytes: readFileSync(indexFile).length, sha256: sha256(indexFile) }
     }
   }
   writeFileSync(path.join(cfg.wasmDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8')
 
   log(
-    `完成：wasm ${(manifest.files['blog_search_bg.wasm'].bytes / 1024).toFixed(1)} KiB / 索引 `
+    `完成：wasm ${(manifest.files['bigseek_bg.wasm'].bytes / 1024).toFixed(1)} KiB / 索引 `
     + `${(manifest.files['search.idx'].bytes / 1024).toFixed(0)} KiB / ${docs} 篇 ${terms} 词条（commit ${commit}）`
   )
 }

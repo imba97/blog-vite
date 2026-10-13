@@ -1,7 +1,7 @@
 /**
- * `imba97-blog-search` wasm-bindgen 产物（`--target web`）在博客侧的类型描述。
+ * `bigseek` wasm-bindgen 产物（`--target web`）在博客侧的类型描述。
  *
- * glue 文件是从 `public/search/blog_search.js` 运行时动态 import 的，
+ * glue 文件是从 `public/search/bigseek.js` 运行时动态 import 的，
  * Vite 不参与打包，所以这里手工声明形状；字段与 `src/wasm.rs` 一一对应。
  */
 
