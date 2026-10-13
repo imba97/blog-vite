@@ -109,7 +109,7 @@ tests/real_corpus.rs               真实语料召回回归（opt-in）
 
 ```
 scripts/search-wasm/config.ts             环境变量 → 构建配置
-scripts/search-wasm/build.ts              拉源码 → 编译 → 各项自检 → 原子落地 public/search/
+scripts/search-wasm/build.ts              取产物（Release 下载 / 源码编译）→ 各项自检 → 原子落地
 scripts/search-wasm/parity.ts             TS 分词器 vs Rust 向量对拍
 scripts/search-wasm/post-policy-parity.ts TS 发布规则 vs Rust 向量对拍
 src/utils/search-tokenize.ts              TS 侧分词器镜像（wasm 与 MiniSearch 回退共用）
@@ -234,19 +234,51 @@ VITE_SEARCH_ENGINE=minisearch  // 强制旧引擎（A/B 或应急）
 | --- | --- | --- |
 | `SEARCH_WASM_REPO` | `https://github.com/imba97/bigseek.git` | 源码仓库 |
 | `SEARCH_WASM_REF` | `latest` | 分支 / tag / 提交号。`latest` = 构建时解析为**最新的正式 tag**（`vX.Y.Z`）；要固定版本或使用预发布 tag 时显式指定 |
+| `SEARCH_WASM_WASM_SOURCE` | `release` | `release` = 从 Release 下载预编译产物（构建端不需要 Rust）；`source` = clone 源码自己编译 |
 | `SEARCH_WASM_TOKEN` | 空 | 私有仓库时的 token，日志里自动打码 |
-| `SEARCH_WASM_LOCAL_DIR` | 空 | 直接用本地目录，跳过 clone（单仓库联调/离线开发） |
+| `SEARCH_WASM_LOCAL_DIR` | 空 | 直接用本地目录，跳过 clone（单仓库联调/离线开发）→ 强制 source 模式 |
 | `SEARCH_WASM_OPTIONAL` | `1` | 失败是否降级继续 |
 | `SEARCH_WASM_SKIP` | `0` | 完全跳过本次构建 |
-| `SEARCH_WASM_CARGO_OFFLINE` | `0` | cargo 走 `--offline`（本地无网/走代理时用） |
-| `SEARCH_WASM_INSTALL_WASM_PACK` | `1` | 缺少 wasm-pack 时用官方脚本自动安装（只下预编译二进制） |
-| `SEARCH_WASM_BOOTSTRAP` | `0` | 缺少 cargo 时自动安装 rustup 工具链；已在 `netlify.toml` 里打开 |
+| `SEARCH_WASM_CARGO_OFFLINE` | `0` | cargo 走 `--offline`（只有 source 模式会用到） |
+| `SEARCH_WASM_INSTALL_WASM_PACK` | `1` | 缺少 wasm-pack 时用官方脚本自动安装（只有 source 模式会用到） |
+| `SEARCH_WASM_BOOTSTRAP` | `0` | 缺少 cargo 时自动安装 rustup 工具链（只有 source 模式会用到）；`netlify.toml` 里仍然打开着 |
 | `VITE_SEARCH_ENGINE` | `auto` | 运行时引擎选择 |
+
+#### 产物来源：默认从 Release 下载（构建端零 Rust 工具链）
+
+`build-index` 是生成 `search.idx` 的 **native 二进制**，不在 wasm 包里；所以"博客不再编译"的前提是
+**release 也带上这个二进制**。现在每次 tag 推送，CI 会把这些东西挂到 release：
+
+```
+bigseek_bg.wasm / bigseek.js / bigseek.d.ts / bigseek_bg.wasm.d.ts
+build-index-linux-x64                     ← 为 Netlify（linux x64）编的原生索引生成器
+tokenize-vectors.json / post-policy-vectors.json   ← 两份跨语言契约向量
+```
+
+博客侧 `resolveWasmSource` 的判定规则（**正式 tag + linux x64 才走下载**，其余自动退回源码编译）：
+
+| 条件 | 走哪条 |
+| --- | --- |
+| `SEARCH_WASM_REF` 是 `vX.Y.Z` 正式 tag，且平台是 linux x64 | **release**：下载 5 个附件，`chmod +x` 后直接用 |
+| 设了 `SEARCH_WASM_LOCAL_DIR` | source（本地目录没有对应的 release） |
+| ref 是分支 / commit（如 `main`） | source（没有对应的 release） |
+| 非 linux x64（本地 Windows/macOS 开发） | source（`build-index-linux-x64` 跑不了） |
+| `SEARCH_WASM_WASM_SOURCE=source` | source（显式强制） |
+
+这意味着 **Netlify 上不需要 Rust、wasm-pack、rustup**，构建增量从 1.5~3 分钟降到 ~10 秒
+（只剩下载 + 跑一次原生二进制 + 读两份向量）。
+
+代价与边界：
+
+- release 里的 `build-index` **平台绑定**（linux x64）。要在别的平台从二进制运行，得再挂对应平台的产物。
+- 博客**只能拉到已发布的 release**：draft 状态的 release 不能匿名下载，UI 上会 404。
+  所以 CI 那一步是创建**正式** release（带自动生成的 notes），而不是 draft。
+- 下载下来的二进制会被执行，因此 `manifest.json` 里额外记录了它的 `sha256`，便于追溯用的是哪一份。
 
 Netlify 相关说明：
 
-- **`wasm-pack` 一定不会预装**，所以脚本默认自动安装；否则每次构建都会静默回退，这套东西等于白做。
-- `netlify.toml` 里设了 `SEARCH_WASM_BOOTSTRAP=1`：镜像自带 Rust 时无副作用，不带时会装 rustup（minimal profile）。
+- **默认路径不需要任何 Rust 工具链**（见上）。`SEARCH_WASM_BOOTSTRAP=1` 与自动安装 wasm-pack
+  只在 `SEARCH_WASM_WASM_SOURCE=source` 时才有意义——留着是为了强制源码编译时不至于直接失败。
 - **版本策略：默认跟最新正式 tag**（`SEARCH_WASM_REF` 不设即为 `latest`）。
   构建时用 `git ls-remote --tags --refs --sort=-v:refname <repo> 'v*'` 取版本号最大的 `vX.Y.Z`，
   所以发版之后**不需要改任何配置**，同时主干上未发布的提交也不会进生产。
@@ -263,11 +295,16 @@ URL 不带 hash，索引每次构建都会变，必须回源校验）。
 
 | 成本 | 量 |
 | --- | --- |
-| 本地热构建 | **实测 +约 3 s**（全量 `pnpm run build` 27.7 s，其中 client 6.8 s + server 5.1 s） |
-| 本地冷编译 | 约 +90 s（cargo release + wasm32 各编译一遍） |
-| Netlify 首次构建 | 预计 +1.5~3 分钟（另需下载 crate、wasm-bindgen-cli、binaryen；未在 Netlify 实测，属估算） |
+| 本地热构建（release 模式） | 预期 +~10 s（只有下载 + 原生二进制生成索引；**未实测**，见下方说明） |
+| 本地热构建（source 模式，旧路径实测） | **实测 +约 3 s**（全量 `pnpm run build` 27.7 s，其中 client 6.8 s + server 5.1 s） |
+| 本地冷编译（source 模式） | 约 +90 s（cargo release + wasm32 各编译一遍） |
+| Netlify 首次构建（release 模式） | 预期 +~10 s，**不需要 Rust / wasm-pack / rustup**（未在 Netlify 实测，属估算） |
+| Netlify 首次构建（source 模式） | 预计 +1.5~3 分钟（需下载 crate、wasm-bindgen-cli、binaryen） |
 | 下载体积 | +约 60 KiB gzip |
 | 查询延迟 | 0.3 ms → 1.14 ms（无观感差异） |
+
+> ⚠️ release 模式的耗时尚无实测数据：它依赖 release 里带 `build-index-linux-x64` 与两份向量，
+> 而现有 tag（v0.1.0 / v0.1.1）的 release 还没有这些附件。等下一个带附件的版本发布后再补实测值。
 
 回滚只需一步：`VITE_SEARCH_ENGINE=minisearch`（或删掉 `public/search/`）。
 搜索库本身出问题也不会阻断发布（默认 `SEARCH_WASM_OPTIONAL=1`）。

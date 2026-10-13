@@ -9,6 +9,15 @@ export interface SearchWasmConfig {
   repo: string
   /** 分支 / tag / 提交号；`latest`（默认）表示构建时解析为最新的正式 tag（形如 vX.Y.Z） */
   ref: string
+  /**
+   * wasm 产物从哪来：
+   * - `release`（默认）：从 GitHub Release 下载 wasm 包 + linux 原生 build-index + 契约向量，
+   *   构建端**不需要任何 Rust 工具链**
+   * - `source`：clone 源码自己编译
+   *
+   * 只有「正式 tag + linux x64」才会真正走 release，其余情况自动退回 source（见 build.ts 的 resolveWasmSource）
+   */
+  wasmSource: 'release' | 'source'
   /** 私有仓库时的访问 token（会被注入 clone URL 并自动打码） */
   token: string | null
   /** 本地已 clone 的目录；设置后跳过 clone（离线开发 / 单仓库联调） */
@@ -29,9 +38,9 @@ export interface SearchWasmConfig {
   skip: boolean
   /** cargo 走离线模式（本地无网 / 走代理时用） */
   cargoOffline: boolean
-  /** 缺少 wasm-pack 时自动安装（官方脚本，只下载预编译二进制） */
+  /** 缺少 wasm-pack 时自动安装（官方脚本，只下载预编译二进制）；只有 source 模式会用到 */
   installWasmPack: boolean
-  /** 缺少 cargo 时自动安装 Rust 工具链（Netlify 镜像若不带 Rust 时打开） */
+  /** 缺少 cargo 时自动安装 Rust 工具链（只有 source 模式会用到） */
   bootstrapToolchain: boolean
   verbose: boolean
 }
@@ -50,6 +59,10 @@ export function resolveConfig(): SearchWasmConfig {
     repo: process.env.SEARCH_WASM_REPO || 'https://github.com/imba97/bigseek.git',
     // 默认取最新正式 tag：发版后不需要改配置，也不会把主干未发布的提交带进生产
     ref: process.env.SEARCH_WASM_REF || 'latest',
+    // 默认直接从 release 拉产物（省掉整套 Rust 工具链）；设成 source 可强制从源码编译
+    wasmSource: (process.env.SEARCH_WASM_WASM_SOURCE || '').trim().toLowerCase() === 'source'
+      ? 'source'
+      : 'release',
     token: process.env.SEARCH_WASM_TOKEN || null,
     localDir: process.env.SEARCH_WASM_LOCAL_DIR ? path.resolve(process.env.SEARCH_WASM_LOCAL_DIR) : null,
     cacheDir: path.join(root, 'node_modules', '.cache', 'bigseek', 'src'),

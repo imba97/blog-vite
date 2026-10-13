@@ -4,12 +4,13 @@ command = "pnpm run build"
 
 [build.environment]
 NODE_VERSION = "22"
-# 搜索 wasm：Netlify 镜像基本不带 wasm-pack（脚本会自动装），若也不带 Rust 则需允许自举安装。
-# 镜像自带 Rust 时这两项不会产生任何额外动作。
+# 搜索产物默认从 bigseek 的 GitHub Release 下载（wasm 包 + linux 原生 build-index + 契约向量），
+# 构建端不需要任何 Rust 工具链；下面这项只在强制 SEARCH_WASM_WASM_SOURCE=source 时才起作用。
 SEARCH_WASM_BOOTSTRAP = "1"
 # 默认自动取 bigseek 最新的正式 tag（形如 vX.Y.Z），发版后不需要改这里；
 # 只有想固定版本、或想用预发布 tag（v0.2.0-rc.1）时才显式指定：
 # SEARCH_WASM_REF = "v0.1.1"
+# 想强制从源码编译（非 linux x64 平台会自动这么做）：SEARCH_WASM_WASM_SOURCE = "source"
 
 # 构建产物强缓存 1 年（hash 文件名天然支持缓存更新）
 [[headers]]

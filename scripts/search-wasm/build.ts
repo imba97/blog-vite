@@ -1,7 +1,7 @@
 import type { SearchWasmConfig } from './config.ts'
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { chmodSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { generateSearchIndex } from '../generate-search-index.ts'
@@ -10,19 +10,27 @@ import { runParityCheck } from './parity.ts'
 import { runPostPolicyParity } from './post-policy-parity.ts'
 
 /**
- * 搜索 wasm 的构建入口：拉取 `bigseek`、编译、自检，把产物放进 `public/search/`。
+ * 搜索 wasm 的构建入口：拿到 bigseek 的产物 → 生成索引 → 自检 → 放进 `public/search/`。
  *
- * 产物四件套：
- * - `bigseek_bg.wasm`  wasm-pack 产物（检索内核）
+ * 产物来源有两种（见 `resolveWasmSource`）：
+ *
+ * - **release**（默认）：从 GitHub Release 下载 `bigseek_bg.wasm` + `bigseek.js` +
+ *   `build-index-linux-x64`（原生索引生成器）+ 两份契约向量。构建端**不需要 Rust 工具链**。
+ *   只有「正式 tag + linux x64」走这条；分支 / commit / 其它平台自动退回源码编译。
+ * - **source**：clone 源码，`cargo build` 出 build-index、`wasm-pack build` 出 wasm 包。
+ *
+ * 落地四件套：
+ * - `bigseek_bg.wasm`  检索内核（release 下载或本地编译）
  * - `bigseek.js`       wasm-bindgen glue，Worker 里用运行时动态 import 加载
- * - `search.idx`           build-index 产出的紧凑索引（含正文，供摘要使用）
- * - `manifest.json`        记录 commit / 体积 / hash，排查线上问题用
+ * - `search.idx`       build-index 直读 `posts/` 产出的紧凑索引（含正文，供摘要使用）
+ * - `manifest.json`    记录产物来源 / ref / commit / 体积 / hash，排查线上问题用
  *
  * 设计原则：
  * 1. **原子落地**：先全部构建到 staging 目录，最后一次性拷贝；中途失败则清掉 `public/search/`，
  *    让运行期干净地回退 MiniSearch，而不是拿到半套产物。
  * 2. **可降级**：默认 `SEARCH_WASM_OPTIONAL=1`，任何一步失败都只警告不阻断站点发布。
- * 3. **自检前置**：分词向量对拍 + `build-index --verify` 召回自检 + wasm 冒烟，三者都过了才落地。
+ * 3. **自检前置**：分词向量对拍 + 发布规则对拍 + `build-index --verify` 召回自检 +
+ *    双路径索引哈希门禁，全都过了才落地。
  */
 
 const root = process.cwd()
@@ -109,7 +117,7 @@ function ensureWasmPack(cfg: SearchWasmConfig): string {
   return installed
 }
 
-/** 确保 cargo 可用，并保证 wasm32-unknown-unknown 目标已安装 */
+/** 确保 cargo 可用（只有 `source` 模式需要） */
 function ensureCargo(cfg: SearchWasmConfig): string {
   let cargo = resolveBinary('cargo')
 
@@ -129,17 +137,20 @@ function ensureCargo(cfg: SearchWasmConfig): string {
       throw new Error('rustup 安装完成仍找不到 cargo，检查 $HOME/.cargo/bin 是否在 PATH')
   }
 
-  // wasm32 目标：有 rustup 就顺手补上，避免 wasm-pack 抛一句难懂的错
-  const rustup = resolveBinary('rustup')
-  if (rustup) {
-    const installed = run(rustup, ['target', 'list', '--installed'], { capture: true, echo: false })
-    if (!installed.includes('wasm32-unknown-unknown')) {
-      log('安装 wasm32-unknown-unknown 目标')
-      run(rustup, ['target', 'add', 'wasm32-unknown-unknown'])
-    }
-  }
-
   return cargo
+}
+
+/** 确保 wasm32-unknown-unknown 目标已安装（只有 `source` 模式跑 wasm-pack 才需要） */
+function ensureWasmTarget(): void {
+  const rustup = resolveBinary('rustup')
+  if (!rustup)
+    return
+
+  const installed = run(rustup, ['target', 'list', '--installed'], { capture: true, echo: false })
+  if (!installed.includes('wasm32-unknown-unknown')) {
+    log('安装 wasm32-unknown-unknown 目标')
+    run(rustup, ['target', 'add', 'wasm32-unknown-unknown'])
+  }
 }
 
 /** 带 token 的 clone / fetch URL（私有仓库用；日志里自动打码） */
@@ -153,10 +164,12 @@ function repoUrl(cfg: SearchWasmConfig): string {
  * `latest`（默认）会在构建时查一次远端 tag，取版本号最大的**正式版**（形如 `vX.Y.Z`）。
  * 这样发版之后不需要改任何配置，同时也不会把主干上未发布的提交带进生产。
  * 预发布（`v0.2.0-rc.1`）与其它命名不会被自动选中，需要显式写 `SEARCH_WASM_REF`。
+ *
+ * 顺带把 tag 对应的 commit 带出来，供 `manifest.json` 记录（release 模式没有本地 clone，`git rev-parse` 用不了）。
  */
-function resolveRef(cfg: SearchWasmConfig): string {
+function resolveRef(cfg: SearchWasmConfig): { ref: string, sha?: string } {
   if (cfg.ref !== 'latest')
-    return cfg.ref
+    return { ref: cfg.ref }
 
   const output = run('git', ['ls-remote', '--tags', '--refs', '--sort=-v:refname', repoUrl(cfg), 'v*'], {
     capture: true,
@@ -166,15 +179,17 @@ function resolveRef(cfg: SearchWasmConfig): string {
 
   const tags = output
     .split('\n')
-    .map(line => line.trim().split(/\s+/)[1] ?? '')
-    .map(ref => ref.replace('refs/tags/', ''))
-    .filter(ref => /^v\d+\.\d+\.\d+$/.test(ref))
+    .map((line) => {
+      const [sha = '', ref = ''] = line.trim().split(/\s+/)
+      return { sha, tag: ref.replace('refs/tags/', '') }
+    })
+    .filter(entry => /^v\d+\.\d+\.\d+$/.test(entry.tag))
 
   if (tags.length === 0)
     throw new Error(`在 ${cfg.repo} 上没找到形如 vX.Y.Z 的正式 tag；请用 SEARCH_WASM_REF 显式指定版本`)
 
-  log(`latest → ${tags[0]}（远端现有 ${tags.length} 个正式 tag，最近的：${tags.slice(0, 3).join(', ')}）`)
-  return tags[0]
+  log(`latest → ${tags[0].tag}（远端现有 ${tags.length} 个正式 tag，最近的：${tags.slice(0, 3).map(t => t.tag).join(', ')}）`)
+  return { ref: tags[0].tag, sha: tags[0].sha }
 }
 
 /** 拉取（或更新）搜索库源码；`SEARCH_WASM_LOCAL_DIR` 时直接用本地目录 */
@@ -202,6 +217,150 @@ function ensureSource(cfg: SearchWasmConfig, ref: string): string {
     run('git', ['clone', '--depth', '1', '--branch', ref, url, dest], { secrets })
   }
   return dest
+}
+
+/** 把仓库地址规范成可下载 release 的 HTTPS 形式（兼容 https 与 git@github.com: 两种写法） */
+function httpsRepoUrl(cfg: SearchWasmConfig): string {
+  let url = cfg.repo.replace(/\.git$/, '')
+  if (url.startsWith('git@github.com:'))
+    url = `https://github.com/${url.slice('git@github.com:'.length)}`
+  if (cfg.token)
+    url = url.replace(/^https:\/\//, `https://x-access-token:${cfg.token}@`)
+  return url
+}
+
+/** 下载 release 附件；GitHub 会 302 跳到 CDN，Node 的 fetch 默认跟随重定向 */
+async function downloadReleaseAsset(
+  cfg: SearchWasmConfig,
+  ref: string,
+  asset: string,
+  dest: string
+): Promise<void> {
+  const url = `${httpsRepoUrl(cfg)}/releases/download/${encodeURIComponent(ref)}/${asset}`
+  log(`下载 ${cfg.token ? url.replace(cfg.token, '***') : url}`)
+
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error(
+      `下载 ${asset} 失败：HTTP ${res.status}。常见原因：release ${ref} 还没**发布**`
+      + `（draft 状态的 release 不能匿名下载），或该版本的 CI 还没跑完`
+    )
+  }
+
+  const bytes = new Uint8Array(await res.arrayBuffer())
+  writeFileSync(dest, bytes)
+  log(`  ${asset} → ${(bytes.length / 1024).toFixed(1)} KiB`)
+}
+
+/**
+ * 产物来源判定。只有「显式 source」「本地目录」「非正式 tag」「非 linux x64」才回退到源码编译——
+ * release 里带的 `build-index` 是为 Netlify（linux x64）编的，别的平台跑不了。
+ */
+function resolveWasmSource(cfg: SearchWasmConfig, ref: string): 'release' | 'source' {
+  if (cfg.wasmSource === 'source')
+    return 'source'
+  if (cfg.localDir) {
+    log('SEARCH_WASM_LOCAL_DIR 已设置 → 从本地源码编译')
+    return 'source'
+  }
+  if (!/^v\d/.test(ref)) {
+    log(`ref=${ref} 不是正式 tag（v*）→ 从源码编译`)
+    return 'source'
+  }
+  if (process.platform !== 'linux' || process.arch !== 'x64') {
+    log(`当前平台 ${process.platform}/${process.arch} 与 release 里的 build-index 不匹配 → 从源码编译`)
+    return 'source'
+  }
+  return 'release'
+}
+
+/** 构建端需要的一组 wasm 侧输入 */
+interface PreparedWasm {
+  source: 'release' | 'source'
+  /** 生成 search.idx 的 native 二进制 */
+  buildIndexBin: string
+  glue: string
+  wasm: string
+  /** 跨语言契约向量（分词 / 发布规则对拍用） */
+  vectors: { name: string, path: string }[]
+  commit: string
+}
+
+/** 从 GitHub Release 下载全部产物——构建端不需要任何 Rust 工具链 */
+async function prepareFromRelease(cfg: SearchWasmConfig, ref: string, sha?: string): Promise<PreparedWasm> {
+  const dir = path.join(root, 'node_modules', '.cache', 'bigseek', 'release', ref.replace(/[^\w.-]/g, '_'))
+  rmSync(dir, { recursive: true, force: true })
+  mkdirSync(dir, { recursive: true })
+
+  const assets = [
+    { asset: 'bigseek_bg.wasm', local: 'bigseek_bg.wasm' },
+    { asset: 'bigseek.js', local: 'bigseek.js' },
+    { asset: 'build-index-linux-x64', local: 'build-index' },
+    { asset: 'tokenize-vectors.json', local: 'tokenize-vectors.json' },
+    { asset: 'post-policy-vectors.json', local: 'post-policy-vectors.json' }
+  ]
+
+  for (const { asset, local } of assets)
+    await downloadReleaseAsset(cfg, ref, asset, path.join(dir, local))
+
+  // 下载下来的文件没有执行位
+  chmodSync(path.join(dir, 'build-index'), 0o755)
+
+  return {
+    source: 'release',
+    buildIndexBin: path.join(dir, 'build-index'),
+    glue: path.join(dir, 'bigseek.js'),
+    wasm: path.join(dir, 'bigseek_bg.wasm'),
+    vectors: assets
+      .filter(item => item.local.endsWith('-vectors.json'))
+      .map(item => ({ name: item.local, path: path.join(dir, item.local) })),
+    commit: sha ?? 'unknown'
+  }
+}
+
+/** clone 源码自己编译（分支 / commit / 非 linux x64 / 显式 source 模式 / 本地目录） */
+function prepareFromSource(cfg: SearchWasmConfig, ref: string): PreparedWasm {
+  const sourceDir = ensureSource(cfg, ref)
+  const cargo = ensureCargo(cfg)
+  const cargoArgs = cfg.cargoOffline ? ['--offline'] : []
+
+  run(cargo, ['build', ...cargoArgs, '--release', '--features', 'cli', '--bin', 'build-index'], { cwd: sourceDir })
+  const buildIndexBin = resolveBuildIndexBin(cargo, sourceDir, cargoArgs)
+
+  ensureWasmTarget()
+  const wasmPack = ensureWasmPack(cfg)
+  const pkgDir = path.join(sourceDir, 'pkg')
+  rmSync(pkgDir, { recursive: true, force: true })
+  // 必须 --no-default-features：默认 feature 含 cli（comrak/serde_yaml_ng/regex），
+  // 不加的话那些依赖会被编进 wasm（实测多 5 KiB，构建也变慢）
+  run(
+    wasmPack,
+    [
+      'build',
+      '--target',
+      'web',
+      '--release',
+      '--out-dir',
+      'pkg',
+      '--no-pack',
+      '--no-default-features',
+      '--features',
+      'wasm'
+    ],
+    { cwd: sourceDir }
+  )
+
+  return {
+    source: 'source',
+    buildIndexBin,
+    glue: path.join(pkgDir, 'bigseek.js'),
+    wasm: path.join(pkgDir, 'bigseek_bg.wasm'),
+    vectors: ['tokenize-vectors.json', 'post-policy-vectors.json'].map(name => ({
+      name,
+      path: path.join(sourceDir, 'testdata', name)
+    })),
+    commit: gitCommit(sourceDir)
+  }
 }
 
 function gitCommit(sourceDir: string): string {
@@ -248,8 +407,6 @@ async function main(): Promise<void> {
     return
   }
 
-  const cargoArgs = cfg.cargoOffline ? ['--offline'] : []
-
   // ---- 0. 清掉旧产物：任何失败都会让运行期回退 MiniSearch，而不是拿到半套文件 ----
   rmSync(cfg.wasmDir, { recursive: true, force: true })
 
@@ -257,26 +414,24 @@ async function main(): Promise<void> {
   log('生成 public/search-full.json')
   await generateSearchIndex('public')
 
-  // ---- 2. 源码（ref 为 `latest` 时在这里解析成最新的正式 tag）----
-  const ref = resolveRef(cfg)
-  const sourceDir = ensureSource(cfg, ref)
-  const commit = gitCommit(sourceDir)
-  log(`搜索库源码：${ref} @ ${commit}`)
+  // ---- 2. 决定产物来源：正式 tag + linux x64 直接从 release 下载，其余情况 clone 源码自己编译 ----
+  const { ref, sha } = resolveRef(cfg)
+  const wasmSource = resolveWasmSource(cfg, ref)
 
-  // ---- 3. 工具链 ----
-  const cargo = ensureCargo(cfg)
-  const wasmPack = ensureWasmPack(cfg)
+  // ---- 3. 准备 wasm 侧输入（wasm 包 + build-index + 契约向量）----
+  const prepared = wasmSource === 'release'
+    ? await prepareFromRelease(cfg, ref, sha)
+    : prepareFromSource(cfg, ref)
+  log(`搜索库产物：${prepared.source} · ${ref} @ ${prepared.commit}`)
 
   // ---- 4. 跨语言契约对拍：分词语义 + 发布规则 ----
-  const contractFiles = ['tokenize-vectors.json', 'post-policy-vectors.json'] as const
   mkdirSync(cfg.generatedDir, { recursive: true })
-  for (const name of contractFiles) {
-    const from = path.join(sourceDir, 'testdata', name)
-    if (!existsSync(from)) {
-      warn(`源码里没有 testdata/${name}，跳过对应的一致性校验`)
+  for (const { name, path: vectorPath } of prepared.vectors) {
+    if (!existsSync(vectorPath)) {
+      warn(`缺少 ${name}，跳过对应的一致性校验`)
       continue
     }
-    cpSync(from, path.join(cfg.generatedDir, name))
+    cpSync(vectorPath, path.join(cfg.generatedDir, name))
 
     if (name === 'tokenize-vectors.json') {
       const parity = runParityCheck(path.join(cfg.generatedDir, name))
@@ -304,12 +459,8 @@ async function main(): Promise<void> {
   mkdirSync(staging, { recursive: true })
   const stagedIndex = path.join(staging, 'search.idx')
 
-  // 先单独 build（stdio 直通，CI 日志里能看到实时编译进度），再直接调用二进制
-  run(cargo, ['build', ...cargoArgs, '--release', '--features', 'cli', '--bin', 'build-index'], { cwd: sourceDir })
-  const buildIndexBin = resolveBuildIndexBin(cargo, sourceDir, cargoArgs)
-
   const indexOutput = run(
-    buildIndexBin,
+    prepared.buildIndexBin,
     ['--posts-dir', cfg.postsDir, '--output', stagedIndex, '--verify'],
     { capture: true }
   )
@@ -323,7 +474,7 @@ async function main(): Promise<void> {
   // 一旦不同，说明「Rust 直读文章」与「TS 抽文」的规则已经漂移——那 wasm 索引和 MiniSearch
   // 回退索引收录的内容就会不一致，且线上极难发现。这里花 ~50ms 把它挡在发布前。
   const parityIndex = path.join(staging, 'parity.idx')
-  run(buildIndexBin, ['--input', cfg.fullIndexFile, '--output', parityIndex, '--quiet'], {
+  run(prepared.buildIndexBin, ['--input', cfg.fullIndexFile, '--output', parityIndex, '--quiet'], {
     capture: true,
     echo: false
   })
@@ -343,38 +494,19 @@ async function main(): Promise<void> {
   }
   log(`双路径索引一致：sha256:${directHash}`)
 
-  // ---- 6. wasm ----
-  const pkgDir = path.join(sourceDir, 'pkg')
-  rmSync(pkgDir, { recursive: true, force: true })
-  // 必须 --no-default-features：默认 feature 含 cli（comrak/serde_yaml_ng/regex），
-  // 不加的话那些依赖会被编进 wasm（实测多 5 KiB，构建也变慢）
-  run(
-    wasmPack,
-    [
-      'build',
-      '--target',
-      'web',
-      '--release',
-      '--out-dir',
-      'pkg',
-      '--no-pack',
-      '--no-default-features',
-      '--features',
-      'wasm'
-    ],
-    { cwd: sourceDir }
-  )
-
-  // ---- 7. 落地 ----
+  // ---- 6. 落地 ----
   // 注：wasm 侧的 ABI 契约测试（query 返回的 JS 对象字段、tags 是否为数组、
-  // 非法字节流是否抛可捕获异常）已改为 Rust 编写的 `tests/wasm_abi.rs`，
-  // 由搜索库 CI 的 `wasm-pack test --node` 执行，博客构建里不再跑 JS 测试。
+  // 非法字节流是否抛可捕获异常）由 Rust 的 `tests/wasm_abi.rs` 覆盖，
+  // 在搜索库 CI 里用 `wasm-pack test --node` 执行，博客构建里不跑 JS 测试。
   mkdirSync(cfg.wasmDir, { recursive: true })
-  for (const file of ['bigseek.js', 'bigseek_bg.wasm']) {
-    const from = path.join(pkgDir, file)
+  const artifacts: [string, string][] = [
+    [prepared.glue, 'bigseek.js'],
+    [prepared.wasm, 'bigseek_bg.wasm']
+  ]
+  for (const [from, name] of artifacts) {
     if (!existsSync(from))
-      throw new Error(`wasm-pack 产物缺少 ${file}`)
-    cpSync(from, path.join(cfg.wasmDir, file))
+      throw new Error(`缺少 wasm 产物：${from}`)
+    cpSync(from, path.join(cfg.wasmDir, name))
   }
   cpSync(stagedIndex, path.join(cfg.wasmDir, 'search.idx'))
 
@@ -382,22 +514,27 @@ async function main(): Promise<void> {
   const indexFile = path.join(cfg.wasmDir, 'search.idx')
   const manifest = {
     source: cfg.repo,
+    // release = 下载预编译产物（构建端不需要 Rust）；source = clone 源码自己编译
+    wasmSource: prepared.source,
     // 记录解析后的真实 ref（`latest` 会被换成具体 tag），排查线上问题时能一眼看出用的哪个版本
     ref,
-    commit,
+    commit: prepared.commit,
     builtAt: new Date().toISOString(),
     docs,
     terms,
     files: {
       'bigseek_bg.wasm': { bytes: readFileSync(wasmFile).length, sha256: sha256(wasmFile) },
-      'search.idx': { bytes: readFileSync(indexFile).length, sha256: sha256(indexFile) }
+      'search.idx': { bytes: readFileSync(indexFile).length, sha256: sha256(indexFile) },
+      // 索引由哪个二进制生成：release 模式下它是下载下来的，留个哈希便于追溯
+      'build-index': { sha256: sha256(prepared.buildIndexBin) }
     }
   }
   writeFileSync(path.join(cfg.wasmDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8')
 
   log(
     `完成：wasm ${(manifest.files['bigseek_bg.wasm'].bytes / 1024).toFixed(1)} KiB / 索引 `
-    + `${(manifest.files['search.idx'].bytes / 1024).toFixed(0)} KiB / ${docs} 篇 ${terms} 词条（commit ${commit}）`
+    + `${(manifest.files['search.idx'].bytes / 1024).toFixed(0)} KiB / ${docs} 篇 ${terms} 词条`
+    + `（${prepared.source} · ${ref} @ ${prepared.commit}）`
   )
 }
 
