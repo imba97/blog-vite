@@ -1,5 +1,5 @@
 import { useRoute } from 'vue-router'
-import { isArticlePostRoute } from '~/utils/route-page-kind'
+import { isArticlePostRoute, needsArticleStyles } from '~/utils/route-page-kind'
 
 /**
  * 控制文章详情页正文的显隐时机。
@@ -14,6 +14,9 @@ import { isArticlePostRoute } from '~/utils/route-page-kind'
  * 2. CSS chunk 通过模块级标志 `articleCssImported` 跨多次进入复用，
  *    首次进入触发 `import()`，后续命中浏览器缓存立即 resolve。
  * 3. SSR 阶段保持 `ready=false`，客户端 hydrate 后再处理显隐切换。
+ * 4. 用 markdown 渲染正文的静态页（关于 / 友链 / catch-all 404）也需要这份
+ *    样式，但它们不做渐显：直接 `import()` 应用样式即可，否则从首页等处
+ *    直接刷新进来时正文会完全没有样式。
  */
 
 let articleCssImported = false
@@ -25,13 +28,16 @@ export function useArticleStyles() {
   watch(
     () => route.path,
     async (path) => {
-      if (!isArticlePostRoute(path))
+      const isArticle = isArticlePostRoute(path)
+      if (!needsArticleStyles(path, route.params))
         return
 
-      // 重置 ready，触发新一轮 fade-in（包括文章页之间互跳）
-      ready.value = false
-      // 等 Vue 把 `data-article-ready="false"` 渲染到 DOM（opacity:0 生效）
-      await nextTick()
+      if (isArticle) {
+        // 重置 ready，触发新一轮 fade-in（包括文章页之间互跳）
+        ready.value = false
+        // 等 `ready=false` 先渲染到 DOM（main.vue 用它切换加载占位 / 正文）
+        await nextTick()
+      }
 
       if (!articleCssImported) {
         // 首次进入：触发 article.ts 模块下载，Vite 会同时下载 CSS chunk
@@ -39,7 +45,7 @@ export function useArticleStyles() {
         articleCssImported = true
       }
 
-      if (import.meta.env.SSR)
+      if (!isArticle || import.meta.env.SSR)
         return
 
       // 翻转 ready，CSS transition 把 opacity:0 → 1 平滑过渡

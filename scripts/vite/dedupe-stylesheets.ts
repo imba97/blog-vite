@@ -1,15 +1,19 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
+import { isProseContentPage } from '../../src/constants/route-policy.ts'
 
 /**
  * vite-ssg 后处理钩子：
  * 1. 去重每个渲染好的页面 HTML 中的 `<link rel="stylesheet" href="...">` 标签
  *    （vite-ssg 与 Vite 默认产物会重复写入同一资源）。
  * 2. 文章专属 CSS chunk（prose / markdown / shiki / github-alerts）
- *    通过 Vite `manualChunks: 'article'` 隔离，在非文章详情页（首页 / 分页 /
- *    关于 / 友链等）移除对应 link 以避免拖累首屏；在文章详情页主动注入 link
- *    避免内容闪烁。
+ *    通过 Vite `manualChunks: 'article'` 隔离，在非正文页（首页 / 分页等）
+ *    移除对应 link 以避免拖累首屏；在正文页（文章详情 / 关于 / 友链）主动
+ *    注入 link 避免内容闪烁。
+ *
+ * 判定必须与客户端 `src/utils/route-page-kind.ts` 的 `needsArticleStyles`
+ * 保持一致（catch-all 404 不会预渲染，故此处只处理静态路由）。
  *
  * 文章 CSS chunk 的实际文件名带 hash，这里通过读取 Vite manifest
  * 找到包含 `src/assets/styles/article.ts` 入口关联的 CSS 路径。
@@ -96,14 +100,19 @@ function removeStylesheetLinks(html: string, hrefs: string[]): string {
   )
 }
 
+/** 渲染 markdown 正文的路由：文章详情 `/post/*` 与 markdown 静态页（关于 / 友链） */
+function isProseContentRoute(route: string): boolean {
+  return /^\/post\//.test(route) || isProseContentPage(route)
+}
+
 export function dedupeStylesheetsInHtml(html: string, route?: string): string {
-  const isArticlePage = !!route && /^\/post\//.test(route)
+  const isArticlePage = !!route && isProseContentRoute(route)
   const articleCssHrefs = loadArticleCssHrefs()
 
   // 第一步：去重已有的 stylesheet link
   let result = html
   if (isArticlePage) {
-    // 文章页：移除文章专属 CSS 链接（避免去重逻辑把它干掉），稍后统一注入
+    // 正文页：移除文章专属 CSS 链接（避免去重逻辑把它干掉），稍后统一注入
     result = removeStylesheetLinks(result, articleCssHrefs)
     const deduped = dedupeStylesheetLinks(result)
     result = deduped.result
@@ -111,7 +120,7 @@ export function dedupeStylesheetsInHtml(html: string, route?: string): string {
     result = injectStylesheetLinks(result, articleCssHrefs)
   }
   else {
-    // 非文章页：去掉文章专属 CSS，再去重
+    // 非正文页：去掉文章专属 CSS，再去重
     result = removeStylesheetLinks(result, articleCssHrefs)
     result = dedupeStylesheetLinks(result).result
   }
