@@ -2,13 +2,15 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { miniSearchTokenizer } from '../../src/utils/search-tokenize.ts'
+import { miniSearchTokenizer } from 'bigseek'
 
 /**
- * 分词一致性校验：拿 Rust 仓库的 `testdata/tokenize-vectors.json` 逐条比对本仓库的 TS 实现。
+ * 分词一致性校验：拿 bigseek 仓库的 `testdata/tokenize-vectors.json` 逐条比对**已安装的
+ * `bigseek` 包**里的 TS 实现。
  *
- * WASM 索引是主引擎、TS 分词是 MiniSearch 回退路径，两者语义必须一致，
- * 否则「降级」会把召回率从 100% 打回 39.7%。这个校验在 `pnpm run search:wasm` 里会顺带跑。
+ * WASM 索引是主引擎、包内的 TS 分词是 MiniSearch 回退路径，两者语义必须一致，
+ * 否则「降级」会把召回率从 100% 打回 39.7%。这个校验在 `pnpm run search:wasm` 里会顺带跑，
+ * 校验的正是运行期实际会加载的那份代码。
  */
 
 interface TokenizeVectorCase {

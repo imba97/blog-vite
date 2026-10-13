@@ -20,12 +20,12 @@ importers:
       '@vueuse/core':
         specifier: ^15.0.0
         version: 15.0.0(vue@3.5.43(typescript@6.0.3))
+      bigseek:
+        specifier: 0.1.0
+        version: 0.1.0
       dayjs:
         specifier: ^1.11.23
         version: 1.11.23
-      minisearch:
-        specifier: ^7.2.0
-        version: 7.2.0
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -1523,6 +1523,10 @@ packages:
 
   bidi-js@1.1.0:
     resolution: {integrity: sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg==}
+
+  bigseek@0.1.0:
+    resolution: {integrity: sha512-tCJdcEcB0zI5DEz5ovSZ07jCqdmBRddN6DajRvPHUeWmvcBQpfgFzkA0YJ+EOyZqBIpEO/g0Gi80U1TaJFlD3Q==}
+    engines: {node: '>=20.12.0'}
 
   birpc@2.9.0:
     resolution: {integrity: sha512-KrayHS5pBi69Xi9JmvoqrIgYGDkD6mcSe/i6YKi3w5kekCLzrX4+nawcXqrj2tIp50Kw/mT/s3p+GVK0A0sKxw==}
@@ -4908,6 +4912,10 @@ snapshots:
   bidi-js@1.1.0:
     dependencies:
       require-from-string: 2.0.2
+
+  bigseek@0.1.0:
+    dependencies:
+      minisearch: 7.2.0
 
   birpc@2.9.0: {}
 

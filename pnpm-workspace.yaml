@@ -3,6 +3,7 @@ minimumReleaseAgeExclude:
   - '@twikoojs/shared'
   - twikoo
   - vite
+  - bigseek@0.1.0
 
 trustPolicy: no-downgrade
 trustPolicyExclude:
