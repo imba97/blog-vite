@@ -20,6 +20,8 @@ export type SiteSearchMainToWorkerMessage
 
 export interface SiteSearchReadyMessage {
   type: 'ready'
+  /** 实际生效的检索引擎；wasm 不可用时会回退为 minisearch */
+  engine?: 'wasm' | 'minisearch'
 }
 
 export interface SiteSearchErrorMessage {

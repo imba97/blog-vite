@@ -6,7 +6,9 @@
   "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "vite",
-    "build": "cross-env NODE_ENV=production vite-ssg build && esno ./scripts/copy-fonts.ts && esno ./scripts/rss.ts",
+    "build": "cross-env NODE_ENV=production esno ./scripts/search-wasm/build.ts && cross-env NODE_ENV=production vite-ssg build && esno ./scripts/copy-fonts.ts && esno ./scripts/rss.ts",
+    "search:wasm": "esno ./scripts/search-wasm/build.ts",
+    "search:check-parity": "esno ./scripts/search-wasm/parity.ts .auto-generate/search-wasm/tokenize-vectors.json && esno ./scripts/search-wasm/post-policy-parity.ts .auto-generate/search-wasm/post-policy-vectors.json",
     "generate-rss": "esno scripts/rss.ts",
     "post:new": "esno scripts/create-post.ts",
     "generate-search-index": "esno scripts/search-index-cli.ts",

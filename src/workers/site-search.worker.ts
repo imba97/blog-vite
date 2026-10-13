@@ -1,10 +1,12 @@
 import type { SearchFullRecord, SearchHit } from '~/types/search-index'
+import type { WasmSearchHit, WasmSearchIndex, WasmSearchModule } from '~/types/search-wasm'
 import type {
   SiteSearchMainToWorkerMessage,
   SiteSearchQueryMessage,
   SiteSearchWorkerToMainMessage
 } from '~/types/site-search-worker-protocol'
 import MiniSearch from 'minisearch'
+import { miniSearchTokenizer } from '~/utils/search-tokenize'
 
 type SearchRequest = SiteSearchQueryMessage
 type SearchResultEmitter = (msg: SiteSearchWorkerToMainMessage) => void
@@ -23,11 +25,22 @@ const INDEX_SEARCH_OPTIONS = {
   prefix: true
 }
 
-interface SearchCorpus {
-  mini: MiniSearch
-  docsByPath: Map<string, SearchFullRecord>
-  tagPathIndex: Map<string, Set<string>>
-  categoryPathIndex: Map<string, Set<string>>
+/**
+ * 引擎选择：
+ * - `auto`（默认）：先试 wasm，失败则回退 MiniSearch
+ * - `wasm`：强制 wasm，失败即报错
+ * - `minisearch`：强制旧引擎（排查用）
+ */
+type SearchEngineKind = 'auto' | 'wasm' | 'minisearch'
+
+function resolvePreferredEngine(): SearchEngineKind {
+  const raw = String(import.meta.env.VITE_SEARCH_ENGINE || 'auto').trim().toLowerCase()
+  return raw === 'wasm' || raw === 'minisearch' ? raw : 'auto'
+}
+
+interface SearchBackend {
+  readonly kind: 'wasm' | 'minisearch'
+  search: (request: SearchRequest) => SearchHit[]
 }
 
 function normalizeBase(baseUrl: string): string {
@@ -83,6 +96,17 @@ function intersectPathSets(left: Set<string>, right: Set<string>): Set<string> {
   return output
 }
 
+// ---------------------------------------------------------------------------
+// MiniSearch 后端（回退路径）
+// ---------------------------------------------------------------------------
+
+interface SearchCorpus {
+  mini: MiniSearch
+  docsByPath: Map<string, SearchFullRecord>
+  tagPathIndex: Map<string, Set<string>>
+  categoryPathIndex: Map<string, Set<string>>
+}
+
 function createSearchCorpus(records: SearchFullRecord[]): SearchCorpus {
   const docsByPath = new Map<string, SearchFullRecord>()
   const tagPathIndex = new Map<string, Set<string>>()
@@ -90,7 +114,9 @@ function createSearchCorpus(records: SearchFullRecord[]): SearchCorpus {
   const mini = new MiniSearch({
     fields: ['title', 'body', 'tagLine', 'catLine'],
     storeFields: ['path', 'title', 'date', 'text', 'tags', 'categories'],
-    searchOptions: INDEX_SEARCH_OPTIONS
+    searchOptions: INDEX_SEARCH_OPTIONS,
+    // 与 wasm 引擎逐字对齐的 CJK bigram 分词；不传则中文文档级召回只有 39.7%
+    tokenize: miniSearchTokenizer
   })
 
   mini.addAll(
@@ -196,6 +222,108 @@ function searchInCorpus(corpus: SearchCorpus, request: SearchRequest): SearchHit
   }
 }
 
+class MiniSearchBackend implements SearchBackend {
+  readonly kind = 'minisearch' as const
+  private corpus: SearchCorpus | null = null
+
+  static async create(baseUrl: string): Promise<MiniSearchBackend> {
+    const backend = new MiniSearchBackend()
+    const url = `${normalizeBase(baseUrl)}search-full.json`
+    const res = await fetch(url)
+    if (!res.ok)
+      throw new Error(`加载搜索索引失败：${res.status} ${url}`)
+
+    const records = JSON.parse(await res.text()) as SearchFullRecord[]
+    if (!Array.isArray(records))
+      throw new Error('搜索索引格式无效')
+
+    backend.corpus = createSearchCorpus(records)
+    return backend
+  }
+
+  search(request: SearchRequest): SearchHit[] {
+    if (!this.corpus)
+      return []
+    return searchInCorpus(this.corpus, request)
+  }
+}
+
+// ---------------------------------------------------------------------------
+// wasm 后端（主路径）
+// ---------------------------------------------------------------------------
+
+async function fetchBytes(url: string, label: string): Promise<Uint8Array> {
+  const res = await fetch(url)
+  if (!res.ok)
+    throw new Error(`加载${label}失败：${res.status} ${url}`)
+  return new Uint8Array(await res.arrayBuffer())
+}
+
+/** 运行时动态 import `public/search/blog_search.js`（不经 Vite 打包，故用 @vite-ignore） */
+async function importWasmGlue(baseUrl: string): Promise<WasmSearchModule> {
+  const base = globalThis.location?.href ?? 'http://localhost/'
+  const url = new URL(`${normalizeBase(baseUrl)}search/blog_search.js`, base).href
+  return (await import(/* @vite-ignore */ url)) as WasmSearchModule
+}
+
+function toSearchHit(hit: WasmSearchHit): SearchHit {
+  return {
+    path: hit.path,
+    title: hit.title,
+    date: hit.date,
+    snippet: hit.snippet,
+    // wasm 侧返回的是同一份内存视图，复制成普通数组避免跨边界持有引用
+    tags: [...hit.tags],
+    categories: [...hit.categories]
+  }
+}
+
+class WasmSearchBackend implements SearchBackend {
+  readonly kind = 'wasm' as const
+
+  private constructor(
+    private readonly index: WasmSearchIndex,
+    readonly docCount: number,
+    readonly termCount: number
+  ) {}
+
+  static async create(baseUrl: string): Promise<WasmSearchBackend> {
+    const base = normalizeBase(baseUrl)
+    const [glue, wasmBytes, indexBytes] = await Promise.all([
+      importWasmGlue(base),
+      fetchBytes(`${base}search/blog_search_bg.wasm`, 'wasm 模块'),
+      fetchBytes(`${base}search/search.idx`, '搜索索引')
+    ])
+
+    if (typeof glue?.default !== 'function' || typeof glue?.SearchIndex !== 'function')
+      throw new Error('wasm glue 模块形状异常（缺少 default / SearchIndex）')
+
+    await glue.default({ module_or_path: wasmBytes })
+    const index = new glue.SearchIndex(indexBytes)
+    return new WasmSearchBackend(index, index.docCount(), index.termCount())
+  }
+
+  search(request: SearchRequest): SearchHit[] {
+    try {
+      const hits = this.index.query(
+        request.keywords,
+        request.tag,
+        request.category,
+        request.limit || SEARCH_LIMIT_DEFAULT
+      )
+      return hits.map(toSearchHit)
+    }
+    catch (error) {
+      console.warn('[site-search] wasm 查询失败，本轮返回空结果', error)
+      return []
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 引擎调度
+// ---------------------------------------------------------------------------
+
 export const __siteSearchWorkerTestables = {
   normalizeBase,
   buildSnippet,
@@ -203,7 +331,7 @@ export const __siteSearchWorkerTestables = {
 }
 
 export class SearchEngine {
-  private corpus: SearchCorpus | null = null
+  private backend: SearchBackend | null = null
   private initialized = false
   private queuedSearch: { request: SearchRequest, emit: SearchResultEmitter } | null = null
   private searchFlushScheduled = false
@@ -213,18 +341,27 @@ export class SearchEngine {
     if (this.initialized)
       return
 
-    const base = normalizeBase(baseUrl)
-    const url = `${base}search-full.json`
-    const res = await fetch(url)
-    if (!res.ok)
-      throw new Error(`加载搜索索引失败：${res.status} ${url}`)
+    const preferred = resolvePreferredEngine()
+    if (preferred !== 'minisearch') {
+      try {
+        this.backend = await WasmSearchBackend.create(baseUrl)
+        this.initialized = true
+        return
+      }
+      catch (error) {
+        if (preferred === 'wasm')
+          throw error
+        const message = error instanceof Error ? error.message : String(error)
+        console.warn(`[site-search] wasm 引擎不可用，回退 MiniSearch：${message}`)
+      }
+    }
 
-    const records = JSON.parse(await res.text()) as SearchFullRecord[]
-    if (!Array.isArray(records))
-      throw new Error('搜索索引格式无效')
-
-    this.corpus = createSearchCorpus(records)
+    this.backend = await MiniSearchBackend.create(baseUrl)
     this.initialized = true
+  }
+
+  get engineKind(): 'wasm' | 'minisearch' | null {
+    return this.backend?.kind ?? null
   }
 
   enqueueLatestSearch(request: SearchRequest, emit: SearchResultEmitter) {
@@ -236,9 +373,9 @@ export class SearchEngine {
   }
 
   private search(request: SearchRequest): SearchHit[] {
-    if (!this.corpus)
+    if (!this.backend)
       return []
-    return searchInCorpus(this.corpus, request)
+    return this.backend.search(request)
   }
 
   private flushQueuedSearch() {
@@ -292,7 +429,7 @@ class WorkerMessageBridge {
   private async handleInit(baseUrl: string) {
     try {
       await this.engine.init(baseUrl)
-      this.emit({ type: 'ready' })
+      this.emit({ type: 'ready', engine: this.engine.engineKind ?? undefined })
     }
     catch (e) {
       const message = e instanceof Error ? e.message : String(e)

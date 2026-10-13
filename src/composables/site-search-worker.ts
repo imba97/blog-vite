@@ -77,6 +77,8 @@ class SiteSearchWorkerClient {
     if (d.type === 'ready') {
       siteSearchWorkerReady.value = true
       siteSearchWorkerError.value = null
+      if (import.meta.env.DEV)
+        console.warn(`[site-search] 引擎就绪：${d.engine ?? 'unknown'}`)
       this.resolveReadyTask()
       return
     }

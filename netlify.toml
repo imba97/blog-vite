@@ -4,6 +4,11 @@ command = "pnpm run build"
 
 [build.environment]
 NODE_VERSION = "22"
+# 搜索 wasm：Netlify 镜像基本不带 wasm-pack（脚本会自动装），若也不带 Rust 则需允许自举安装。
+# 镜像自带 Rust 时这两项不会产生任何额外动作。
+SEARCH_WASM_BOOTSTRAP = "1"
+# 生产构建建议把源码锁到 tag 或 commit，避免搜索库主干改动直接影响发版：
+# SEARCH_WASM_REF = "v0.1.0"
 
 # 构建产物强缓存 1 年（hash 文件名天然支持缓存更新）
 [[headers]]
@@ -42,6 +47,15 @@ for = "/search-full.json"
 
 [headers.values]
 Cache-Control = "public, max-age=3600, must-revalidate"
+
+# 搜索 wasm 产物（wasm / glue / search.idx / manifest）同样不带 hash：
+# 索引每次构建都会变，必须回源校验；wasm 与 glue 虽稳定，但一起短缓存更好回滚
+[[headers]]
+for = "/search/*"
+
+[headers.values]
+Cache-Control = "public, max-age=3600, must-revalidate"
+X-Content-Type-Options = "nosniff"
 
 [[headers]]
 for = "/search-meta.json"

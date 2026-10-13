@@ -12,6 +12,8 @@ drafts
 public/assets/fonts
 public/search-meta.json
 public/search-full.json
+# 搜索 wasm 产物（wasm / glue / 索引 / manifest），由 scripts/search-wasm/build.ts 生成
+public/search/
 .eslintcache
 .auto-generate
 
