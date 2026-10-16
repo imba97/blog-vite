@@ -14,6 +14,10 @@ public/search-meta.json
 public/search-full.json
 # 搜索 wasm 产物（wasm / glue / 索引 / manifest），由 scripts/search-wasm/build.ts 生成
 public/search/
+# GEO 友好产物，由 scripts/generate-llms-txt.ts 与 scripts/generate-sitemap.ts 构建期生成
+public/llms.txt
+public/llms-full.txt
+public/sitemap.xml
 .eslintcache
 .auto-generate
 

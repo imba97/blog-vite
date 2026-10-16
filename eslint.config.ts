@@ -3,8 +3,15 @@ import antfu from '@antfu/eslint-config'
 export default antfu({
   unocss: true,
 
-  // 生成物（`pnpm run generate-langs` 维护），不参与 lint
-  ignores: ['src/generated/**'],
+  // 生成物 / 大体积静态资源：不参与 lint，避免 antfu formatter 跑大文件拖慢全量扫描
+  ignores: [
+    'src/generated/**',
+    'public/uploads/**',
+    'public/llms.txt',
+    'public/llms-full.txt',
+    'public/sitemap.xml',
+    'public/search-*.json'
+  ],
 
   rules: {
     'style/comma-dangle': ['warn', 'never']

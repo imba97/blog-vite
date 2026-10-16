@@ -10,6 +10,8 @@
     "search:wasm": "esno ./scripts/search-wasm/build.ts",
     "search:check-parity": "esno ./scripts/search-wasm/parity.ts .auto-generate/search-wasm/tokenize-vectors.json && esno ./scripts/search-wasm/post-policy-parity.ts .auto-generate/search-wasm/post-policy-vectors.json",
     "generate-rss": "esno scripts/rss.ts",
+    "generate-llms": "esno scripts/generate-llms-txt.ts",
+    "generate-sitemap": "esno scripts/generate-sitemap.ts",
     "post:new": "esno scripts/create-post.ts",
     "generate-search-index": "esno scripts/search-index-cli.ts",
     "generate-langs": "esno scripts/shiki-langs-cli.ts",

@@ -30,8 +30,10 @@ import { slugify } from './scripts/slugify.ts'
 import { dedupeStylesheetsInHtml, pruneArticleFontPreloadsInHtml } from './scripts/vite/dedupe-stylesheets.ts'
 import FontPreload from './scripts/vite/plugins/font-preload.ts'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject.ts'
+import LlmsTxt from './scripts/vite/plugins/llms-txt.ts'
 import PostsMeta from './scripts/vite/plugins/posts-meta.ts'
 import SearchIndex from './scripts/vite/plugins/search-index.ts'
+import Sitemap from './scripts/vite/plugins/sitemap.ts'
 import { applyMarkdownRouteMeta } from './scripts/vite/route-frontmatter.ts'
 import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes.ts'
 
@@ -55,6 +57,8 @@ export default defineConfig({
     FontPreload(),
     PostsMeta(),
     SearchIndex(),
+    LlmsTxt(),
+    Sitemap(),
 
     UnoCSS(),
 

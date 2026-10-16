@@ -125,9 +125,12 @@ async function main(): Promise<void> {
 id: ${id}
 title: ${toSingleQuotedYamlString(title)}
 date: ${date}
+description:
 tags:
   -
 categories:
+  -
+keywords:
   -
 ---
 `
