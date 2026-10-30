@@ -12,12 +12,13 @@ disable-model-invocation: true
 - `id`：现有文章最大 id + 1
 - `title`：用户提供的原始标题
 - `date`：当前时间
-- `description`：SEO/GEO 摘要（OG description / JSON-LD description 必填）
 - `tags`：默认一个空项
 - `categories`：默认一个空项
-- `keywords`：默认一个空项
 
 正文默认留空。
+
+`description` / `keywords` / `keyPoints` / `faq` 等 GEO 元数据**不写进 frontmatter**，
+统一由 `geo-post-seo` 技能写到 `seo/posts/<id>.json`。
 
 ## 工作流
 
@@ -42,7 +43,7 @@ disable-model-invocation: true
 5. 返回结果：
    - 返回创建的文件路径。
    - 返回生成的 `id` 和 `date`。
-   - 提醒作者补 `description` / `tags` / `categories` / `keywords`。
+   - 提醒作者补 `tags` / `categories`，并建议接着跑 `geo-post-seo` 生成侧车元数据。
 
 ## 执行命令
 
@@ -61,12 +62,9 @@ pnpm run post:new -- --title "<original title>" --slug "<english-slug>"
 id: <自动递增 id>
 title: <用户标题>
 date: <当前时间>
-description:
 tags:
   -
 categories:
-  -
-keywords:
   -
 ---
 ```
@@ -110,10 +108,10 @@ keywords:
 
 ### frontmatter 必填项
 
-- `description`：50–160 字，写文章要解决的具体问题与最终结论。喂给 OG description / JSON-LD description / RSS。
-- `tags`：3–6 个标签。
-- `categories`：分类。
-- `keywords`（可选）：5–10 个搜索关键词，喂给 JSON-LD `keywords`。
+- `title` / `date` / `tags` / `categories` 写在 frontmatter。
+- `description`（120–160 字符）、`keywords`（5–8 个）、`keyPoints`、`faq` **不写 frontmatter**，
+  由 `geo-post-seo` 技能生成到 `seo/posts/<id>.json`；没有侧车时构建期会用正文首段兜底。
+- `updated`：文章有实质修改时更新，喂给 JSON-LD `dateModified` 与 sitemap `lastmod`。
 
 ### 多载体一致性
 

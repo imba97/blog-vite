@@ -121,16 +121,15 @@ async function main(): Promise<void> {
   const id = await getNextPostId()
   const date = formatDateTime(new Date())
 
+  // description / keywords 等 GEO 元数据不写进 frontmatter，
+  // 统一放在 seo/posts/<id>.json（见 .agents/skills/geo-post-seo）
   const frontmatter = `---
 id: ${id}
 title: ${toSingleQuotedYamlString(title)}
 date: ${date}
-description:
 tags:
   -
 categories:
-  -
-keywords:
   -
 ---
 `
