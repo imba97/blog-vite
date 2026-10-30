@@ -59,6 +59,7 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
   let description = ''
   let keywords: string[] | undefined
   let faq: SeoFaqItem[] | undefined
+  let keyPoints: string[] | undefined
   let pageTitle = String(frontmatter.title ?? '')
 
   if (isPost && id) {
@@ -66,6 +67,7 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
     description = resolved.description
     keywords = resolved.keywords
     faq = resolved.faq
+    keyPoints = resolved.keyPoints
   }
   else {
     const page = getPageSeo(pagePathFromFile(defaultFile) ?? route.path)
@@ -80,6 +82,7 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
       description,
       keywords,
       image: frontmatter.image,
+      keyPoints,
       faq,
       date: frontmatter.date,
       updated: frontmatter.updated,

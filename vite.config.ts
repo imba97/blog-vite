@@ -29,7 +29,6 @@ import NetlifyImagePlugin from './scripts/netlify-image-plugin.ts'
 import { slugify } from './scripts/slugify.ts'
 import { dedupeStylesheetsInHtml, pruneArticleFontPreloadsInHtml } from './scripts/vite/dedupe-stylesheets.ts'
 import FontPreload from './scripts/vite/plugins/font-preload.ts'
-import GeoContent from './scripts/vite/plugins/geo-content.ts'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject.ts'
 import LlmsTxt from './scripts/vite/plugins/llms-txt.ts'
 import PostsMeta from './scripts/vite/plugins/posts-meta.ts'
@@ -57,7 +56,6 @@ export default defineConfig({
   },
   plugins: [
     HtmlHeadInject(),
-    GeoContent(),
     FontPreload(),
     PostsMeta(),
     SearchIndex(),

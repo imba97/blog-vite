@@ -19,6 +19,7 @@ export interface SeoRouteMeta {
   description?: string
   keywords?: string[]
   image?: string
+  keyPoints?: string[]
   faq?: SeoFaqItem[]
   date?: string
   updated?: string

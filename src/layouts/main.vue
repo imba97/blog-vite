@@ -3,6 +3,32 @@
     class="pb-24 transition-colors duration-200"
     @click="handleMainClick"
   >
+    <!-- 要点区块刻意放在正文容器之外：只读侧车元数据（seo/posts/<id>.json），
+         不改动文章本身的 markdown 内容与结构 -->
+    <aside
+      v-if="isArticlePage && articleKeyPoints.length > 0"
+      class="page-container-readable pt-8"
+      aria-labelledby="article-key-points-title"
+    >
+      <div class="rounded-xl border border-gray-200/70 bg-gray-100/50 px-4 py-4 dark:border-neutral-800/80 dark:bg-neutral-900/40 sm:px-5">
+        <h2
+          id="article-key-points-title"
+          class="m-0 text-sm font-semibold tracking-wide text-muted"
+        >
+          本文要点
+        </h2>
+        <ul class="mb-0 mt-2 space-y-1.5 pl-5 text-sm leading-6">
+          <li
+            v-for="point in articleKeyPoints"
+            :key="point"
+            class="list-disc"
+          >
+            {{ point }}
+          </li>
+        </ul>
+      </div>
+    </aside>
+
     <section
       :class="[isPostPage ? 'page-container-readable prose prose-shell' : 'page-container', { 'prose-shell--article': isArticlePage }]"
     >
@@ -15,6 +41,33 @@
       </div>
       <RouterView v-else />
     </section>
+
+    <!-- 文章 FAQ 同样独立于正文，数据来自侧车元数据 -->
+    <aside
+      v-if="isArticlePage && articleFaq.length > 0"
+      class="page-container-readable mt-10"
+      aria-labelledby="article-faq-title"
+    >
+      <h2
+        id="article-faq-title"
+        class="text-lg font-semibold text-gray-800 dark:text-gray-100"
+      >
+        常见问题
+      </h2>
+      <div
+        v-for="item in articleFaq"
+        :key="item.question"
+        class="mt-4 space-y-1.5"
+      >
+        <h3 class="m-0 text-base font-medium text-gray-800 dark:text-gray-100">
+          {{ item.question }}
+        </h3>
+        <p class="m-0 text-sm leading-7 text-gray-700 dark:text-gray-300">
+          {{ item.answer }}
+        </p>
+      </div>
+    </aside>
+
     <section
       v-if="shouldShowComments"
       ref="commentsShellRef"
@@ -38,6 +91,7 @@
 import PostImageViewer from '~/components/PostImageViewer.vue'
 import { useArticleStyles } from '~/composables/use-article-styles'
 import { usePostImageViewer } from '~/composables/use-post-image-viewer'
+import type { SeoRouteMeta } from '~/utils/seo/share-meta'
 import { tracker } from '~/utils/analytics'
 import { isArticlePostRoute, isReadableLayoutRoute, shouldShowTwikooSection } from '~/utils/route-page-kind'
 import { navigateSpaOrExternal, shouldDelegateSpaNavigation } from '~/utils/spa-navigation'
@@ -66,6 +120,12 @@ const {
 const isPostPage = computed(() => isReadableLayoutRoute(route.path))
 const isArticlePage = computed(() => isArticlePostRoute(route.path))
 const shouldShowComments = computed(() => shouldShowTwikooSection(route.path))
+
+// 要点与 FAQ 只从侧车元数据读取（route-frontmatter 写进 meta），
+// 渲染在正文容器之外，文章的 markdown 内容保持原样。
+const routeSeo = computed(() => route.meta.seo as SeoRouteMeta | undefined)
+const articleKeyPoints = computed(() => routeSeo.value?.keyPoints ?? [])
+const articleFaq = computed(() => routeSeo.value?.faq ?? [])
 
 function handleMainClick(event: MouseEvent) {
   const target = event.target as HTMLElement | null
