@@ -9,7 +9,7 @@ categories:
   - 个人项目
 ---
 
-# 使用
+## 使用
 
 项目地址：[https://dst-recipe.netlify.app](https://dst-recipe.netlify.app)
 
@@ -27,7 +27,7 @@ categories:
 
 ![](/uploads/2025/02/dst-recipe-2.png)
 
-# 代码分析
+## 代码分析
 
 逻辑上来说是分为两块，一个是食材，一个是食谱
 
@@ -238,10 +238,10 @@ export default class GlowBerryMousse extends FoodBase {
 
 ![](/uploads/2025/02/dst-recipe-4.png)
 
-# 开源
+## 开源
 
 <span icon i-mdi-github></span> [imba97/dst-recipe](https://github.com/imba97/dst-recipe)
 
-# 数据来源
+## 数据来源
 
 <span icon i-ph-files-duotone></span> [饥荒中文维基-烹饪](https://dontstarve.huijiwiki.com/wiki/%E7%83%B9%E9%A5%AA)

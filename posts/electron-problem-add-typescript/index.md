@@ -10,13 +10,13 @@ categories:
   - electron
 ---
 
-# 原由
+## 原由
 
 单纯用`javascript`其实还是有点局限性，比如枚举，虽然js中可以用对象实现，实际上就是定义一个对象，并让它`readonly`。但不如用`typescript`语法清晰明了。还有我一直想接触静态类型语言，包括之前想把`Btools`插件重制一下，目前也是用的`vue+typescript`起步了，不过搁置了。
 
 <!--more-->
 
-# 加入 TypeScript 的方式
+## 加入 TypeScript 的方式
 
 ## 直接安装
 
@@ -38,7 +38,7 @@ categories:
 
 随之而来的也是各种问题。
 
-# Vue 重复加载问题
+## Vue 重复加载问题
 
 转ts不容易，一路摸黑排错，以下总结一下问题和解决方式
 
@@ -85,7 +85,7 @@ export default class Index extends Vue {
 }
 ```
 
-# Vue 重复加载问题的解决
+## Vue 重复加载问题的解决
 
 其实总结以上原因，大致能猜出`main.ts`中的`Vue`和内页`class`中的`Vue`不是同一个东西
 
@@ -128,7 +128,7 @@ const rendererConfig = {
 
 但我只添加`vue-property-decorator`依然不行，应该是因为`vue-property-decorator`的`Component`是`vue-class-component`中的，不把`vue-class-component`写进去应该也会创建多个`Vue`实例，所以最后就加了个`vue-class-component`发现没问题。
 
-# types 的问题
+## types 的问题
 
 `typescript`有类型检查，比如`Vue.appSetup`是我自己添加的属性，代码虽然能执行，但语法检查插件和编辑器是会报错的。
 
@@ -136,7 +136,7 @@ const rendererConfig = {
 
 但如果是自定义的，需要自己写，`vue`的官方文档中也说了这个：<span class="vue">[**《TypeScript 支持 #增强类型以配合插件使用》**](https://cn.vuejs.org/v2/guide/typescript.html#增强类型以配合插件使用)</span>
 
-# types 问题的解决
+## types 问题的解决
 
 这里我需要给`Vue`加一个静态属性`appSetup`和一个实例属性`$appSetup`，你需要在项目目录下建一个文件，比如我是在`src`下建了个文件夹`types`
 
@@ -164,7 +164,7 @@ declare module 'vue/types/vue' {
 
 这个地方卡了好久，最后发现自己sb了，没看到官方文档的全局、实例是分开的。我当时只写了其中一个，所以还是各种报错。
 
-# 补充知识
+## 补充知识
 
 如果`typescript`中用变量作为对象的下标，会报`any`类型的问题。
 

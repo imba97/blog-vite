@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# QNAS MINI
+## QNAS MINI
 
 QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded bg-gray></span> NAS，拼好后就是下图
 
@@ -26,7 +26,7 @@ QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded 
 - M.2 转 6 SATA ASM1166 扩展卡
 - 致钛 500G + 2TB SSD
 
-# 软件
+## 软件
 
 系统安装了飞牛，一直想试试，真好用
 
@@ -36,7 +36,7 @@ QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded 
 
 之前用的 `NPS`，需要自己搭建服务器，作者也不更新了，所以刚好也是顺便换掉
 
-# 拼装踩坑总结
+## 拼装踩坑总结
 
 出了一个视频 <span i-ix-bilibili-logo bg="#fb7299"></span> [BV1H34UzWEwJ](http://b23.tv/BV1H34UzWEwJ)，可以参考一下，以下是文字总结
 
@@ -45,7 +45,7 @@ QNAS MINI 是一个 2.5 寸 6 盘位 <span i-material-symbols-hard-disk-rounded 
 3. 侧面有方形孔，可以用来扎线，如果引导盘用硬盘，注意别压到内存
 4. 风扇供电线有正反，不要接反了
 
-# 网络拓扑图
+## 网络拓扑图
 
 更新了一下网络拓扑图
 

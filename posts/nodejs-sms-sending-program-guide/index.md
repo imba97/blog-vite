@@ -11,7 +11,7 @@ categories:
   - 瞎研究
 ---
 
-# 前面的废话
+## 前面的废话
 
 前阵子接了个有意思的活，需求根据模板批量发送短信，在强烈兴趣爱好的驱使下决定研究研究，顺便把钱赚了
 
@@ -23,7 +23,7 @@ categories:
 
 总之最后折腾出来这篇，分享一下踩的坑
 
-# 硬件准备
+## 硬件准备
 
 - 封装好的 4G 模块 **(A7680C)**
 
@@ -33,11 +33,11 @@ categories:
 
   <img src="/uploads/2023/07/serialport-1-2.jpg" style="zoom:50%;" />
 
-# 接线参考
+## 接线参考
 
 <img src="/uploads/2023/07/serialport-1-3.jpg" style="zoom:50%;" />
 
-# 测试
+## 测试
 
 用串口工具，或者使用 `serialport` 包写个简单的程序连接并发送指令
 
@@ -77,7 +77,7 @@ categories:
 - 发件人反转手机号 + 第四步的字符串
 - 依次执行 `AT+CMGF=0`、`AT+CSCS="GSM`、`AT+CMGS=字符串长度`、上一步的字符串、`1A`
 
-# 避坑
+## 避坑
 
 1. 中文短信转 16 进制要 4 位，不足补零，比如 `ABC` 是不行的，必须是 `0ABC`，否则会乱码
 
@@ -88,7 +88,7 @@ categories:
    serialPort.write('\r')
    ```
 
-# 参考
+## 参考
 
 - [中文短信编码流程](https://github.com/imba97/simple-serialport-gsm/blob/master/packages/adapters/src/MainlandChinaAdapter.ts)
 - [短信内容转 16 进制](https://github.com/imba97/simple-serialport-gsm/blob/master/packages/utils/src/unicode.ts)

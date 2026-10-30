@@ -9,13 +9,13 @@ categories:
   - 瞎研究
 ---
 
-# 上回
+## 上回
 
 之前写过一个同步我当前正在听的音乐，大概长这样
 
 ![](/uploads/2025/03/steam-game-1.png)
 
-# 这次
+## 这次
 
 尝试把当前正在玩的 Steam 游戏展示到个人简介中
 
@@ -27,7 +27,7 @@ categories:
 
 开源：[imba97/me](https://github.com/imba97/me)
 
-# 开源库
+## 开源库
 
 为了方便调用，简单封装了一下用到的 Steam API
 

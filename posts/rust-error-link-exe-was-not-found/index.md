@@ -8,7 +8,7 @@ categories:
   - 笔记
 ---
 
-# 报错简介
+## 报错简介
 
 记录一个报错
 
@@ -20,7 +20,7 @@ categories:
 
 少安装了一些环境
 
-# 解决
+## 解决
 
 1. 下载 [Build Tools](https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/)，等它自动下载安装
 

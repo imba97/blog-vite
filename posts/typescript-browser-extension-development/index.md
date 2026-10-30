@@ -12,7 +12,7 @@ categories:
 
 总结一篇 TypeScript 浏览器插件开发经验
 
-# 推荐模块
+## 推荐模块
 
 1. [webextension-polyfill-ts](https://github.com/Lusito/webextension-polyfill-ts)
 
@@ -103,7 +103,7 @@ categories:
    }
    ```
 
-# Btools
+## Btools
 
 最后宣传一下自己写的插件，Btools，以B站为主的网站页面优化，增强用户体验
 
@@ -366,6 +366,6 @@ export class RetrieveInvalidVideo extends ModuleBase {
 
 相当于自己封装了返回默认值
 
-# 收工
+## 收工
 
 OK，以上就是一些小总结，告辞

@@ -10,13 +10,13 @@ categories:
   - 瞎研究
 ---
 
-# 烧录镜像
+## 烧录镜像
 
 插入空U盘，打开软件`balenaEtcher`，选择镜像，选择U盘，Flash!
 
 操作过于简单就不上图了，软件和镜像都整合在云盘里了，地址在下面。
 
-# 盒子信息和配置
+## 盒子信息和配置
 
 首先连接显示器和鼠标，只支持HDMI，开机后可以看到固件版本和IP地址，如果不是网线连接，可以在这个界面连接WiFi。
 
@@ -25,7 +25,7 @@ categories:
 ![](/uploads/2020/08/n1-1.png)
 > 图片来自网络
 
-# 连接电脑
+## 连接电脑
 
 用双公USB接口连接盒子和电脑，需要做一下操作。
 
@@ -45,7 +45,7 @@ categories:
 
 下面就会进入U盘中刷入的openwrt中，命令行界面不支持高分辨率屏幕的显示，但我们也不需要用命令。
 
-# 旁路由配置
+## 旁路由配置
 
 ## IP
 
@@ -144,7 +144,7 @@ bind :6253 -group overseas
 
 服务器组写刚才设置的国外DNS服务器分组名称
 
-# 软件、镜像、工具
+## 软件、镜像、工具
 
 [AdGuardHome_linux_armv6.tar.gz](http://static.imba97.com/uploads/AdGuardHome_linux_armv6.tar.gz)
 

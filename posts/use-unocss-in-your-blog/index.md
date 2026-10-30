@@ -8,7 +8,7 @@ categories:
   - Hexo
 ---
 
-# 演示
+## 演示
 
 ```html
 <div text="center 10 primary">你可以设置字体样式</div>
@@ -150,7 +150,7 @@ categories:
   </div>
 </div>
 
-# 使用
+## 使用
 
 安装插件和相关依赖（必选）
 
@@ -168,7 +168,7 @@ npm install @iconify/json
 
 图标站：[Icônes](https://icones.js.org/)
 
-# 配置
+## 配置
 
 ## 插件配置
 

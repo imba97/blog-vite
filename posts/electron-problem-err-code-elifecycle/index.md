@@ -10,13 +10,13 @@ categories:
   - Electron
 ---
 
-# 事情经过
+## 事情经过
 
 执行`npm run build`报错
 
 <!--more-->
 
-# 报错
+## 报错
 
 ```bash
 npm ERR! code ELIFECYCLE
@@ -31,7 +31,7 @@ npm ERR! A complete log of this run can be found in:
 npm ERR!     E:\nodejs\node_cache\_logs\2020-07-30T18_05_50_819Z-debug.log
 ```
 
-# 解决
+## 解决
 
 这个问题应该是编译出现错误，但错误日志并不会明确提示错误信息，错误种类有很多，这里是其中一种。
 

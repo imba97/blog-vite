@@ -8,7 +8,7 @@ categories:
   - 瞎研究
 ---
 
-# Unocss
+## Unocss
 
 `unocss` 是个强大的原子化 CSS 引擎，可以让你无需考虑样式的命名，按需生成样式
 
@@ -24,7 +24,7 @@ categories:
 [mt-5=""]{margin-top:1.25rem;}
 ```
 
-# 发现需求
+## 发现需求
 
 最近在做一个 `Hexo` 的主题，用到了 `unocss`
 
@@ -66,7 +66,7 @@ const outFile = resolve(options.cwd || process.cwd(), options.outFile ?? 'uno.cs
 }
 ```
 
-# Uno 启动！
+## Uno 启动！
 
 - 第一步，fork 项目、下载源码 [unocss](https://github.com/unocss/unocss)，参考其他人的 PR，fork 后还需要创建一个分支，格式是 `git 提交类型/简单的修改描述`
 
@@ -78,13 +78,13 @@ const outFile = resolve(options.cwd || process.cwd(), options.outFile ?? 'uno.cs
 
 - 接下来，你只需要对 `src/*.ts` 进行修改即可
 
-# 最后
+## 最后
 
 头回知道 `jiti`，这种开发方式真的太爽了，不需要频繁执行 `tsc`，学到
 
 我先去改了，争取 PR 成功合并
 
-# 汇报
+## 汇报
 
 写完了发现 `unocss` 本身就支持多个输出文件功能，再加上几个单元测试没过，后面就不想搞了
 

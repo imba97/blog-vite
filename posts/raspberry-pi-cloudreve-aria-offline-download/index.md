@@ -11,7 +11,7 @@ categories:
   - 瞎研究
 ---
 
-# Aria2
+## Aria2
 
 aria2是一个轻量级下载工具，支持HTTP、FTP、磁力链接等
 
@@ -19,13 +19,13 @@ cloudreve的离线下载功能会使用它进行下载
 
 <!--more-->
 
-# 下载
+## 下载
 
 ```bash
 sudo apt install -y aria2
 ```
 
-# 配置
+## 配置
 
 ## Aria2
 
@@ -143,7 +143,7 @@ sudo service aria start
 
 ![](/uploads/2020/12/raspberry-pi-cloudreve-aria2-1.png)
 
-# 后言
+## 后言
 
 cloudreve默认每过一分钟查询一次进度
 

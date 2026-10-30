@@ -18,7 +18,7 @@ Hexo之前也接触过，不过只是看看，没摸
 
 <!--more-->
 
-# 原因
+## 原因
 
 ## 服务器出大问题
 
@@ -40,7 +40,7 @@ Hexo之前也接触过，不过只是看看，没摸
 
 现在想想，还好之前用了`Markdown`
 
-# 迁移
+## 迁移
 
 Hexo提供了[迁移文档](https://hexo.io/zh-cn/docs/migration#WordPress)，可以用插件把WordPress导出的数据转成对应的文章
 
@@ -54,7 +54,7 @@ Hexo提供了[迁移文档](https://hexo.io/zh-cn/docs/migration#WordPress)，�
 
 其实迁移插件还是有点用的，至少文章类型、标签、发布时间还是都有的，也算省了很多事吧
 
-# 教程
+## 教程
 
 ## 在本地安装 Hexo
 
@@ -172,7 +172,7 @@ sudo chown -R www:www /www/wwwroot/blog
 
 所以这里就先把它变成`git`用户的，`checkout`完后改回`www`用户
 
-# 使用
+## 使用
 
 Hexo可真是太舒服了，在`source/_posts`编辑文章
 
@@ -207,6 +207,6 @@ hexo clean
 
 OK，以上就是本期文章
 
-# 爷青结
+## 爷青结
 
 用了两年多的WordPress退役了，👴的青春结束了

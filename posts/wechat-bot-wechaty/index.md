@@ -10,7 +10,7 @@ categories:
   - 个人项目
 ---
 
-# 起因
+## 起因
 
 朋友玩游戏分享到群里领游戏奖励，领完撤回，于是...
 
@@ -24,7 +24,7 @@ categories:
 
 <img src="/uploads/2021/05/wechaty-5.jpg" style="zoom: 50%;" />
 
-# 功能
+## 功能
 
 `node.js`太上头了，除了上面那个之外又做了点别的
 
@@ -62,11 +62,11 @@ categories:
 
 <img src="/uploads/2021/05/wechaty-10.jpg" style="zoom: 50%;" />
 
-# 使用
+## 使用
 
 详情请见：[Github](https://github.com/imba97/imba97_project/tree/master/wechat_bot)
 
-# 程序猿复健计划
+## 程序猿复健计划
 
 解释一下，我二月份做了个近视手术，三个月内不能长时间看手机电脑这种需要近距离长时间看的东西
 

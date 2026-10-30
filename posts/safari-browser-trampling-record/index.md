@@ -8,7 +8,7 @@ categories:
   - 笔记
 ---
 
-# 音频加载
+## 音频加载
 
 近期做了个小游戏，需要用到 `mp3` 文件，为了不让用户等待做了预加载，实现方式就是
 
@@ -34,7 +34,7 @@ audio.load()
 
    于是最后做了设备类型判断，如果是 `iOS` 设备，就需要先点击加载音频，加载完后才会出现开始按钮
 
-# 滚动回弹
+## 滚动回弹
 
 近期工作中遇到了这个问题，`Safari` 浏览器如果滚动到最下面先停一下，然后还能继续往上拉，松开就有个很回弹的回弹
 
@@ -44,7 +44,7 @@ audio.load()
 -webkit-overflow-scrolling: auto;
 ```
 
-# 100vh 的问题
+## 100vh 的问题
 
 这也是工作中遇到的，最先是 `Safari ` 遇到的，但按理说是所有移动端浏览器都可能有的
 
@@ -85,6 +85,6 @@ document.documentElement.style.setProperty('--1svh', (`${svh}px`))
 }
 ```
 
-# 最后
+## 最后
 
 上面说的小游戏在这里：[https://games.imba97.com](https://games.imba97.com)

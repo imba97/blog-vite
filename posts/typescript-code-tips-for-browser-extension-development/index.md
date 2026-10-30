@@ -11,13 +11,13 @@ categories:
   - 瞎研究
 ---
 
-# chrome/browser
+## chrome/browser
 
 这两个是浏览器为插件开发提供的API，Chrome浏览器的变量名叫`chrome`，火狐浏览器的变量名叫`browser`
 
 <!--more-->
 
-# 代码提示
+## 代码提示
 
 我用的编辑器是vscode，之前一直不明白怎么给这两个变量添加代码提示
 
@@ -84,7 +84,7 @@ declare module 'vue/types/vue' {
 
 以上，代码提示添加完成
 
-# 使用示例
+## 使用示例
 
 然后你就可以给Vue的chrome赋值，以`background.ts`为例，里面封装了一个网络请求
 
@@ -180,7 +180,7 @@ export default class Popup extends Vue {
 
 其他细节可查看Github项目：[Btools-vue](https://github.com/imba97/Btools-vue)
 
-# 总结
+## 总结
 
 1. 如果typescript项目用到的某变量没有代码提示可在npm搜索`@types/xxx`查找
 
@@ -190,6 +190,6 @@ export default class Popup extends Vue {
 
    之前想到了在typings文件中声明，但不知道得用typeof，一直报错：namespace不能作为类型使用
 
-# 更新
+## 更新
 
 2021-07-06 更新，发现有一个插件API的包[webextension-polyfill-ts](https://github.com/Lusito/webextension-polyfill-ts)，直接引入就可以用

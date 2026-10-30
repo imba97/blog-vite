@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 需求产生
+## 需求产生
 
 在使用表单时，表单的输入框、选择器会设置 `placeholder` 属性来进行提示
 
@@ -19,7 +19,7 @@ categories:
 
 那我们为何不封装个指令，让它自己加呢
 
-# 思路
+## 思路
 
 因为我用的是 `element-plus`，组件都有固定的样式、模板
 
@@ -48,7 +48,7 @@ categories:
 
 `Vue` 指令可以在组件挂载后拿到添加指令的 `DOM` 元素，再用 `DOM` 的 `querySelector` 获取到所有 `el-form-item` 子元素，遍历后再根据 `label` 的内容给 `input` 设置 `placeholder`
 
-# 代码参考
+## 代码参考
 
 ```js
 import _ from 'lodash'
@@ -101,7 +101,7 @@ export default {
 }
 ```
 
-# 最终效果
+## 最终效果
 
 在 `el-form` 加上 `v-auto-placeholder`
 

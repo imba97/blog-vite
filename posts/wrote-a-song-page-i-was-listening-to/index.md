@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 演示
+## 演示
 
 因为是个网页，所以可以通过 `iframe` 分享到各处
 
@@ -17,7 +17,7 @@ categories:
 
 页面是 [https://imba97.me/playing](https://imba97.me/playing)
 
-# 原理
+## 原理
 
 最近发了篇博客文章：[《自建音乐服务 Navidrome》](/posts/782)，里面提到可以使用 `last.fm` 来保存听歌历史
 
@@ -49,6 +49,6 @@ categories:
 <div i-ph-music-note-simple-duotone h-20 w-20 animate-spin animate-duration-30000></div>
 ```
 
-# 开源
+## 开源
 
 <span icon i-mdi-github></span> Github: [imba97/playing-music](https://github.com/imba97/playing-music)

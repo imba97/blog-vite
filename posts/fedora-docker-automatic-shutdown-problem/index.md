@@ -9,7 +9,7 @@ categories:
   - 笔记
 ---
 
-# 事件回放
+## 事件回放
 
 之前在做 Homelab 的时候用到了 `Fedora` 这个系统，做显卡直通后，在系统中单独跑一个 `Jellyfin` 可以开启硬件解码
 
@@ -17,7 +17,7 @@ categories:
 
 之后感觉是系统休眠问题，于是就搜了一下 `Fedora` 怎么关闭自动休眠，但没搜到命令
 
-# 关闭自动休眠
+## 关闭自动休眠
 
 昨天仔细找了找，发现了关闭自动休眠的命令，`Fedora` 也可以用
 
@@ -27,7 +27,7 @@ sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.ta
 
 记录一下
 
-# 添加自动重启
+## 添加自动重启
 
 之前加了个音乐服务，使用频率大幅增加
 
@@ -39,7 +39,7 @@ sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.ta
 0 5 * * * reboot
 ```
 
-# 添加 NAS 挂载重试
+## 添加 NAS 挂载重试
 
 2024-04-20 更新
 

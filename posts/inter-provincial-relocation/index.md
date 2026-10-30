@@ -10,7 +10,7 @@ categories:
   - vlog
 ---
 
-# 文稿
+## 文稿
 
 无
 
@@ -20,11 +20,11 @@ categories:
 
 <!--more-->
 
-# 对应视频
+## 对应视频
 
 [https://www.bilibili.com/video/BV17A411h7Mo](https://www.bilibili.com/video/BV17A411h7Mo)
 
-# 带货
+## 带货
 
 <img src="https://i.loli.net/2020/04/02/r5JZYPD3wiy6SkH.png" width="200">
 
@@ -33,6 +33,6 @@ categories:
 
 最后更新日期：`2020-04-02`
 
-# 弹幕评论删除记录
+## 弹幕评论删除记录
 
 暂无

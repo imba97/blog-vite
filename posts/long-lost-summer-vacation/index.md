@@ -9,13 +9,13 @@ categories:
   - 数字游民
 ---
 
-# 暑假
+## 暑假
 
 大概有七年没放过暑假了，毕竟打工人没有暑假
 
 辞职后的打算是先放个暑假，转眼也过了一个半月了，盘点一下我的暑假做了什么
 
-# Vue Conf
+## Vue Conf
 
 看了一场 Vue Conf，就是 Vue 核心团队的大佬们分享一些技术
 
@@ -27,7 +27,7 @@ categories:
 
 ![](/uploads/2024/08/summer-day-2.jpg)
 
-# 骑行
+## 骑行
 
 从南京 <span icon i-ph-person-simple-bike-duotone bg-primary></span> 骑回了家，大概 560 多公里
 
@@ -37,7 +37,7 @@ categories:
 
 ![](/uploads/2024/08/summer-day-3.jpg)
 
-# 找工作
+## 找工作
 
 骑行中途在宾馆休息的时候，构思了一个个人简介网站 [me.imba97.com](https://me.imba97.com)
 
@@ -47,7 +47,7 @@ categories:
 
 ![](/uploads/2024/08/summer-day-4.jpg)
 
-# 开源
+## 开源
 
 做兼职的时候发现一些需求，写了几个小工具
 
@@ -61,7 +61,7 @@ categories:
 
 给 <span icon i-mdi-github></span> [nuxt-lodash](https://github.com/cipami/nuxt-lodash) 提了个 [PR](https://github.com/cipami/nuxt-lodash/pull/64)，修复了服务端不生效的问题
 
-# 精神状态
+## 精神状态
 
 果然辞职才能治百病，我一直是入睡困难，至少是半小时到一小时起步
 
@@ -73,7 +73,7 @@ categories:
 
 ![](/uploads/2024/08/summer-day-5.jpg)
 
-# 暑假后
+## 暑假后
 
 首要任务就是找个远程全职工作了，有稳定收入就能出去旅居办公了，朝目标一点点靠近吧
 

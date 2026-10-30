@@ -9,7 +9,7 @@ categories:
   - 记录
 ---
 
-# 描述
+## 描述
 
 水一篇文章
 
@@ -19,7 +19,7 @@ categories:
 
 开了个无痕看了看，也确实被隐藏了
 
-# 解决
+## 解决
 
 找了半天，原来可以在 Organization People 里设置
 

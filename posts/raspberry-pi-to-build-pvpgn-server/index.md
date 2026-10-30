@@ -69,7 +69,7 @@ make && make install
 
 如果你是用文件储存数据，储存的文件在：`/usr/local/var/pvpgn/`
 
-# 测试
+## 测试
 
 最后你可以在`Battle.net Gateways Editor`中测试连接是否正常
 

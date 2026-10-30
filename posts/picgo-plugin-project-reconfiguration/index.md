@@ -8,7 +8,7 @@ categories:
   - 瞎研究
 ---
 
-# FTP 上传插件
+## FTP 上传插件
 
 这是一个四年前的项目，当时发现 PicGo 没有我需要的 FTP 上传插件，于是自己写了一个
 
@@ -16,7 +16,7 @@ categories:
 
 前端技术发展迅猛，积累了四年的前端知识，让我有了重构的想法
 
-# Refactor!
+## Refactor!
 
 我当前开发前端库主要用以下技术
 
@@ -62,7 +62,7 @@ bumpp 是一个简单的版本管理工具，命令行界面选择版本号，�
 
 封装 `ftp` 客户端，让代码看起来更清晰
 
-# PicGo 插件模板
+## PicGo 插件模板
 
 PicGo 支持插件模板的开发，所以我基于上面的优化做了个插件模板
 
@@ -74,6 +74,6 @@ picgo init imba97/picgo-template-plugin picgo-plugin-name
 
 模板仓库 <span icon i-mdi-github></span> [imba97/picgo-template-plugin](https://github.com/imba97/picgo-template-plugin)
 
-# 顺手
+## 顺手
 
 使用 `picgo init` 命令时发现一个问题，一个可选参数不写会报错，修了一下 ([#178](https://github.com/PicGo/PicGo-Core/pull/178))

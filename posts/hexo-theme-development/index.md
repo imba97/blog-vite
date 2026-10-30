@@ -9,7 +9,7 @@ categories:
   - hexo
 ---
 
-# 使命
+## 使命
 
 近一年中我了解到**数字游民**这个概念，就深受吸引，想逐步达成这一目标
 
@@ -19,7 +19,7 @@ categories:
 
 <!--more-->
 
-# 地基
+## 地基
 
 模板的开发是在 `Hexo` 默认模板的基础上，最开始没有直接写页面，而是丰富开发工具，会让开发变得更简单
 
@@ -41,7 +41,7 @@ categories:
 
 这样就不用为 `class` 起名发愁了，并且按需生成，不会有大量重复样式
 
-# 功能
+## 功能
 
 除了自带的图片预览，目前还加了 `Pjax`、`nprogress`、`smooth-scrollbar`
 
@@ -49,6 +49,6 @@ categories:
 
 并且可以方便的设置哪个库是用户可以在配置里控制开关的
 
-# 开源
+## 开源
 
 Github：[imba97/hexo-theme-imba97](https://github.com/imba97/hexo-theme-imba97)

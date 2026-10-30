@@ -11,7 +11,7 @@ categories:
   - 瞎研究
 ---
 
-# Cloudreve
+## Cloudreve
 
 [Cloudreve](https://cloudreve.org/) 是个网盘系统，包含前后端，解压即用，贼吉尔方便
 
@@ -39,7 +39,7 @@ tar -zxvf cloudreve.tar.gz
 
 Cluedreve 默认存储是`SQLite`本地存储，所以会在当前目录创建一个`.db`的文件
 
-# Mysql
+## Mysql
 
 不过它支持`mysql`，这里我选用`mysql`
 
@@ -103,7 +103,7 @@ Host = 127.0.0.1
 Name = cloudreve
 ```
 
-# 开机启动
+## 开机启动
 
 创建一个`service`文件，配置开机启动
 
@@ -144,7 +144,7 @@ sudo systemctl enable cloudreve
 sudo service cloudreve start
 ```
 
-# 完成
+## 完成
 
 访问`树莓派IP:端口`，你就能看到登录页了
 

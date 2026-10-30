@@ -10,7 +10,7 @@ categories:
   - 瞎研究
 ---
 
-# PicGo
+## PicGo
 
 [PicGo](https://github.com/Molunerfinn/PicGo)是**一个用于快速上传图片并获取图片 URL 链接的工具**，可以把本地图片上传到图床并返回各种格式的链接
 
@@ -18,13 +18,13 @@ categories:
 
 <!--more-->
 
-# 插件
+## 插件
 
 PicGo支持插件开发，但官方教程并没有从零到安装成功的具体细节演示，只说了插件开发相关的一些东西
 
 所以对新手的我来说还是碰到很多坑的，在此记录分享一下
 
-# 入门教程
+## 入门教程
 
 下面我会用PicGo给我们提供的[**插件开发模板**](https://github.com/PicGo/picgo-template-plugin)进行插件从零到安装成功的开发过程演示
 
@@ -164,6 +164,6 @@ PicGo程序本体这边可以下载源码，运行`npm run electron:serve`进入
 
 应该是跟**配置文件**在一起的
 
-# 告辞
+## 告辞
 
 OK，接下来你可以在[《插件开发指南》](https://picgo.github.io/PicGo-Core-Doc/zh/dev-guide/cli.html)获取更多教程，开启插件开发之路了

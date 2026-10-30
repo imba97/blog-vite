@@ -13,7 +13,7 @@ categories:
 
 <!--more-->
 
-# 使用方法
+## 使用方法
 
 **第一种方式**，直接把下面这个拖到收藏夹。然后在**任意页面**点击使用
 
@@ -33,7 +33,7 @@ javascript:if(typeof koe_knowking_clicked==='undefined'){var koe_knowking_clicke
 
 <script>make_js();</script>
 
-# 服务端
+## 服务端
 
 这里需要PHP去获取百度百科的页面，目前是放在我服务器上的，如果到时候用的人多了我可能会停掉。
 

@@ -9,13 +9,13 @@ categories:
   - 个人项目
 ---
 
-# 从体积焦虑到按需加载
+## 从体积焦虑到按需加载
 
 写了个中文字体子集化工具 `charbi-font`
 
 ---
 
-# 开发契机
+## 开发契机
 
 受公司大佬做的工具的启发，了解到字体子集化这条路径。说来惭愧，入行前端这么多年了，还是头一次知道
 
@@ -23,7 +23,7 @@ categories:
 
 ---
 
-# 发现需求
+## 发现需求
 
 1. 多字重支持
 
@@ -39,7 +39,7 @@ categories:
 
 ---
 
-# charbi-font 做了什么
+## charbi-font 做了什么
 
 `charbi-font` 覆盖了从扫描、构建到分发的完整链路：
 
@@ -126,7 +126,7 @@ categories:
     </summary>
   </details>
 
-# 使用
+## 使用
 
 ## 安装
 
@@ -253,10 +253,10 @@ pnpm chabi build
 pnpm chabi upload
 ```
 
-# 关于名称
+## 关于名称
 
 最开始让 AI 起名，我说可以造组合字，于是在一堆名称中我一眼看到了 `char + build = charbi`（你没有偷摸骂我吧？）
 
-# 开源
+## 开源
 
 [Github](https://github.com/imba97/charbi-font)

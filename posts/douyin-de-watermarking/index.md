@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 前言
+## 前言
 
 如果你是为了盗视频而看本教程，那就是本教程最大的失败。
 
@@ -17,7 +17,7 @@ categories:
 
 至于为什么说是本教程最大的失败，因为这个社会什么牛鬼蛇神都有，我无法控制。盗视频这种弟弟行为，即使不看这个也会去搜其他教程、用其他软件。
 
-# 手动打开无水印视频
+## 手动打开无水印视频
 
 抖音去水印教程，不借助其他去水印工具。
 
@@ -83,7 +83,7 @@ Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML,
 
 <script>function analysis(){var share_url=document.querySelector('#share_url').value;var share_code=document.querySelector('#share_code').value;if(!/https?:\/\/v\.douyin\.com\/[a-zA-Z0-9]+/i.test(share_url)){ alert('分享地址格式错误');return;} $.get('https://bili.imba97.com/douyin/api.php?url='+share_url+'&code='+share_code, function(json){if(json.code==0){alert(json.msg);return;} var output=document.querySelector('#output'); output.href=json.url; output.innerText='点击此处跳转至视频' }); }</script>
 
-# 去印员
+## 去印员
 
 以上就是本期教程，如果你喜欢我的教程，请支持imba久期博客网
 

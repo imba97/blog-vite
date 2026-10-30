@@ -10,13 +10,13 @@ categories:
   - 笔记
 ---
 
-# 问题说明
+## 问题说明
 
 最开始我新建了一个项目A，不知道设置了什么，这个是有自动补全的。之后又建了几个项目，发现自动补全都失效。
 
 <!--more-->
 
-# 搜到的解决方法
+## 搜到的解决方法
 
 网上各种解决方法，比如更改`Assembly-CSharp.csproj`中的`TargetFrameworkVersion`，与自己电脑的`.NET Framework`版本保持一致，可惜我这里依然不生效。
 
@@ -24,7 +24,7 @@ categories:
 
 与我的解决方法比较接近的是在VsCode按`Ctrl + Shift + P`输入`OmniSharp: select project`，选择项目文件
 
-# 我的解决流程
+## 我的解决流程
 
 通过文件对比，可以看出项目A的`.sln`文件要多几行内容
 
@@ -49,7 +49,7 @@ EndProject
 
 这个应该是一些Debug配置，具体我没细研究，有兴趣可以自行搜索`.sln`文件的配置项都是干什么的
 
-# 解决方法
+## 解决方法
 
 如果你的`.sln`文件没有上面所说的这几行，那么问题应该就出在这
 
@@ -94,7 +94,7 @@ EndGlobal
 
 ---
 
-# 参考
+## 参考
 
 > [《Visual Studio 使用的 ProjectTypeGuids》](https://www.cnblogs.com/zealic/archive/2009/06/25/1511039.html)
 > [文本对比工具](http://www.jq22.com/textDifference)

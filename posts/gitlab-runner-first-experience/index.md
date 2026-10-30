@@ -10,13 +10,13 @@ categories:
   - 工作
 ---
 
-# 概念
+## 概念
 
 `GitLab` 在跑流水线时需要配置 `runner`，`runner` 就是一个计算服务，说白了就是个一台电脑
 
 根据流水线的步骤执行编译、打包、部署等工作
 
-# 创建 Runner
+## 创建 Runner
 
 首先在 `GitLab` 项目设置中创建 `runner`，拿到 `token`
 
@@ -63,7 +63,7 @@ Enter a name for the runner. This is stored only in the local config.toml file:
 Enter an executor: custom, shell, ssh, instance, docker-autoscaler, docker+machine, kubernetes, docker, docker-windows, parallels, virtualbox:
 ```
 
-# 报错
+## 报错
 
 `runner` 配置成功后跑的时候报了个错
 
@@ -75,7 +75,7 @@ ERROR: Job failed: exit status 1
 
 是执行 `npm install` 的时候没找到 `npm`
 
-# 解决
+## 解决
 
 后面发现是选择执行器，我最开始选的 `shell`
 

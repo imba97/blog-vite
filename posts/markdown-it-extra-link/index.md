@@ -9,13 +9,13 @@ categories:
   - 个人项目
 ---
 
-# 前因后果
+## 前因后果
 
 上次我们探讨了本博客使用 Vite SSG 的构建方案，可以将 Markdown 转为 Vue 组件，其中底层就是基于 {link:github:markdown-it/markdown-it,markdown-it}，这是一个用于解析 Markdown 的库。同时它提供了编写插件的能力，可以方便地扩展 Markdown 的功能
 
 于是我实现了一个一直以来想实现的功能
 
-# 我的需求
+## 我的需求
 
 在博客中会有一些跳转到博客其他文章的链接，常见写法一般是这样的固定写法
 
@@ -29,7 +29,7 @@ categories:
 
 如果是修改了标题，比如想更正格式、大小写之类的，那么所有使用的地方都需要修改。虽说有一键替换和 AI 处理，但每次这么改链接一点也不优雅
 
-# 解决方案
+## 解决方案
 
 于是我写了个 {link:github:imba97/markdown-it-extra-link,markdown-it-extra-link}，Markdown It 的链接扩展插件，目前实现了两个我常用的链接扩展
 

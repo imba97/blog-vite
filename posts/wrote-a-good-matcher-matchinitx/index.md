@@ -9,7 +9,7 @@ categories:
   - 个人项目
 ---
 
-# matchinitx
+## matchinitx
 
 `matchinitx` 前身是 <span icon i-mdi-github></span> [initx-collective/initx](https://github.com/initx-collective/initx) 项目中的功能，在插件中定义了匹配规则，然后 `initx` 会收集所有插件，根据用户在命令行输入的关键字，匹配、调用对应的插件
 
@@ -17,7 +17,7 @@ categories:
 
 <!-- more -->
 
-# 使用
+## 使用
 
 ```ts
 import type { MatcherRules } from 'matchinitx'

@@ -8,7 +8,7 @@ categories:
   - JavaScript
 ---
 
-# 位枚举是个啥
+## 位枚举是个啥
 
 ## 枚举
 
@@ -65,7 +65,7 @@ enum STATUS
 
 但当判断项只有一个可能看不出它的优势，别急我们先用JS演示一下
 
-# JS模仿C#位枚举
+## JS模仿C#位枚举
 
 ## 定义
 
@@ -180,7 +180,7 @@ hasFlag(~STATUS.EAT, status) // 除了吃饭
 hasFlag(~STATUS.EAT & ~STATUS.SLEEP, status) // 除了吃饭和睡觉
 ```
 
-# 告辞
+## 告辞
 
 目前我在`javascript`中用位枚举还比较少，只用过一次，不过我感觉这种方式能解决不少判断的问题
 

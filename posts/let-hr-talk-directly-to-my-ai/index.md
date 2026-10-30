@@ -9,7 +9,7 @@ categories:
   - 个人项目
 ---
 
-# 做个自我介绍
+## 做个自我介绍
 
 ![](/uploads/2025/04/imba97-ai-1.gif)
 
@@ -19,7 +19,7 @@ categories:
 - 比如直接复制工作要求让 AI 给出匹配程度
 - 可以自己跟 AI 聊聊，学习参考 AI 的回答技巧
 
-# 技术细节
+## 技术细节
 
 AI 是 DeepSeek，并使用了 [one-api](https://github.com/songquanpeng/one-api)，直接用 <span icon text="#2396ed" i-mdi-docker></span> Docker 跑起来
 
@@ -27,7 +27,7 @@ AI 是 DeepSeek，并使用了 [one-api](https://github.com/songquanpeng/one-api
 
 也算是摸清了流式输出和 SSE 格式处理
 
-# 网站
+## 网站
 
 有兴趣可以体验一下 [imba97.me/ai](https://imba97.me/ai)
 

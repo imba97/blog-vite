@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 简述
+## 简述
 
 最开始知道这个方法是在公司一位大佬的代码里看到的，语言是`TypeScript`，当时感觉这个写法逻辑非常清晰，阅读极度舒适
 
@@ -19,7 +19,7 @@ categories:
 
 <!--more-->
 
-# 使用
+## 使用
 
 先演示一下使用方式
 
@@ -505,6 +505,6 @@ Url.POST_TEST_COMPLEX.Request(new Params.POST_TEST_COMPLEX()
 
 这里面用的JSON格式化包是[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)，比`JsonUtility`不知道要好用多少
 
-# 结束
+## 结束
 
 OK 以上就是这个请求接口类

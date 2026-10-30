@@ -10,13 +10,13 @@ categories:
 
 用 vue 脚手架创建的 electron-vue 项目
 
-# 需求
+## 需求
 
 程序启动后，打开某个页面会下载网络图片到本地，存到指定文件夹下
 
 <!--more-->
 
-# 问题
+## 问题
 
 electron-vue 可以启动开发版：`npm run dev` 和生成安装包：`npm run build`
 
@@ -30,7 +30,7 @@ electron-vue 虽然提供了一个`static`目录，但这个会在打包时被�
 
 这个`文件`中还存了所有页面、样式、库、等...
 
-# 解决
+## 解决
 
 使用`process.cwd()`获取当前进程工作目录
 

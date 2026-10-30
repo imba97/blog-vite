@@ -16,7 +16,7 @@ categories:
 
 <!--more-->
 
-# JS中的类型
+## JS中的类型
 
 在`js`中，虽然类型的概念没那么强，但你依然无时无刻不在受到类型约束
 
@@ -30,7 +30,7 @@ categories:
 
 ![](/uploads/2021/10/jsdoc-2.png)
 
-# JS Doc
+## JS Doc
 
 这时候，`JSDoc`就派上用场了。在你明确知道它类型的情况下，你可以直接声明变量的类型
 
@@ -61,7 +61,7 @@ const test = document.querySelector('.test')
 
 这样就可以在运行前排除掉大部分因为粗心导致的问题
 
-# 常用字段
+## 常用字段
 
 ## @type
 
@@ -211,7 +211,7 @@ console.log(
 
 还有一些不太常用的（我个人不常用），可以参考[官方文档](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)。
 
-# 结语
+## 结语
 
 OK，这次就说到这，这篇文章憋了20天
 

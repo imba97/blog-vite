@@ -8,17 +8,17 @@ categories:
   - 个人项目
 ---
 
-# 首先
+## 首先
 
 `initx` 是一个免安装脚本，需要 <span icon i-logos-nodejs-icon-alt></span> Node.js 环境
 
-# 一直在初始化
+## 一直在初始化
 
 一直以来有个让我难受的点，就是一些初始化总会需要手动操作，比如换工作的新电脑、重装系统、创建新仓库，都需要进行大量重复的准备工作，有些甚至还有很多步骤
 
 虽然大部分只需要配置一次，配置的时候查文档，但看完下次就忘了
 
-# 比如
+## 比如
 
 即使想完成一次简单的 <span icon i-logos-git-icon></span> Git 提交，你也需要先完成以下步骤
 
@@ -53,7 +53,7 @@ git config --global --edit
 
 但你依然也需要找到不知道备份到哪里的配置文件
 
-# 再比如
+## 再比如
 
 你创建了一个远程仓库，你需要在本地创建目录，然后初始化仓库，添加远程仓库地址
 
@@ -70,7 +70,7 @@ git remote set-url origin git@github.com:user/repository.git
 
 不常用的话很难记，特别是一堆参数的
 
-<h1 id="init" text-center>init 🛠</h1>
+<h2 id="init" text-center>init 🛠</h2>
 
 <p text-center font-bold>非常骄傲的为你介绍</p>
 
@@ -124,7 +124,7 @@ npx initx git@github.com:user/repository.git
 
 如果已经初始化过，会修改远程仓库地址
 
-# 开源
+## 开源
 
 你可以在 <span icon i-logos-github-icon></span> [initx-collective/initx](https://github.com/initx-collective/initx) 查看具体文档和代码
 

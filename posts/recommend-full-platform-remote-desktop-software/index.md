@@ -8,7 +8,7 @@ categories:
   - 软件
 ---
 
-# 我太激动了
+## 我太激动了
 
 今天发现一个 `全平台`、`远程桌面`、`免费开源`、`支持自建服务器` 的软件！可以说是 `Buff` 都让它叠满了！
 
@@ -22,7 +22,7 @@ categories:
 
 而且我是连接本地设备，它还要去那破破烂烂的服务器绕一圈我就不是很理解，撒我像素是吧？
 
-# 软件本体
+## 软件本体
 
 请记住，它叫：[rustdesk](https://rustdesk.com/)
 
@@ -34,7 +34,7 @@ categories:
 
 **它真的，我哭死！**
 
-# 服务端
+## 服务端
 
 官方有开源的服务端项目：[rustdesk-server](https://github.com/rustdesk/rustdesk-server)
 
@@ -44,7 +44,7 @@ categories:
 
 <img src="/uploads/2023/08/rustdesk-2.png" style="zoom:50%;" />
 
-# 其他要说的
+## 其他要说的
 
 我从两个月前就开始找平替，但一直没找到满意的
 

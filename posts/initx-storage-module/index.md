@@ -9,7 +9,7 @@ categories:
   - 个人项目
 ---
 
-# 简单演示
+## 简单演示
 
 `initx` 的插件如果想在硬盘中存取数据，可以使用上下文中的 `store` 字段
 
@@ -41,7 +41,7 @@ export default class StarterPlugin extends InitxPlugin<Store> {
 
 默认会先取硬盘数据，所以 `store.foo` 的值将会改为 `baz`
 
-# 实现原理
+## 实现原理
 
 在 `handle` 被调用前，`store` 会被创建
 

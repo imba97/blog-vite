@@ -10,7 +10,7 @@ categories:
   - 瞎研究
 ---
 
-# 事情经过
+## 事情经过
 
 最近在研究 NuxtHub 惹出来的事，部署过 [introxd.com](https://introxd.com) 之后爽到了，所以就想把我的简介 [imba97.me](https://imba97.me) 也部署到上面
 
@@ -18,7 +18,7 @@ categories:
 
 在本地直接跑部署命令是可以的，但用 <span icon i-logos-github-actions></span> Github Actions 部署后，环境变量就没了，打印 `process.env` 是个空对象 `{}`
 
-# 尝试解决
+## 尝试解决
 
 ## 命名规则
 
@@ -62,7 +62,7 @@ export default defineNuxtConfig({
 
 也试了把 `useRuntimeConfig` 从顶层放在函数中，也不行
 
-# 解决方法
+## 解决方法
 
 本地的打的包部署上去，`process.env` 是有值的，`runtimeConfig` 也能正常取到，所以考虑是 Github Actions 环境没有环境变量
 

@@ -9,7 +9,7 @@ categories:
   - 个人项目
 ---
 
-# 前言
+## 前言
 
 本教程是在B站UP“[一唐老狮一](https://space.bilibili.com/79983517)”的视频教程 [《Unity的程序基础框架》](https://www.bilibili.com/video/BV1C441117wU) 中，**UI管理模块**的改进。
 
@@ -19,7 +19,7 @@ categories:
 
 <!--more-->
 
-# 主要功能
+## 主要功能
 
 1. 统一管理当前面板下的控件（按钮、图片、文本框等）
 2. UI分层
@@ -70,7 +70,7 @@ public class LoginPanel : BasePanel
 
 如果有其他事件监听，可以添加更多
 
-# 教程
+## 教程
 
 除了反射型事件监听这个功能，其实整个UI部分还包括很多，我们一个个来看
 
@@ -456,7 +456,7 @@ public class UIManager<T> : SingletonBase<UIManager<T>> where T : BasePanel<T>
 
 最后新建各种面板类，继承面板基类，上面那个`LoginPanel`就是其中一个面板
 
-# 后言
+## 后言
 
 至于`SingletonBase`和`SingletonMonoBase`是什么，可以去唐老狮那个基础视频中第三节看（免费的）
 

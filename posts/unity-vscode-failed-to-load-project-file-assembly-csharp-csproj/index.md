@@ -21,7 +21,7 @@ The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To res
 
 <!--more-->
 
-# 原因
+## 原因
 
 重装了系统，所有东西都重新下了，Unity的安装位置也变了
 
@@ -36,7 +36,7 @@ The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To res
 </Reference>
 ```
 
-# 解决
+## 解决
 
 ## 报错问题
 

@@ -10,7 +10,7 @@ categories:
   - 瞎研究
 ---
 
-# 事情经过
+## 事情经过
 
 之前 Nuxt 项目中使用了 `axios` 在 Server 端发送请求，包括获取数据和图片两种
 
@@ -22,7 +22,7 @@ the 'credentials' field on 'requestinitializerdict' is not implemented.
 
 应该是 Cloudflare Workers 不支持 `credentials` 这个字段，但 `axios` 默认会有
 
-# 尝试解决
+## 尝试解决
 
 ## Axios Adapter
 
@@ -30,7 +30,7 @@ the 'credentials' field on 'requestinitializerdict' is not implemented.
 
 但换成这个库后，图片会拿不到，所以暂时放弃了
 
-# 解决方法
+## 解决方法
 
 抛弃 `axios`，简单封装了个 `fetch` 请求
 

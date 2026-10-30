@@ -97,7 +97,7 @@ Promise.all([avatar, span]).then((nodeLists) => {
 快捷键菜单源码：[Github →](https://github.com/imba97/Btools/blob/master/core/Btools.js#L139)
 TypeScript版快捷键菜单：[Github →](https://github.com/imba97/Btools-vue/blob/master/src/scripts/hotKeyMenu.ts)
 
-# 后言
+## 后言
 
 被ES6爽到，也被TypeScript语法爽到，可以指定类型，vs code 直接就有相应的接口提示，太舒服了 —— 来自PHP程序猿的叫好
 

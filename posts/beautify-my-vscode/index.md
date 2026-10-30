@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 上图
+## 上图
 
 ![](/uploads/2024/05/vscode-1.png)
 
@@ -19,7 +19,7 @@ categories:
 
 <!--more-->
 
-# 契机
+## 契机
 
 最开始看托尼老师的视频，发现虽然都是用的 <span icon i-vscode-icons-file-type-vscode></span> VS Code，但感觉完全是两个软件
 
@@ -29,7 +29,7 @@ categories:
 
 再到前几天，发现了托尼老师专门开了个项目分享自己的配置。太贴心了，这必须狠狠抄袭一波！
 
-# 基本配置
+## 基本配置
 
 来自 <span icon i-mdi-github></span> [antfu/use](https://github.com/antfu/use)
 
@@ -41,7 +41,7 @@ categories:
 
 <span icon i-material-symbols-light-settings-rounded text-yellow></span> 配置：[antfu VS Code settings](https://github.com/antfu/vscode-settings/blob/main/.vscode/settings.json) - 根据自己需要微调
 
-# code-server
+## code-server
 
 `code-server` 中使用 `Vitesse Theme`，目前插件市场中只有老版本，只能使用 `Vitesse Light` 和 `Vitesse Dark`
 
@@ -49,7 +49,7 @@ categories:
 
 但可以通过下载 `vsix` 文件手动拖到里面来安装最新版本
 
-# 终端
+## 终端
 
 <span icon i-streamline-warning-triangle-solid text-yellow></span> 目前使用 `WSL ZSH` 有个关键步骤没解决，就是 Git 提交时 `GPG` 加密，慎重将终端切换为 `WSL ZSH`
 

@@ -10,13 +10,13 @@ categories:
   - 个人项目
 ---
 
-# 前言
+## 前言
 
 起因是本人经常喝完瑞幸新品后跟朋友们简评一波，然后列个榜单。所以不如就直接搞个从夯到拉的网页，既然要做不如就直接封装成组件，于是就有了这个
 
 顺便一说，瑞幸家五黑拿铁、西瓜拿铁、每日维C果蔬茶我是给到一个夯的
 
-# h2l-ranking
+## h2l-ranking
 
 ![](/uploads/2026/02/h2l-ranking-1.png)
 
@@ -69,6 +69,6 @@ const rankings = ref({
 </script>
 ```
 
-# 开源
+## 开源
 
 <span i-mdi-github></span> [imba97/h2l-ranking](https://github.com/imba97/h2l-ranking)

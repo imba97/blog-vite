@@ -8,7 +8,7 @@ categories:
   - 瞎研究
 ---
 
-# Navidrome
+## Navidrome
 
 Navidrome 是一个支持自建的 <span icon i-ph-music-notes-duotone bg-primary></span> 音乐服务
 
@@ -16,13 +16,13 @@ Navidrome 是一个支持自建的 <span icon i-ph-music-notes-duotone bg-primar
 
 <!--more-->
 
-# 软件截图
+## 软件截图
 
 我目前用的是这两个，点击查看大图
 
 <MusicClientList />
 
-# 音乐刮削器
+## 音乐刮削器
 
 用的是 Music Tag Web，也是可通过 `Docker` 部署的应用，可以自动或手动搜索、写入音乐信息
 
@@ -32,7 +32,7 @@ Navidrome 是一个支持自建的 <span icon i-ph-music-notes-duotone bg-primar
 
 ![](/uploads/2024/06/navidrome-3.png)
 
-# 搭建
+## 搭建
 
 ## Navidrome
 

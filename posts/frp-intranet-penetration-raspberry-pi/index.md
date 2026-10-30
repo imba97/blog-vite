@@ -11,11 +11,11 @@ categories:
   - 瞎研究
 ---
 
-# 前言
+## 前言
 
 本教程以树莓派+阿里云服务器为例，两者都是linux系统，不涉及其他配置方案
 
-# 下载
+## 下载
 
 首先打开frp在github上的发布版本，找到你要下载的版本，复制压缩包的地址。
 服务器：`frp_版本号_linux_amd64.tar.gz`
@@ -35,7 +35,7 @@ wget https://github.com/fatedier/frp/releases/download/v0.32.0/frp_0.32.0_linux_
 
 <!--more-->
 
-# 解压
+## 解压
 
 使用以下命令解压刚才下好的压缩包
 
@@ -49,7 +49,7 @@ tar -zxvf frp_0.32.0_linux_amd64.tar.gz
 cd frp_0.32.0_linux_amd64
 ```
 
-# 服务器（服务端）配置
+## 服务器（服务端）配置
 
 配置文件是`frps.ini`，默认内容如下
 
@@ -60,7 +60,7 @@ bind_port = 7000
 
 如果你服务器上的7000端口没有其他用途，默认这个配置就可以
 
-# 树莓派（客户端）配置
+## 树莓派（客户端）配置
 
 配置文件是`frpc.ini`，默认内容如下
 
@@ -88,7 +88,7 @@ local_port = 本地端口
 remote_port = 远程端口
 ```
 
-# 客户端新增配置案例
+## 客户端新增配置案例
 
 假设
 
@@ -113,7 +113,7 @@ remote_port = 6000
 
 配置完后重启frp，我在电脑浏览器输入`50.60.70.80:6000`就能打开我本地电脑的网站了
 
-# 客户端的启动和开机启动
+## 客户端的启动和开机启动
 
 启动可以在`frpc`所在的文件夹下执行以下命令
 
@@ -162,7 +162,7 @@ service frpc restart
 systemctl enable frpc.service
 ```
 
-# 服务器的启动和自动启动
+## 服务器的启动和自动启动
 
 同理，操作步骤一样的，只不过服务器的是`frps`
 
@@ -211,6 +211,6 @@ service frps restart
 systemctl enable frps.service
 ```
 
-# 阿里云
+## 阿里云
 
 如果要用阿里云的话：[推广链接](https://www.aliyun.com/minisite/goods?userCode=ujl29kt5)

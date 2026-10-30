@@ -8,7 +8,7 @@ categories:
   - 个人项目
 ---
 
-# 简要
+## 简要
 
 最近发布的 <span icon i-material-symbols-release-alert-rounded bg-amber></span> [v0.0.12](https://github.com/initx-collective/initx/releases/tag/v0.0.12) 版本中移除了默认业务功能，转而加入了 <span icon i-mingcute-plugin-2-fill bg-primary></span> 插件系统
 
@@ -18,7 +18,7 @@ categories:
 
 不管有没有重复造轮子，我非常喜欢 `initx` 以及享受开发过程 🤣
 
-# 插件系统
+## 插件系统
 
 把业务功能的选择交给使用者，将插件的包安装到全局即可，类似
 
@@ -62,7 +62,7 @@ npx initx <something>
 
 可以专注于写脚本！
 
-# starter
+## starter
 
 插件开发在此起步 <span icon i-logos-github-icon></span> [initx-plugin-starter](https://github.com/initx-collective/initx-plugin-starter)
 

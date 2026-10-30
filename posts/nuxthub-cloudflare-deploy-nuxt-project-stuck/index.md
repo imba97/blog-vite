@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# 事情经过
+## 事情经过
 
 很早之前看到过 NuxtHub，但注册了半截，到绑定 <span class="icon i-devicon-cloudflare"></span> Cloudflare 那就暂时弃坑了
 
@@ -17,13 +17,13 @@ categories:
 
 一时间来了兴趣，想看看 NuxtHub 是个啥
 
-# NuxtHub
+## NuxtHub
 
 NuxtHub 是一个对接 Cloudflare Workers、Pages 的后台，同时提供 Nuxt 模块，比如数据库、KV、AI 等
 
 可以非常方便的部署包含前后端的 Nuxt 项目
 
-# 问题
+## 问题
 
 把最近在做的 Nuxt 项目部署上去的时候发现，本地打包后用命令部署是没问题的
 
@@ -40,7 +40,7 @@ NuxtHub 是一个对接 Cloudflare Workers、Pages 的后台，同时提供 Nuxt
 
 最后会构建超时，部署失败
 
-# 排查
+## 排查
 
 因为本地打包也会报这个 <span class="icon i-vscode-icons-file-type-sass"></span> Sass 的警告，所以本来感觉不是这个的问题
 
@@ -48,7 +48,7 @@ NuxtHub 是一个对接 Cloudflare Workers、Pages 的后台，同时提供 Nuxt
 
 代码中使用 `<style lang="scss">` 就会有这个警告，但又不能不用
 
-# 解决
+## 解决
 
 搜了一下发现是要在 `nuxt.config.js` 中加上
 

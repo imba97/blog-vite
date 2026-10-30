@@ -8,7 +8,7 @@ categories:
   - 个人项目
 ---
 
-# 可圈可点
+## 可圈可点
 
 `initx` 是一个免安装的脚本引擎，可以使用 `npx` 执行，通过 <span icon i-mingcute-plugin-2-fill bg-primary></span> 插件实现各种功能
 
@@ -16,13 +16,13 @@ categories:
 
 简单且强大的匹配器来匹配用户输入指令，后来单独抽离成了一个项目 <span icon i-mdi-github></span> [matchinitx](https://github.com/imba97/matchinitx)
 
-# 美中不足
+## 美中不足
 
 `initx` 可以免安装运行，但你需要全局安装各种插件，这显然是**不合理**的
 
 虽然有一个插件管理器 `@initx-plugin/manager`，但它甚至也要先全局安装才能使用，这太傻了
 
-# v0.1.0
+## v0.1.0
 
 在这个版本以及之前的几个版本中，陆续解决了以上的问题
 
@@ -42,7 +42,7 @@ npx initx plugin list
 npm i initx -g
 ```
 
-# 解决需求
+## 解决需求
 
 目前做的几个插件，以解决我自己日常使用需求为主，比如以下几个简单的例子
 
@@ -134,7 +134,7 @@ initx use
 
 更多文档可以在 <span icon i-mdi-github></span> [initx-collective](https://github.com/initx-collective) 对应的插件仓库中找到
 
-# 插件开发
+## 插件开发
 
 `initx` 插件开发的方向大致分为两个部分
 

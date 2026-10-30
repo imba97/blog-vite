@@ -10,7 +10,7 @@ categories:
   - Electron
 ---
 
-# Electron 的通讯机制
+## Electron 的通讯机制
 
 Electron 在运行时分为**主进程**和**渲染器进程**(渲染进程)，**主进程**可以用`NodeJS`的 api，**渲染进程**可以用浏览器的 api
 
@@ -58,7 +58,7 @@ ipcMain.on('rendererSend', (event, path) => {
 
 最少的情况也是**主进程**和**渲染进程**各要写一个，最后会有大量的`on`、`send`
 
-# electron-vue-event-manager
+## electron-vue-event-manager
 
 于是解决方案出现了，`electron-vue-event-manager`是个基于`electron-vue`的事件管理器
 
@@ -159,7 +159,7 @@ EventManager.Instance().sendRequest({
 // EventManager.Instance().sendRequest(options) === axios(options).then(response => response.data)
 ```
 
-# 使用
+## 使用
 
 <div style="display: flex; align-items: center;">
     <p>当前<img src="https://img.shields.io/npm/v/electron-vue-event-manager?label=electron-vue-event-manager&style=flat-square" style="display: inline; margin: 0 5px;" /></p>

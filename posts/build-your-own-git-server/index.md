@@ -9,11 +9,11 @@ categories:
   - 瞎研究
 ---
 
-# 服务器信息
+## 服务器信息
 CentOS 7.0 x86_64 (64bit)
 这里用CentOS举例
 
-# 安装Git
+## 安装Git
 
 ```bash
 # CentOS
@@ -27,7 +27,7 @@ apt-get install git
 
 <!--more-->
 
-# 创建用户
+## 创建用户
 
 如果整个服务器只有你自己用，那无所谓，用root都行（大概吧）
 
@@ -45,7 +45,7 @@ passwd git
 # 然后输入密码
 ```
 
-# 创建仓库
+## 创建仓库
 移动到需要创建仓库的目录中执行
 
 ```bash
@@ -59,7 +59,7 @@ git init --bare xxx.git
 sudo chown -R git:git xxx.git
 ```
 
-# 创建SSH
+## 创建SSH
 
 ### 服务端
 
@@ -100,11 +100,11 @@ ssh-keygen -t rsa
 最后只需要把`id_rsa.pub`的内容粘贴到刚才在服务器创建的`authorized_keys`里就可以
 多个公钥每行一个
 
-# 克隆到本地
+## 克隆到本地
 ```bash
 # git clone username@ip或域名:根目录开始的路径
 git clone git@255.255.255.255:/home/git/test/xxx.git
 ```
 
-# 后言
+## 后言
 其实我在搭Git服务器的时候，主要问题在SSH，看了很多教程都是简单带过。最后慢慢试终于成功了，所以分享一下。

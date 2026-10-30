@@ -9,7 +9,7 @@ categories:
   - 瞎研究
 ---
 
-# Nuxt
+## Nuxt
 
 <span icon i-logos-nuxt-icon></span> Nuxt 是一个集成了前后端的框架，对于一些小型网站，不需要前后端分离的，是个好的选择
 
@@ -17,7 +17,7 @@ categories:
 
 <!--more-->
 
-# Docker
+## Docker
 
 因为涉及到后端，需要 Node 环境，借助 `GPT` 简单写了个 <span icon i-logos-docker-icon></span> Dockerfile
 
@@ -53,7 +53,7 @@ CMD [ "pnpm", "start-docker" ]
 nuxt start --hostname 0.0.0.0 --port $NUXT_PORT
 ```
 
-# Github Actions
+## Github Actions
 
 配置了 <span icon i-logos-github-actions></span> Github Actions 自动打包镜像并发布
 
@@ -103,7 +103,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/me:$TAG_NAME
 ```
 
-# 部署脚本
+## 部署脚本
 
 我是部署在家里路由器上的，为了方便又简单写了个脚本
 
@@ -118,12 +118,12 @@ docker pull imba97/me:latest
 docker run -d --name imba97-me -p 3000:3000 --restart always imba97/me:latest
 ```
 
-# 其他
+## 其他
 
 虽然之前看到过有自动更新容器的方法，不过目前先这样了
 
 Nuxt Docker 镜像倒是也有不少，但还是自己搞一个单独的了
 
-# 开源
+## 开源
 
 有兴趣可以看一下 <span icon i-mdi-github></span> [imba97/me](https://github.com/imba97/me)

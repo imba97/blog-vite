@@ -12,7 +12,7 @@ categories:
 
 以下介绍由 `Google Gemini` 生成
 
-# Google Gemini
+## Google Gemini
 
 > 简单介绍一下 Google Gemini
 
@@ -24,7 +24,7 @@ Google Gemini 是谷歌公司推出的一款对话式人工智能模型，可以
 - **创造性思维**：Gemini 可以进行创造性的思维，可以生成故事、诗歌、笑话等内容。
 - **强大的推理能力**：Gemini 具有强大的推理能力，可以对复杂的问题进行分析和推理，并给出合理的答案。
 
-# 能做什么
+## 能做什么
 
 > 你能做什么
 
@@ -47,13 +47,13 @@ Google Gemini 是谷歌公司推出的一款对话式人工智能模型，可以
 
 其实跟 `Chat GPT` 一样，就是个大语言模型。API 提供免费版，1分钟限制 60 次请求，对于个人用户再带几个朋友一起用也完全够用
 
-# API KEY 获取
+## API KEY 获取
 
 首先需要科学上网到 [支持的地区](https://ai.google.dev/available_regions?hl=zh-cn)，不然打不开申请页面。选择好地区后打开 [申请页面](https://ai.google.dev/)，点击创建即可
 
 ![](/uploads/2024/01/gemini-1.png)
 
-# 部署
+## 部署
 
 部署网页程序：[babaohuang/GeminiProChat](https://github.com/babaohuang/GeminiProChat)
 
@@ -78,7 +78,7 @@ services:
 
 <img src="/uploads/2024/01/gemini-2.png" style="zoom:50%;" />
 
-# 试一下
+## 试一下
 
 刚好公司要写年终述职报告，基本上再简单改改就能用
 

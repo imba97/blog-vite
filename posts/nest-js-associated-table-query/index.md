@@ -8,7 +8,7 @@ categories:
   - 笔记
 ---
 
-# 联表查询
+## 联表查询
 
 浅浅记录一下 `nestjs` 开发的联表查询
 
@@ -44,6 +44,6 @@ async findAll(page: number, limit: number) {
 
 而且分页的话需要用 `offset` 和 `limit`，`take` 和 `skip` 没效果
 
-# 后言
+## 后言
 
 请教一下各位大佬，如果用 `@OneToOne` 的话要不额外生成 ID 要怎么写

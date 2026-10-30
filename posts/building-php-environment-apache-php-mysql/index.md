@@ -21,7 +21,7 @@ PHP非集成环境的搭建笔记。
 
 <!--more-->
 
-# Apache 和 PHP 的配置
+## Apache 和 PHP 的配置
 
 Apache 配置文件：`Apache/conf/httpd.conf`
 
@@ -77,7 +77,7 @@ extension=mysqli
 date.timezone = PRC
 ```
 
-# 使用 Apache
+## 使用 Apache
 
 首先用管理员打开终端，切换目录到`Apache/bin`下
 
@@ -100,7 +100,7 @@ httpd -k start
 
 至此你就可以访问并运行PHP程序了
 
-# MySQL 的配置
+## MySQL 的配置
 
 MySQL 配置文件：`MySQL/my.ini`，如果没有则自己创建
 
