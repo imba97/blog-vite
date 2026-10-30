@@ -8,17 +8,6 @@
     "CDN",
     "前端性能"
   ],
-  "keyPoints": [
-    "全量中文字体动辄十几 MB，子集化后能压到几十 KB",
-    "charbi-font 递归扫描源码提取真实用字，并自动过滤注释",
-    "支持多字重合并、extraText 补充动态文案、上传 COS 等云存储",
-    "输出 woff/woff2/ttf 与 CSS，附实测压缩率表格"
-  ],
-  "about": [
-    "前端性能",
-    "字体优化",
-    "构建工具"
-  ],
   "reviewedAt": "2026-10-30",
   "status": "done"
 }

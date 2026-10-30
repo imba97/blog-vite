@@ -8,20 +8,6 @@
     "开源",
     "瑞幸"
   ],
-  "keyPoints": [
-    "一个从夯到拉的排行榜 Vue 组件，支持拖动排序",
-    "可自定义档位文案与分组，样式轻量",
-    "已开源为 imba97/h2l-ranking，可独立安装",
-    "在线体验页可以直接看效果"
-  ],
-  "about": [
-    "Vue 组件",
-    "开源项目",
-    "前端"
-  ],
-  "citations": [
-    "https://github.com/imba97/h2l-ranking"
-  ],
   "reviewedAt": "2026-10-30",
   "status": "done"
 }

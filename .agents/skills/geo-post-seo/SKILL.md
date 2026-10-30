@@ -1,6 +1,6 @@
 ---
 name: geo-post-seo
-description: 为文章梳理并生成 GEO/SEO 侧车元数据 seo/posts/<id>.json。默认处理 git 未提交的文章，用户指定文章时只处理指定的；没有未提交文章时提示用户指定。用于「给文章补 description / 关键词 / 要点 / FAQ」「GEO 优化某篇」「跑一下 seo 元数据」这类请求。
+description: 为文章梳理并生成 GEO/SEO 侧车元数据 seo/posts/<id>.json（描述 + 关键词）。默认处理 git 未提交的文章，用户指定文章时只处理指定的；没有未提交文章时提示用户指定。用于「给文章补 description / 关键词」「GEO 优化某篇」「跑一下 seo 元数据」这类请求。
 ---
 
 # 生成文章 GEO 元数据
@@ -13,12 +13,10 @@ description: 为文章梳理并生成 GEO/SEO 侧车元数据 seo/posts/<id>.jso
 | --- | --- | --- |
 | `description` | 是 | 120–160 字符，写「解决什么问题 + 结论/产出」 |
 | `keywords` | 建议 | 5–8 个，单个 ≤ 30 字符 |
-| `keyPoints` | 建议 | 3–5 条，每条 ≤ 80 字符，是可独立引用的结论（**只存档，不渲染到文章页**） |
-| `faq` | 按需 | 0–3 条，问题 6–60 字符、答案 20–300 字符（**只在站点级 /faq 展示，文章页不加区块**） |
-| `about` | 可选 | 主题实体，进 JSON-LD `about` |
-| `citations` | 可选 | 一手资料 URL |
 | `reviewedAt` | 是 | 当天日期 `YYYY-MM-DD` |
 | `status` | 是 | 梳理完成写 `done` |
+
+只影响 `<head>`（meta / OG / JSON-LD / llms.txt / summary.json / RSS），**不改动文章页面内容**。
 
 **不要**把这些字段写回文章 frontmatter——frontmatter 只保留 `id / title / date / tags / categories`。
 
@@ -50,9 +48,6 @@ description: 为文章梳理并生成 GEO/SEO 侧车元数据 seo/posts/<id>.jso
 
 - `description`：第一句就说清这篇文章解决了什么，第二句给结论或产出；不要「本文介绍了……」这种开场。中文字符数必须落在 120–160。
 - `keywords`：搜索者会输入的名词/短语，不要堆砌同义词，5–8 个。
-- `keyPoints`：从正文里挑**能脱离上下文独立成立**的结论，带具体数字/版本/命令时保留。
-- `faq`：只有正文里确实回答了某个通用问题时才写（问答式教程、踩坑记录）；普通随笔不要硬凑。
-- `about` / `citations`：文章有明确主题实体或一手链接时再填。
 - `status: "done"`、`reviewedAt` 用当天日期。
 
 ## 第 4 步：调用脚本写入
@@ -93,7 +88,7 @@ pnpm seo:check -- <id> [<id> ...]
 输出：
 
 - 处理了哪些文章（id + 标题），各自写了哪个文件；
-- 每篇的 `description` 字符数、keywords / keyPoints / faq 数量；
+- 每篇的 `description` 字符数与 keywords 数量；
 - 跳过或失败的文章及原因；
 - 未提交（默认不要自动 commit，除非用户要求）。
 

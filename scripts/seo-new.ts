@@ -10,7 +10,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import process from 'node:process'
 import { parsePostFiles } from './parse-post-files.ts'
-import { deriveDescription, postSeoFile, stripMarkdown } from './seo/load-seo.ts'
+import { deriveDescription, postSeoFile } from './seo/load-seo.ts'
 import { normalizePostSeo } from './seo/schema.ts'
 
 const args = process.argv.slice(2).filter(item => item !== '--')
@@ -36,15 +36,8 @@ if (!force && await fileExists(target)) {
   process.exit(1)
 }
 
-const keyPoints = stripMarkdown(post.content)
-  .split(/(?<=[。！？!?])/)
-  .map(item => item.trim())
-  .filter(item => item.length >= 8)
-  .slice(0, 3)
-
 const entry = normalizePostSeo({
   description: deriveDescription(post.content),
-  keyPoints,
   status: 'draft',
   reviewedAt: new Date().toISOString().slice(0, 10)
 })

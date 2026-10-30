@@ -8,20 +8,6 @@
     "开源项目",
     "Markdown"
   ],
-  "keyPoints": [
-    "站内互链写成 {link:post:<id>}，标题或路径变化时自动跟随",
-    "GitHub 仓库链接用 {link:github:owner/repo} 统一生成",
-    "插件在构建期解析，不引入运行时开销",
-    "已开源为 markdown-it-extra-link，可单独安装使用"
-  ],
-  "about": [
-    "Markdown",
-    "开源工具",
-    "博客工程"
-  ],
-  "citations": [
-    "https://github.com/imba97/markdown-it-extra-link"
-  ],
   "reviewedAt": "2026-10-30",
   "status": "done"
 }
