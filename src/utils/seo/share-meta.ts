@@ -1,9 +1,7 @@
-import type { SeoFaqItem } from '~/types/seo'
 import { siteSeo } from '../../../.auto-generate/site-seo'
 import { DEFAULT_FAVICON } from '../seasonal-avatar'
 import {
   buildBlogPostingJsonLd,
-  buildFaqJsonLd,
   serializeJsonLd,
   toAbsoluteUrl,
   toIsoDateString
@@ -19,8 +17,6 @@ export interface SeoRouteMeta {
   description?: string
   keywords?: string[]
   image?: string
-  keyPoints?: string[]
-  faq?: SeoFaqItem[]
   date?: string
   updated?: string
   tags?: string[]
@@ -155,11 +151,8 @@ export function createShareMeta(input: ShareMetaInput) {
       script.push({ type: 'application/ld+json', innerHTML: serializeJsonLd(jsonLd) })
   }
 
-  if (seo?.faq && seo.faq.length > 0) {
-    const faqJsonLd = buildFaqJsonLd({ path: pagePath, items: seo.faq, name: pageTitle || undefined })
-    if (faqJsonLd)
-      script.push({ type: 'application/ld+json', innerHTML: serializeJsonLd(faqJsonLd) })
-  }
+  // 文章页不再输出 FAQPage：可见的问答区块已经移除，
+  // 结构化数据必须对应页面上真实可见的内容。/faq 页面自己的 FAQPage 由该页注入。
 
   return { title, meta, link, script }
 }

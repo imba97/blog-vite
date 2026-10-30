@@ -1,4 +1,3 @@
-import type { SeoFaqItem } from '../../src/types/seo.ts'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
@@ -58,16 +57,12 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
   // 路由 meta 只放 head 与分享卡片需要的短字段，完整元数据留在构建期。
   let description = ''
   let keywords: string[] | undefined
-  let faq: SeoFaqItem[] | undefined
-  let keyPoints: string[] | undefined
   let pageTitle = String(frontmatter.title ?? '')
 
   if (isPost && id) {
     const resolved = resolvePostSeo({ id, frontmatter, content })
     description = resolved.description
     keywords = resolved.keywords
-    faq = resolved.faq
-    keyPoints = resolved.keyPoints
   }
   else {
     const page = getPageSeo(pagePathFromFile(defaultFile) ?? route.path)
@@ -82,8 +77,6 @@ export function applyMarkdownRouteMeta(route: RouteLike, postsMarkdownRoot: stri
       description,
       keywords,
       image: frontmatter.image,
-      keyPoints,
-      faq,
       date: frontmatter.date,
       updated: frontmatter.updated,
       tags: normalizeStringList(frontmatter.tags),
