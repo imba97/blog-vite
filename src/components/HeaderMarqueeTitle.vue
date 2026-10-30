@@ -1,5 +1,12 @@
 <style scoped>
+/* 静止时只让右边缘渐隐，提示标题被截断；左侧不渐隐，保证首字清晰 */
 .title-mask {
+  mask: linear-gradient(to right, black 92%, transparent);
+  -webkit-mask: linear-gradient(to right, black 92%, transparent);
+}
+
+/* 滚动时两侧渐隐，让文字从边缘柔和地进出 */
+.title-mask-scrolling {
   mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   -webkit-mask: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
@@ -9,12 +16,17 @@
   --marquee-shift: 0px;
   --marquee-duration: 12s;
   column-gap: var(--marquee-gap);
-  animation: marquee-scroll var(--marquee-duration) linear infinite;
+}
+
+/* 每次播放只滚一遍：进入页面自动播一次，hover / 触屏点按再按需重播 */
+.marquee-track.is-scrolling {
+  animation: marquee-scroll var(--marquee-duration) linear 1;
   will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+  .marquee-track,
+  .marquee-track.is-scrolling {
     animation: none !important;
     transform: translateX(0) !important;
   }
@@ -35,7 +47,12 @@
   <div
     ref="containerRef"
     class="relative h-full min-w-0 overflow-hidden"
-    :class="{ 'title-mask': shouldAnimateMarquee }"
+    :class="{
+      'title-mask': shouldAnimateMarquee,
+      'title-mask-scrolling': isScrolling
+    }"
+    @pointerenter="onPointerEnter"
+    @pointerdown="onPointerDown"
   >
     <span
       ref="measureRef"
@@ -49,9 +66,11 @@
     <div v-if="displayTitle" class="h-full min-w-0">
       <div
         v-if="shouldAnimateMarquee"
-        :key="trackKey"
+        :key="`${trackKey}-${playCount}`"
         class="marquee-track h-full min-w-0 flex items-center whitespace-nowrap"
+        :class="{ 'is-scrolling': isScrolling }"
         :style="trackStyle"
+        @animationend="onMarqueeAnimationEnd"
       >
         <span :class="textClass">{{ displayTitle }}</span>
         <span :class="textClass" aria-hidden="true">{{ displayTitle }}</span>
@@ -105,12 +124,50 @@ const trackStyle = computed(() => ({
   '--marquee-duration': `${durationSeconds.value}s`
 }))
 
+const isScrolling = ref(false)
+const playCount = ref(0)
+// 进入页面（或换文章）后自动播一遍；hover / 触屏点按只负责按需重播
+let autoPlayPending = true
+
+function startScroll() {
+  if (!shouldAnimateMarquee.value || isScrolling.value)
+    return
+  isScrolling.value = true
+  playCount.value++
+}
+
+function onMarqueeAnimationEnd(event: AnimationEvent) {
+  if (event.target !== event.currentTarget)
+    return
+  isScrolling.value = false
+}
+
+function onPointerEnter(event: PointerEvent) {
+  // 触屏交给 pointerdown，避免同一次点按被 pointerenter 重复触发
+  if (event.pointerType === 'touch')
+    return
+  startScroll()
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (event.pointerType === 'mouse')
+    return
+  startScroll()
+}
+
 let observer: ResizeObserver | null = null
 let rafId: number | null = null
 
 watch(displayTitle, () => {
+  autoPlayPending = true
+  isScrolling.value = false
   scheduleMeasure()
 }, { immediate: true })
+
+watch(shouldAnimateMarquee, (canScroll) => {
+  if (!canScroll)
+    isScrolling.value = false
+})
 
 onMounted(() => {
   scheduleMeasure()
@@ -162,6 +219,18 @@ function measureLayout() {
 
   const nextWidth = textEl.scrollWidth
   textWidth.value = nextWidth
-  isOverflowing.value = nextWidth > container.clientWidth + 1
+
+  const nextOverflowing = nextWidth > container.clientWidth + 1
+  isOverflowing.value = nextOverflowing
+
+  if (!nextOverflowing) {
+    isScrolling.value = false
+    return
+  }
+
+  if (autoPlayPending && shouldAnimateMarquee.value) {
+    autoPlayPending = false
+    startScroll()
+  }
 }
 </script>
