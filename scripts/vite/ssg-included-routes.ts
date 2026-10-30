@@ -10,6 +10,7 @@ const DEFAULT_SSG_STATIC_ROUTE_RES: RegExp[] = [
   /^\/page\/.+$/,
   /^\/about$/,
   /^\/links$/,
+  /^\/faq$/,
   /^\/archives(?:\/.*)?$/
 ]
 

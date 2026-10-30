@@ -74,9 +74,12 @@ export interface SitemapStats {
 
 export async function generateSitemap(outFile = 'public/sitemap.xml'): Promise<SitemapStats> {
   const entries: SitemapEntry[] = []
+  // 站点级页面的「最后更新」用构建时间：模板 / 导航变动同样算内容变化
+  const buildTime = new Date().toISOString()
 
   entries.push({
     loc: `${SITE_URL}/`,
+    lastmod: buildTime,
     changefreq: 'daily',
     priority: 1.0
   })
@@ -84,6 +87,7 @@ export async function generateSitemap(outFile = 'public/sitemap.xml'): Promise<S
   for (const path of PROSE_CONTENT_PAGE_PATHS) {
     entries.push({
       loc: `${SITE_URL}${path}`,
+      lastmod: buildTime,
       changefreq: 'monthly',
       priority: 0.6
     })
@@ -91,7 +95,9 @@ export async function generateSitemap(outFile = 'public/sitemap.xml'): Promise<S
 
   const posts = await parsePostFiles()
   for (const post of posts) {
-    const lastmod = toIsoDate(post.date)
+    // 更新过就用 updated，否则退回发布时间——RAG 更看重新鲜度信号
+    const updated = typeof post.data.updated === 'string' ? post.data.updated : ''
+    const lastmod = toIsoDate(updated) ?? toIsoDate(post.date)
     entries.push({
       loc: `${SITE_URL}${postPublicPath(post.idStr)}`,
       lastmod: lastmod ?? undefined,

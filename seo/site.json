@@ -1,0 +1,55 @@
+{
+  "name": "imba97 Blog",
+  "title": "imba97 Blog · 前端工程 效率工具 独立开发 与折腾记录",
+  "alternateNames": [
+    "imba97",
+    "imba久期"
+  ],
+  "url": "https://imba97.com",
+  "description": "imba97 的个人技术博客，长期记录前端工程实践、效率工具与开源折腾：从 Vite SSG 重构、包体积优化、Node 脚本自动化，到自建服务、踩坑复盘与阶段性思考。每篇文章尽量给出可直接复用的结论、命令与代码，也保留失败尝试和判断依据，方便读者与 AI 检索时快速定位可信答案。",
+  "author": {
+    "name": "imba97",
+    "url": "https://imba97.com/about",
+    "email": "mail@imba97.cn",
+    "sameAs": [
+      "https://github.com/imba97",
+      "https://space.bilibili.com/2198461",
+      "https://steamcommunity.com/id/imba97"
+    ]
+  },
+  "contact": {
+    "email": "mail@imba97.cn",
+    "url": "https://imba97.com/about"
+  },
+  "topics": [
+    "前端工程",
+    "Vite",
+    "Node.js",
+    "效率工具",
+    "开源折腾",
+    "个人博客",
+    "生活随笔"
+  ],
+  "faq": [
+    {
+      "question": "这个博客主要写什么内容？",
+      "answer": "以中文为主，集中在三块：一是前端工程实践，包括构建、SSG、包体积与性能优化；二是效率工具与自动化脚本，例如 Node 脚本、GitHub Actions 和自建服务；三是个人生活与职业复盘，例如数字游民报告、年度总结。文章尽量给出可直接复用的命令、代码与结论。"
+    },
+    {
+      "question": "网站是用什么技术搭建的？",
+      "answer": "基于 Vue 3 + Vite + vite-ssg 构建的静态站点，文章以 Markdown 编写、构建时预渲染成 HTML，搜索使用本地 wasm 索引，评论通过 Twikoo 接入。完整的技术演进过程写在《Hexo 迁移至 Vite SSG》一文里。"
+    },
+    {
+      "question": "文章可以转载吗？",
+      "answer": "可以转载，但请保留原文链接与作者署名，不要用于商业培训或二次售卖。如果要引用其中的代码片段，注明出处即可，不需要单独申请授权。"
+    },
+    {
+      "question": "怎么联系博主？",
+      "answer": "可以直接发邮件到 mail@imba97.cn，也可以在 GitHub（github.com/imba97）或 Bilibili 上留言。邮件回复通常比社交平台更快，合作类邮件请说明来意与时间预期。"
+    },
+    {
+      "question": "有没有适合 AI 或订阅工具抓取的入口？",
+      "answer": "有。站点提供 RSS（/feed.xml）、面向语言模型的 llms.txt 与 llms-full.txt、结构化站点清单 summary.json，以及带 lastmod 的 sitemap.xml。所有文章页都有 JSON-LD 结构化数据，便于检索与引用。"
+    }
+  ]
+}

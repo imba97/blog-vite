@@ -9,7 +9,7 @@ export const POSTS_PATH_PREFIX = '/post/'
  * 都必须覆盖这些路由，否则直接打开 / 刷新这些页面时正文没有样式。
  * 新增此类 markdown 页面时同步补充；catch-all 404 页由路由 params 判定，不在此列。
  */
-export const PROSE_CONTENT_PAGE_PATHS: readonly string[] = ['/about', '/links']
+export const PROSE_CONTENT_PAGE_PATHS: readonly string[] = ['/about', '/links', '/faq']
 
 /** 去掉尾部斜杠，让 `/about` 与 `/about/` 视为同一路由 */
 function normalizeRoutePath(path: string): string {

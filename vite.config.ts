@@ -29,11 +29,14 @@ import NetlifyImagePlugin from './scripts/netlify-image-plugin.ts'
 import { slugify } from './scripts/slugify.ts'
 import { dedupeStylesheetsInHtml, pruneArticleFontPreloadsInHtml } from './scripts/vite/dedupe-stylesheets.ts'
 import FontPreload from './scripts/vite/plugins/font-preload.ts'
+import GeoContent from './scripts/vite/plugins/geo-content.ts'
 import HtmlHeadInject from './scripts/vite/plugins/html-head-inject.ts'
 import LlmsTxt from './scripts/vite/plugins/llms-txt.ts'
 import PostsMeta from './scripts/vite/plugins/posts-meta.ts'
 import SearchIndex from './scripts/vite/plugins/search-index.ts'
+import SiteSeo from './scripts/vite/plugins/site-seo.ts'
 import Sitemap from './scripts/vite/plugins/sitemap.ts'
+import SummaryJson from './scripts/vite/plugins/summary-json.ts'
 import { applyMarkdownRouteMeta } from './scripts/vite/route-frontmatter.ts'
 import { isSsgIncludedRoute } from './scripts/vite/ssg-included-routes.ts'
 
@@ -54,10 +57,13 @@ export default defineConfig({
   },
   plugins: [
     HtmlHeadInject(),
+    GeoContent(),
     FontPreload(),
     PostsMeta(),
     SearchIndex(),
+    SiteSeo(),
     LlmsTxt(),
+    SummaryJson(),
     Sitemap(),
 
     UnoCSS(),
@@ -95,7 +101,10 @@ export default defineConfig({
     }),
 
     Markdown({
-      headEnabled: true,
+      // 关闭 unplugin-vue-markdown 自带的 head 注入：它会用 frontmatter.title
+      // 覆盖 App.vue 里统一的 title / canonical / JSON-LD，
+      // 导致文章标题没有站点后缀、静态页标题回退成旧值。
+      headEnabled: false,
       exportFrontmatter: false,
       exposeFrontmatter: false,
       exposeExcerpt: false,

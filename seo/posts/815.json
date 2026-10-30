@@ -1,0 +1,27 @@
+{
+  "description": "博客里的文章互链一直是硬编码，标题或路径一变就得全站手改。这篇记录了 markdown-it-extra-link 的由来：一个 markdown-it 链接扩展插件，用 {link:post:814} 这种写法引用站内文章，构建时自动解析成标题与正式链接；另一个扩展处理 GitHub 仓库链接。",
+  "keywords": [
+    "markdown-it",
+    "链接插件",
+    "博客重构",
+    "Vite SSG",
+    "开源项目",
+    "Markdown"
+  ],
+  "keyPoints": [
+    "站内互链写成 {link:post:<id>}，标题或路径变化时自动跟随",
+    "GitHub 仓库链接用 {link:github:owner/repo} 统一生成",
+    "插件在构建期解析，不引入运行时开销",
+    "已开源为 markdown-it-extra-link，可单独安装使用"
+  ],
+  "about": [
+    "Markdown",
+    "开源工具",
+    "博客工程"
+  ],
+  "citations": [
+    "https://github.com/imba97/markdown-it-extra-link"
+  ],
+  "reviewedAt": "2026-10-30",
+  "status": "done"
+}

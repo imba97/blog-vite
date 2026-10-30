@@ -1,0 +1,30 @@
+{
+  "description": "QNAS MINI 是一台 2.5 寸六盘位 NAS，我用 3D 打印外壳、畅网 N355 主板、32G 内存和 ASM1166 扩展卡拼了一台。系统装飞牛，相册和影音开箱即用，再叠一层 Cloudflare Tunnel 做内网穿透。文中列了完整硬件清单、拼装时踩的坑，以及家里的网络拓扑。",
+  "keywords": [
+    "QNAS MINI",
+    "NAS",
+    "飞牛 fnOS",
+    "内网穿透",
+    "Cloudflare Tunnel",
+    "硬件"
+  ],
+  "keyPoints": [
+    "六盘位 2.5 寸 NAS，硬件总价与清单都在文中",
+    "系统选飞牛 fnOS，相册支持 AI 人脸识别与以文搜图",
+    "额外用 Cloudflare Tunnel 做内网穿透作为官方远程的备份",
+    "拼装时螺丝难拧等细节坑位有文字与视频总结"
+  ],
+  "faq": [
+    {
+      "question": "QNAS MINI 用什么系统和硬件？",
+      "answer": "系统是飞牛 fnOS，硬件为畅网 N355 主板、Crucial DDR5 32G 内存、M.2 转六口 SATA 的 ASM1166 扩展卡，配 3D 打印外壳，硬盘用一块 500G 做系统盘加两块 2TB SSD 存数据。"
+    }
+  ],
+  "about": [
+    "NAS",
+    "自建服务",
+    "硬件折腾"
+  ],
+  "reviewedAt": "2026-10-30",
+  "status": "done"
+}

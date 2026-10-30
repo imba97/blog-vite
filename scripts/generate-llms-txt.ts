@@ -20,6 +20,7 @@ import {
   normalizeNumericPostId,
   normalizeStringList
 } from '../src/content/post-policy.ts'
+import { loadSiteSeo, resolvePostSeo } from './seo/load-seo.ts'
 
 const SITE_URL = 'https://imba97.com'
 const SITE_NAME = 'imba97 Blog'
@@ -86,7 +87,9 @@ async function loadPosts(): Promise<ParsedPostSummary[]> {
         if (!idStr)
           return null
         const title = String(data.title ?? '').trim() || `Post #${idStr}`
-        const description = String(data.description ?? '').trim()
+        // 侧车 > frontmatter > 正文首段派生，避免摘要退化成「第一个小标题」
+        const resolved = resolvePostSeo({ id: idStr, frontmatter: data as Record<string, unknown>, content })
+        const description = resolved.description
         const tags = normalizeStringList(data.tags)
         const categories = normalizeStringList(data.categories)
         return {
@@ -119,6 +122,7 @@ async function readFileSafe(file: string): Promise<string | null> {
 
 function buildLlmsTxt(posts: ParsedPostSummary[]): string {
   const lines: string[] = []
+  const site = loadSiteSeo()
   lines.push(`# ${SITE_NAME}`)
   lines.push('')
   lines.push(`> ${SITE_TAGLINE}`)
@@ -128,6 +132,7 @@ function buildLlmsTxt(posts: ParsedPostSummary[]): string {
   lines.push(`Canonical site: ${SITE_URL}`)
   lines.push(`RSS: ${SITE_URL}/feed.xml`)
   lines.push(`Sitemap: ${SITE_URL}/sitemap.xml`)
+  lines.push(`Summary (JSON): ${SITE_URL}/summary.json`)
   lines.push(`Full dump (Markdown): ${SITE_URL}/llms-full.txt`)
   lines.push('')
 
@@ -135,11 +140,19 @@ function buildLlmsTxt(posts: ParsedPostSummary[]): string {
   lines.push('')
   lines.push(`- [首页](${SITE_URL}/): 最新文章与项目精选`)
   for (const path of PROSE_CONTENT_PAGE_PATHS) {
-    const label = path === '/about' ? '关于' : path === '/links' ? '友情链接' : path
+    const label = path === '/about' ? '关于' : path === '/links' ? '友情链接' : path === '/faq' ? '常见问题' : path
     lines.push(`- [${label}](${SITE_URL}${path}): 站点级介绍页`)
   }
   lines.push(`- [RSS](${SITE_URL}/feed.xml): 订阅所有文章`)
   lines.push('')
+
+  if (site.faq?.length) {
+    lines.push('## FAQ')
+    lines.push('')
+    for (const item of site.faq)
+      lines.push(`- ${item.question} ${item.answer}`)
+    lines.push('')
+  }
 
   lines.push(`## Recent posts (${Math.min(posts.length, MAX_POSTS_IN_LLMS_TXT)} of ${posts.length})`)
   lines.push('')

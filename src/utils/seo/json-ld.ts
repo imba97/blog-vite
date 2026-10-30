@@ -1,31 +1,31 @@
 /**
- * 生成 Schema.org JSON-LD 块（站点级 + 文章级），供 unhead 的 script.innerHTML 注入。
+ * 生成 Schema.org JSON-LD 块（站点级 + 文章级 + FAQ），供 unhead 的 script.innerHTML 注入。
  *
- * 参考：https://schema.org/BlogPosting · https://schema.org/Person · https://schema.org/WebSite
+ * 参考：https://schema.org/Organization · https://schema.org/BlogPosting · https://schema.org/FAQPage
  * GEO 友好要点：datePublished/dateModified/author/publisher/image/mainEntityOfPage 必填，
- * keywords/inLanguage/articleSection 强烈建议。
+ * keywords/inLanguage/articleSection/about/citation 强烈建议；品牌与联系方式挂在 Organization 上。
  *
  * 写法约束：Schema.org `@context` / `@type` / `@id` / `@graph` 等带 `@` 的键必须引号包裹，
  * 为保持一致（quote-props rule），其余键也统一加引号。
  */
-import type { PostFrontmatter } from '~/types/post-frontmatter'
+import type { SeoFaqItem } from '~/types/seo'
+import { siteSeo } from '../../../.auto-generate/site-seo'
 
-const SITE_URL = 'https://imba97.com'
-const SITE_NAME = 'imba97 Blog'
-const AUTHOR_NAME = 'imba97'
-const AUTHOR_EMAIL = 'mailto:mail@imba97.cn'
-const AUTHOR_GITHUB = 'https://github.com/imba97'
-const AUTHOR_LINK = 'https://imba97.com/about'
-const PUBLISHER_LOGO = `${SITE_URL}/assets/images/favicon.png`
+const SITE_URL = siteSeo.url
+const SITE_NAME = siteSeo.name
+const ORGANIZATION_ID = `${SITE_URL}/#organization`
+const PERSON_ID = `${SITE_URL}/#person`
+const WEBSITE_ID = `${SITE_URL}/#website`
 const DEFAULT_LANG = 'zh-CN'
+const PUBLISHER_LOGO = `${SITE_URL}/assets/images/favicon.png`
 
 interface JsonLdNode {
-  '@context': 'https://schema.org'
+  '@context'?: 'https://schema.org'
   '@type': string
   [key: string]: unknown
 }
 
-function toAbsoluteUrl(value: string | undefined | null): string | undefined {
+export function toAbsoluteUrl(value: string | undefined | null): string | undefined {
   if (!value)
     return undefined
   const trimmed = value.trim()
@@ -51,51 +51,7 @@ function pickString(value: unknown): string | undefined {
   return s || undefined
 }
 
-/** 站点级 JSON-LD：Person + WebSite，作为 `@graph` 注入到所有页面 head */
-export function buildSiteJsonLd(): JsonLdNode {
-  const person: JsonLdNode = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    'name': AUTHOR_NAME,
-    'url': AUTHOR_LINK,
-    'email': AUTHOR_EMAIL,
-    'image': PUBLISHER_LOGO,
-    'sameAs': [
-      AUTHOR_GITHUB
-      // 后续如有多平台身份（Twitter / Mastodon 等）追加到此处
-    ]
-  }
-
-  const webSite: JsonLdNode = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    'name': SITE_NAME,
-    'url': SITE_URL,
-    'inLanguage': DEFAULT_LANG,
-    'publisher': { '@id': `${SITE_URL}/#person` },
-    'author': { '@id': `${SITE_URL}/#person` }
-  }
-
-  // 用 @graph 让 Person 与 WebSite 共用同一个 @id 引用，避免模型解析时孤立
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        ...person,
-        '@id': `${SITE_URL}/#person`
-      },
-      webSite
-    ]
-  }
-}
-
-interface BlogPostingInput {
-  path: string
-  frontmatter: PostFrontmatter | undefined
-  defaultImage?: string
-}
-
-function parseDate(value: unknown): string | undefined {
+export function toIsoDateString(value: unknown): string | undefined {
   if (value == null || value === '')
     return undefined
   if (value instanceof Date)
@@ -109,27 +65,109 @@ function parseDate(value: unknown): string | undefined {
   return new Date(ts).toISOString()
 }
 
+function toNameList(value: unknown): string[] {
+  if (Array.isArray(value))
+    return value.map(item => safeString(item)).filter(Boolean)
+  if (typeof value === 'string')
+    return value.split(/[,，]/).map(item => item.trim()).filter(Boolean)
+  return []
+}
+
+/**
+ * JSON-LD 序列化：转义 `<`，避免正文里的 `</script>` 把标签提前闭合，
+ * 导致整块结构化数据解析失败（GEO 检测里表现就是「No valid JSON-LD」）。
+ */
+export function serializeJsonLd(node: unknown): string {
+  return JSON.stringify(node).replace(/</g, '\\u003c')
+}
+
+/** 站点级 JSON-LD：Organization + Person + WebSite，作为 `@graph` 注入到所有页面 head */
+export function buildSiteJsonLd(): JsonLdNode {
+  const organization: JsonLdNode = {
+    '@type': 'Organization',
+    '@id': ORGANIZATION_ID,
+    'name': SITE_NAME,
+    'alternateName': siteSeo.alternateNames?.length ? siteSeo.alternateNames : undefined,
+    'url': SITE_URL,
+    'description': siteSeo.description,
+    'logo': {
+      '@type': 'ImageObject',
+      'url': PUBLISHER_LOGO
+    },
+    'email': siteSeo.contact?.email ?? siteSeo.author.email,
+    'sameAs': siteSeo.author.sameAs?.length ? siteSeo.author.sameAs : undefined,
+    'knowsAbout': siteSeo.topics?.length ? siteSeo.topics : undefined,
+    'contactPoint': {
+      '@type': 'ContactPoint',
+      'contactType': 'customer support',
+      'email': siteSeo.contact?.email ?? siteSeo.author.email,
+      'url': siteSeo.contact?.url ?? `${SITE_URL}/about`
+    }
+  }
+
+  const person: JsonLdNode = {
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    'name': siteSeo.author.name,
+    'url': siteSeo.author.url ?? `${SITE_URL}/about`,
+    'email': siteSeo.author.email,
+    'image': PUBLISHER_LOGO,
+    'worksFor': { '@id': ORGANIZATION_ID },
+    'sameAs': siteSeo.author.sameAs?.length ? siteSeo.author.sameAs : undefined
+  }
+
+  const webSite: JsonLdNode = {
+    '@type': 'WebSite',
+    '@id': WEBSITE_ID,
+    'name': SITE_NAME,
+    'url': SITE_URL,
+    'description': siteSeo.description,
+    'inLanguage': DEFAULT_LANG,
+    'publisher': { '@id': ORGANIZATION_ID },
+    'author': { '@id': PERSON_ID }
+  }
+
+  // 用 @graph 让三个节点共用 @id 引用，避免模型解析时各自孤立
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [organization, person, webSite]
+  }
+}
+
+export interface BlogPostingInput {
+  path: string
+  title?: string
+  description?: string
+  date?: string
+  updated?: string
+  tags?: string[]
+  categories?: string[]
+  image?: string
+  keywords?: string[]
+  about?: string[]
+  citations?: string[]
+  defaultImage?: string
+}
+
 /** 文章页 JSON-LD：BlogPosting，带 author/publisher/datePublished/dateModified/image */
 export function buildBlogPostingJsonLd(input: BlogPostingInput): JsonLdNode | null {
-  const fm = input.frontmatter
-  if (!fm)
+  const title = pickString(input.title)
+  if (!title)
     return null
 
-  const title = pickString(fm.title)
-  const description = pickString(fm.description)
-  const datePublished = parseDate(fm.date) ?? parseDate(fm.updated)
-  const dateModified = parseDate(fm.updated) ?? datePublished
-  const imageInput = pickString(fm.image) ?? input.defaultImage
-  const image = toAbsoluteUrl(imageInput)
+  const description = pickString(input.description)
+  const datePublished = toIsoDateString(input.date) ?? toIsoDateString(input.updated)
+  const dateModified = toIsoDateString(input.updated) ?? datePublished
+  const image = toAbsoluteUrl(pickString(input.image) ?? input.defaultImage)
   const path = input.path && input.path !== '/' ? input.path : '/'
   const url = toAbsoluteUrl(path) ?? SITE_URL
 
-  const tagsRaw = Array.isArray(fm.tags)
-    ? fm.tags
-    : typeof fm.tags === 'string'
-      ? fm.tags.split(',')
-      : []
-  const keywords = tagsRaw.map(t => safeString(t)).filter(Boolean)
+  const tags = toNameList(input.tags)
+  const categories = toNameList(input.categories)
+  const keywords = (input.keywords?.length ? input.keywords : tags).filter(Boolean)
+  const about = (input.about?.length ? input.about : categories)
+    .filter(Boolean)
+    .map(name => ({ '@type': 'Thing', 'name': name }))
 
   const node: JsonLdNode = {
     '@context': 'https://schema.org',
@@ -145,26 +183,55 @@ export function buildBlogPostingJsonLd(input: BlogPostingInput): JsonLdNode | nu
     'datePublished': datePublished,
     'dateModified': dateModified,
     'inLanguage': DEFAULT_LANG,
+    'isPartOf': { '@id': WEBSITE_ID },
     'author': {
       '@type': 'Person',
-      '@id': `${SITE_URL}/#person`,
-      'name': AUTHOR_NAME,
-      'url': AUTHOR_LINK
+      '@id': PERSON_ID,
+      'name': siteSeo.author.name,
+      'url': siteSeo.author.url ?? `${SITE_URL}/about`
     },
-    'publisher': {
-      '@type': 'Organization',
-      'name': SITE_NAME,
-      'url': SITE_URL,
-      'logo': {
-        '@type': 'ImageObject',
-        'url': PUBLISHER_LOGO
-      }
-    },
-    'image': image
+    'publisher': { '@id': ORGANIZATION_ID },
+    'image': image,
+    'articleSection': categories[0],
+    'keywords': keywords.length > 0 ? keywords.join(', ') : undefined,
+    'about': about.length > 0 ? about : undefined
   }
 
-  if (keywords.length > 0)
-    node.keywords = keywords.join(', ')
+  if (input.citations?.length) {
+    node.citation = input.citations
+      .map(url => toAbsoluteUrl(url))
+      .filter((url): url is string => Boolean(url))
+  }
 
   return node
+}
+
+/** FAQPage JSON-LD：站点 /faq 页与带 `faq` 的文章页共用 */
+export function buildFaqJsonLd(input: {
+  path: string
+  items: SeoFaqItem[]
+  name?: string
+}): JsonLdNode | null {
+  const items = input.items.filter(item => item.question.trim() && item.answer.trim())
+  if (items.length === 0)
+    return null
+
+  const url = toAbsoluteUrl(input.path)
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    'url': url,
+    'name': input.name ?? `${SITE_NAME} 常见问题`,
+    'inLanguage': DEFAULT_LANG,
+    'mainEntity': items.map(item => ({
+      '@type': 'Question',
+      'name': item.question.trim(),
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': item.answer.trim()
+      }
+    }))
+  }
 }

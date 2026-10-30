@@ -6,6 +6,7 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItExtraLinkRss from 'markdown-it-extra-link/rss'
 import { parsePostDateToTimestamp } from '../src/content/post-date.ts'
 import { parsePostFiles } from './parse-post-files.ts'
+import { resolvePostSeo } from './seo/load-seo.ts'
 
 const DOMAIN = 'https://imba97.com'
 const FOLLOW_CHALLENGE_FEED_ID = '41798923170845756'
@@ -45,7 +46,7 @@ async function buildBlogRSS() {
   }
 
   const items: Item[] = []
-  for (const { file, path, data, content, date } of posts) {
+  for (const { file, idStr, path, data, content, date } of posts) {
     const parsedTimestamp = parsePostDateToTimestamp(date)
     if (Number.isNaN(parsedTimestamp)) {
       console.warn(`[rss] Skip post with invalid date: ${file} (${date || 'empty'})`)
@@ -57,9 +58,12 @@ async function buildBlogRSS() {
     const image = typeof data.image === 'string' && data.image.startsWith('/')
       ? DOMAIN + data.image
       : data.image
+    // 摘要走侧车元数据（没有则用正文首段派生），避免 feed 里只有标题
+    const description = resolvePostSeo({ id: idStr, frontmatter: data, content }).description
 
     items.push({
       ...data,
+      description,
       id: link,
       link,
       image,
