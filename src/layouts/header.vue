@@ -129,6 +129,7 @@
               >
                 <HeaderMarqueeTitle
                   :title="presenceTitle"
+                  tag="h1"
                   text-class="text-base text-gray-700 font-medium sm:text-lg dark:text-white/90"
                 />
               </div>
@@ -187,6 +188,7 @@ import { usePostsStore } from '~/store/post'
 import { useSearchOverlayStore } from '~/store/search-overlay'
 import { isArticlePostRoute } from '~/utils/route-page-kind'
 import { DEFAULT_FAVICON, getCurrentFavicon } from '~/utils/seasonal-avatar'
+import { sitePages } from '../../.auto-generate/site-pages'
 
 const router = useRouter()
 const route = useRoute()
@@ -197,6 +199,19 @@ const currentFavicon = ref(DEFAULT_FAVICON)
 const isDrawerOpen = ref(false)
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
 const searchButtonRef = ref<HTMLButtonElement | null>(null)
+
+// 非文章页没有 postsStore.current，用 seo/pages.json 的 navTitle 兜底，
+// 让每个页面都有且只有一个 h1（就是 header 里的标题）。
+const pageNavTitle = computed(() => {
+  const path = route.path.length > 1 ? route.path.replace(/\/+$/, '') : route.path
+  const fromPages = sitePages[path]?.navTitle
+  if (fromPages)
+    return fromPages
+  const paged = /^\/page\/(\d+)$/.exec(path)
+  if (paged)
+    return `第 ${paged[1]} 页`
+  return ''
+})
 
 const returnFocusBus = useMobileNavDrawerReturnFocusBus()
 returnFocusBus.on(() => {
@@ -223,8 +238,8 @@ const {
   onBarIntroComplete,
   onTitlePresenceExitComplete
 } = useHeaderTitleAnimationState({
-  targetTitle: computed(() => postsStore.current?.title?.trim() || ''),
-  targetTitleKey: computed(() => postsStore.current?.path || postsStore.current?.title?.trim() || '')
+  targetTitle: computed(() => postsStore.current?.title?.trim() || pageNavTitle.value),
+  targetTitleKey: computed(() => postsStore.current?.path || route.path)
 })
 
 function goHome() {

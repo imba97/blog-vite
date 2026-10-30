@@ -72,13 +72,20 @@
         :style="trackStyle"
         @animationend="onMarqueeAnimationEnd"
       >
-        <span :class="textClass">{{ displayTitle }}</span>
+        <component :is="tag" :class="textClass">
+          {{ displayTitle }}
+        </component>
         <span :class="textClass" aria-hidden="true">{{ displayTitle }}</span>
       </div>
 
-      <div v-else class="h-full min-w-0 fyc truncate" :class="textClass">
+      <component
+        :is="tag"
+        v-else
+        class="h-full min-w-0 fyc truncate"
+        :class="textClass"
+      >
         {{ displayTitle }}
-      </div>
+      </component>
     </div>
   </div>
 </template>
@@ -88,11 +95,16 @@ const props = withDefaults(
   defineProps<{
     title: string
     textClass?: string
+    /** 标题元素标签：页面标题用 h1，保证每页只有一个 h1 */
+    tag?: string
   }>(),
   {
-    textClass: ''
+    textClass: '',
+    tag: 'span'
   }
 )
+const tag = computed(() => props.tag || 'span')
+
 const MARQUEE_GAP_PX = 50
 const MIN_DURATION_SECONDS = 8
 const MAX_DURATION_SECONDS = 26

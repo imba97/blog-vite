@@ -44,6 +44,11 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
   const presenceTitle = ref('')
   const layoutTitleCache = ref('')
 
+  // 首屏（SSR / hydration 第一帧）不延迟标题：
+  // 之前 gate 在首帧为 true，SSR 产物里标题位置是个空占位，
+  // 要等 440ms 兜底定时器才出现，既闪一下，也让页面没有 h1。
+  let isFirstRun = true
+
   let barIntroFallbackTimer: ReturnType<typeof setTimeout> | null = null
   let barLeaveFallbackTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -97,6 +102,8 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
       const prevK = prev?.[1] || ''
       const prevHad = Boolean(prevT) && Boolean(prevK)
       const has = Boolean(t) && Boolean(k)
+      const firstRun = isFirstRun
+      isFirstRun = false
 
       if (has) {
         clearBarLeaveFallback()
@@ -105,7 +112,9 @@ export function useHeaderTitleAnimationState(options: UseHeaderTitleAnimationSta
         presenceTitle.value = t
         layoutTitleCache.value = t
         barVisible.value = true
-        gateTitleUntilBarDone.value = !prevHad
+        // 首帧直接显示标题（保证 SSR 出 h1、hydration 不闪），
+        // 之后的「无标题 → 文章页」仍然等竖线动画结束再出标题
+        gateTitleUntilBarDone.value = !prevHad && !firstRun
         return
       }
 

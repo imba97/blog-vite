@@ -18,6 +18,7 @@ public/search/
 public/llms.txt
 public/llms-full.txt
 public/sitemap.xml
+public/summary.json
 .eslintcache
 .auto-generate
 
