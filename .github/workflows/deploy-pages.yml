@@ -33,8 +33,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # initx CLI 用于从 vault 注入环境变量（仅本仓库 CI 部署用途）
-      - name: Install initx CLI
-        run: npm install -g initx@latest
+      # env 插件不是内置的，首次使用必须显式安装；安装时会询问确认，
+      # 用管道喂 Y 跳过交互（CI 无 TTY）
+      - name: Install initx CLI and env plugin
+        run: |
+          npm install -g initx@latest
+          echo Y | ix plugin add env
 
       - name: Build
         run: pnpm run build
