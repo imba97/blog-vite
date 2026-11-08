@@ -17,7 +17,11 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const PROJECT_NAME = 'imba97-blog'
-const BRANCH = 'production'
+/**
+ * 必须是项目的 production branch，否则 wrangler 会把部署归到 Preview。
+ * 项目创建时用的是 `--production-branch=main`，所以这里是 main 而不是 production。
+ */
+const BRANCH = 'main'
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const distDir = path.join(projectRoot, 'dist')
