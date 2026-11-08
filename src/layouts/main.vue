@@ -68,7 +68,6 @@ const isPostPage = computed(() => isReadableLayoutRoute(route.path))
 const isArticlePage = computed(() => isArticlePostRoute(route.path))
 const shouldShowComments = computed(() => shouldShowTwikooSection(route.path))
 
-
 function handleMainClick(event: MouseEvent) {
   const target = event.target as HTMLElement | null
   const anchor = target?.closest('a[href]') as HTMLAnchorElement | null

@@ -37,7 +37,7 @@ jobs:
         env:
           # 输出静态图片路径，避免依赖 Netlify Image CDN
           IMAGE_PIPELINE: static
-          SEARCH_WASM_BOOTSTRAP: "1"
+          SEARCH_WASM_BOOTSTRAP: '1'
 
       - name: Deploy to Cloudflare Pages
         run: pnpm dlx wrangler pages deploy dist --project-name=imba97-blog --branch=production

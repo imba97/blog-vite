@@ -63,6 +63,17 @@ function resolvePipeline(): 'netlify' | 'static' {
   return hasLegacy ? 'netlify' : 'static'
 }
 
+/**
+ * 当前生效的图片管线，供 vite.config 决定是否注册本插件。
+ *
+ * 只有 netlify 管线会把 `src` 改写成 `:src` 绑定；static 管线若也注册插件，
+ * Vue 会把 markdown 里的 `/uploads/...` 当成模块导入，打包时整站报
+ * UNRESOLVED_IMPORT（这些文件位于 public/，本就不在模块图里）。
+ */
+export function resolveImagePipeline(): 'netlify' | 'static' {
+  return resolvePipeline()
+}
+
 function toNetlifyImageUrl(src: string): string {
   const params = new URLSearchParams({
     url: src
@@ -103,6 +114,17 @@ function removeAttr(token: any, name: string): void {
   const index = token?.attrIndex?.(name) ?? -1
   if (index >= 0 && Array.isArray(token.attrs))
     token.attrs.splice(index, 1)
+}
+
+/**
+ * `:src` 绑定只在确实换成 CDN 地址时才要；否则保留普通 `src`。
+ *
+ * unplugin-vue-markdown 会把模板里的静态 `src` 路径改写成 `import _imports_N from '...'`，
+ * 指向 public/ 的绝对路径（如 `/uploads/...`）并没有对应模块，打包时报 UNRESOLVED_IMPORT；
+ * 而 `:src` 是 Vue 表达式，不会被改写成 import。
+ */
+function shouldBindSrc(src: string, transformed: string): boolean {
+  return transformed !== src && transformed !== src.trim()
 }
 
 function normalizeImagePath(rawSrc: string): string {
@@ -429,7 +451,7 @@ function transformImageToken(token: any, ctx: TransformContext): void {
   injectDimensionsForToken(token, src, ctx)
 
   const transformed = transformSrc(src)
-  if (transformed !== src) {
+  if (shouldBindSrc(src, transformed)) {
     removeAttr(token, 'src')
     token.attrSet(':src', toVueStringLiteral(transformed))
   }
@@ -451,7 +473,7 @@ function transformHtmlImgSrc(content: string, ctx: TransformContext): string {
       transformedTag = normalizeLegacyZoomStyle(transformedTag)
       transformedTag = injectDimensionsForImgTag(transformedTag, rawSrc, ctx)
       const transformed = transformSrc(rawSrc)
-      if (transformed !== rawSrc)
+      if (shouldBindSrc(rawSrc, transformed))
         transformedTag = transformedTag.replace(/\bsrc\s*=\s*("([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i, `:src="${toVueStringLiteral(transformed)}"`)
     }
 

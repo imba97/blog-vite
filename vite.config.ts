@@ -25,7 +25,7 @@ import VueRouter from 'vue-router/vite'
 import CopyButtonPlugin from './scripts/copy-button-plugin.ts'
 import { resolveShikiLangs } from './scripts/generate-shiki-langs.ts'
 import { getGitMeta } from './scripts/get-git-meta.ts'
-import NetlifyImagePlugin from './scripts/netlify-image-plugin.ts'
+import NetlifyImagePlugin, { resolveImagePipeline } from './scripts/netlify-image-plugin.ts'
 import { slugify } from './scripts/slugify.ts'
 import { dedupeStylesheetsInHtml, pruneArticleFontPreloadsInHtml } from './scripts/vite/dedupe-stylesheets.ts'
 import FontPreload from './scripts/vite/plugins/font-preload.ts'
@@ -114,7 +114,10 @@ export default defineConfig({
         md.use(CopyButtonPlugin({
           codeCopyButtonTitle: '复制代码'
         }))
-        if (isProduction)
+        // 只在显式选择 netlify 管线时启用：static 管线原样输出 `/uploads/...`，
+        // 而 markdown 里一旦生成 `:src` 绑定，Vue 就会把这个绝对路径当成模块导入，
+        // 打包时对每张图报 UNRESOLVED_IMPORT（文件在 public/ 下本就不该进模块图）。
+        if (isProduction && resolveImagePipeline() === 'netlify')
           md.use(NetlifyImagePlugin())
 
         md.use(await MarkdownItShiki({
