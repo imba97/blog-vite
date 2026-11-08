@@ -1,12 +1,8 @@
 # Cloudflare Pages 部署配置
 # 用法：pnpm dlx wrangler pages deploy dist --project-name=imba97-blog
+#
+# 注意：Pages 项目不支持 [build] / [build.environment] 段（那是 Workers 的语法），
+# 构建由 CI 里的 pnpm run build 完成，这里只声明项目元信息。
 name = "imba97-blog"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-11-01"
-
-# 构建命令与 Netlify 保持一致（见 netlify.toml）
-[build]
-command = "pnpm run build"
-
-[build.environment]
-NODE_VERSION = "22"
