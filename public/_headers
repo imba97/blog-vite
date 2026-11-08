@@ -1,0 +1,41 @@
+# Cloudflare Pages 响应头配置（等价复刻 netlify.toml）
+# 注意：Pages 的 _headers 不支持 /*.html 这类中间通配，HTML 由
+# functions/[[path]].js 在响应时补 Cache-Control，见该文件注释。
+
+# 构建产物强缓存 1 年（hash 文件名天然支持缓存更新）
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# 字体单独声明 CORS（更具体路径需写在前面）
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# 历史上传图片内容不可变（按日期归档、原地不覆盖），长缓存
+/uploads/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 搜索索引与 RSS 随构建变化但 URL 不带 hash：短缓存 + 回源校验
+/search-full.json
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/search/*
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/search-meta.json
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/feed.xml
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# 安全相关（对应 netlify.toml 的 "/*" 规则）
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

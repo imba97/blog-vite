@@ -27,6 +27,9 @@
     "pages/**/*.vue",
     "vite.config.ts",
     "scripts/**/*.ts",
+    "functions/**/*.ts",
+    "functions/**/*.d.ts",
+    "workers/**/*.ts",
     ".auto-generate/*.ts",
     ".auto-generate/*.d.ts"
   ],

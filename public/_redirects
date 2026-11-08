@@ -1,0 +1,12 @@
+# Cloudflare Pages / Netlify 通用重定向（来源：netlify.toml 的等价复刻）
+# 格式：/from  /to  [status]
+# 注意：Pages 不支持 :id 占位符，统一用 * 通配符代替。
+
+/atom.xml               /feed.xml                        301
+/posts/*/index.html     /post/:splat                     301
+/posts/*                /post/:splat                     301
+/favicon.png            /assets/images/favicon.png       301
+/avatar.png             /assets/images/favicon.png       301
+
+# SPA fallback：未匹配到的路径交给 index.html，由 vue-router 处理
+/*                      /index.html                      200

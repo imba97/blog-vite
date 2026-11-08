@@ -40,6 +40,29 @@ function shouldTransformSrc(src: string): boolean {
   return !EXCLUDED_PROTOCOL_RE.test(value)
 }
 
+/**
+ * 图片 URL 生成策略：
+ *
+ * - `netlify`（历史默认）：走 Netlify Image CDN 的 `/.netlify/images?url=...`，
+ *   只有 Netlify 能处理，双源部署（Cloudflare Pages / 国内服务器）会 404。
+ * - `static`（默认）：直接输出原图路径，不依赖任何运行时图片服务。
+ *   双源、国内源站、Pages 都能原生托管，是「迁移到多云」的推荐配置。
+ *
+ * 通过 `IMAGE_PIPELINE` 或旧变量 `VITE_NETLIFY_IMAGE_*` 切换：
+ *   IMAGE_PIPELINE=static  pnpm build    # 多源部署（默认）
+ *   IMAGE_PIPELINE=netlify pnpm build    # 仅 Netlify 时保留老行为
+ */
+function resolvePipeline(): 'netlify' | 'static' {
+  const explicit = (process.env.IMAGE_PIPELINE || '').trim().toLowerCase()
+  if (explicit === 'netlify' || explicit === 'static')
+    return explicit
+
+  // 未显式指定时：存在旧变量则沿用 Netlify，否则用 static
+  const hasLegacy = ['VITE_NETLIFY_IMAGE_QUALITY', 'VITE_NETLIFY_IMAGE_WIDTH', 'VITE_NETLIFY_IMAGE_FORMAT']
+    .some(key => (process.env[key] || '').trim().length > 0)
+  return hasLegacy ? 'netlify' : 'static'
+}
+
 function toNetlifyImageUrl(src: string): string {
   const params = new URLSearchParams({
     url: src
@@ -64,6 +87,9 @@ function toNetlifyImageUrl(src: string): string {
 
 function transformSrc(src: string): string {
   if (!shouldTransformSrc(src))
+    return src
+
+  if (resolvePipeline() === 'static')
     return src
 
   return toNetlifyImageUrl(src)

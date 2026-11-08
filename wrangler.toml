@@ -1,0 +1,12 @@
+# Cloudflare Pages 部署配置
+# 用法：pnpm dlx wrangler pages deploy dist --project-name=imba97-blog
+name = "imba97-blog"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-11-01"
+
+# 构建命令与 Netlify 保持一致（见 netlify.toml）
+[build]
+command = "pnpm run build"
+
+[build.environment]
+NODE_VERSION = "22"

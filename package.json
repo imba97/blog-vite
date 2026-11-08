@@ -23,6 +23,8 @@
     "generate-langs": "esno scripts/shiki-langs-cli.ts",
     "shiki-profile": "esno scripts/shiki-langs-cli.ts --profile",
     "preview": "vite preview",
+    "build:pages": "cross-env IMAGE_PIPELINE=static pnpm run build",
+    "deploy:pages": "esno ./scripts/deploy-pages.ts",
     "install:stable": "pnpm dlx esno ./scripts/pnpm-stable-install.ts",
     "env:check": "pnpm dlx esno ./scripts/pnpm-env-check.ts",
     "lint": "eslint .",
