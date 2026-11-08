@@ -24,5 +24,11 @@ public/summary.json
 
 .pnpm-store/
 
+# 本地环境变量（含凭据，绝不入库）
+# 存量的 .env 用于填写变量后推送到 initx vault：ix env push blog
+.env
+.env.*
+!.env.example
+
 # AI
 .qoder
